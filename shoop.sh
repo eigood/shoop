@@ -55,7 +55,7 @@ _shoop () {
 _shoop_introspect=1
 
 # Create a method to create a new object.
-_shoop OBJECT OBJECT new : '
+IFS=" " _shoop OBJECT OBJECT new : '
 	local OBJNAME=$1;
 	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }";
 	if [ $THIS != $OBJNAME ]; then
