@@ -53,6 +53,7 @@ test:
 			CURDIR=$(CURDIR)\
 			$(SHELL) $(CURDIR)/t/regress\
 			$(CURDIR)/t/inheritance.sh\
+			$(CURDIR)/t/list.sh\
 
 www-test1:
 	$(MAKE) installbins installmodules prefix=$(tinstall)
