@@ -42,18 +42,18 @@ strip_comment_space = $(TOPDIR)/utils/shell-stripper
 binstall = $(CURDIR)/benchmark-dir
 
 all:
-	@echo This makefile is only here to run benchmarks or examples,
-	@echo or install shoop, or do regression tests.
-	@echo \	make benchmark
-	@echo \	make example
-	@echo \	make install
-	@echo \	make test
+	echo This makefile is only here to run benchmarks or examples,
+	echo or install shoop, or do regression tests.
+	echo \	make benchmark
+	echo \	make example
+	echo \	make install
+	echo \	make test
 
 test:
-	@t/regress t/*.sh
+	t/regress t/*.sh
 
 example:
-	@sh ./example.sh
+	sh ./example.sh
 
 benchmark:
 	$(MAKE) install prefix=$(binstall)
@@ -73,10 +73,10 @@ installexamples	: $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))
 installdirs	: $(patsubst %,$(prefix)%,$(DIRS))
 
 installshowconfig:
-	@echo "prefix is: $(prefix)"
-	@echo "bindir is: $(bindir)"
-	@echo "moddir is: $(moddir)"
-	@echo
+	echo "prefix is: $(prefix)"
+	echo "bindir is: $(bindir)"
+	echo "moddir is: $(moddir)"
+	echo
 
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: msg=module
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: msg=binary
@@ -93,25 +93,25 @@ inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
 strip_comment_space = $(TOPDIR)/utils/shell-stripper
 
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir)
-	@$(inst_msg)
-	@$(strip_comment_space) < $< > $@
+	$(inst_msg)
+	$(strip_comment_space) < $< > $@
 
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir)
-	@$(inst_msg)
-	@$(strip_comment_space) < $< > $@
-	@chmod +x $@
+	$(inst_msg)
+	$(strip_comment_space) < $< > $@
+	chmod +x $@
 
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(docdir)
-	@$(inst_msg)
-	@install -m 644 $< $@
+	$(inst_msg)
+	install -m 644 $< $@
 
 $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES)): $(prefix)$(empdir)/%: % $(prefix)$(empdir)
-	@$(inst_msg)
-	@install -m 644 $< $@
+	$(inst_msg)
+	install -m 644 $< $@
 
 $(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
-	@echo Making dir $$\(prefix\)$*
-	@mkdir -p $@
+	echo Making dir $$\(prefix\)$*
+	mkdir -p $@
 
 .PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
 
