@@ -1,0 +1,79 @@
+#!/bin/sh -e
+# Benchmark suite (based on shoop/regress)
+SHELL=$(basename ${SHELL:-bash})
+ITERATIONS=${ITERATIONS:-100}
+
+# Call this function to benchmark something.
+prep() {
+	if [ "$_bmprep_" ];then
+		_bmprep_="$_bmprep_;$@"
+	else
+		_bmprep_="$@"
+	fi
+}
+prepsave() {
+	eval _bmprep_$1=\"$_bmprep_\"
+}
+preprestore() {
+	eval _bmprep_=\"\$_bmprep_\; \$_bmprep_$1\"
+}
+prepclear() {
+	_bmprep_=""
+}
+
+bm () {
+
+	local name=$1 message=$2; shift 2
+	if eval [ -z \"\$_bms_$name\" ];then
+		eval "_bm_$name () { benchmark $ITERATIONS \"$message\" \"$_bmprep_\" \"$@\"; }"
+		eval _bms_$name=1
+		_bmtest_="$_bmtest_ $name"
+		unset _bmprep_
+		_bmcount_=$(expr $_bmcount_ + 1)
+	fi
+
+}
+
+# Call this function last say how many tests you should have run.
+run () {
+	benchmark() {
+		local count=$1 message=$2 prep=$3
+		shift 3
+		local script="$@"
+		if [ "$count" = done ]; then
+			return
+		fi
+		seq="$(seq -s ' ' 1 $count)"
+		tmp=$(mktemp foo.XXXXXX)
+		time=$(/usr/bin/time -o $tmp -f "%E" $SHELL -c "
+				$prep;
+				for a in $seq; do
+					echo -n \$a;$script;
+				done
+			"
+		)
+		time=$(cat $tmp)
+		rm -f $tmp
+		echo -e "$time\t: [$count] ($SHELL) $message"
+	}
+	if [ "$1" ]; then
+		_bmtest_="$@"
+	fi
+	for a in $_bmtest_;do
+		eval _bm_$a
+	done
+}
+
+if [ "$1" ]; then
+	_bmcount_=0
+	while [ $# -gt 0 ]; do
+		spoke=""
+		echo -n "Please wait.  Getting benchmark scripts .. "
+
+		. $1
+		echo "done(got $_bmcount_ scripts)."
+		run $2
+		shift 2
+	done
+
+fi

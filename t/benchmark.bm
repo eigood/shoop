@@ -1,0 +1,72 @@
+#!/bin/sh
+DEF_PREP=". ${SHOOPSH:-./shoop.sh}"
+count=100
+
+
+prep true
+bm 1 "internal variable sets" 'FOO=1'
+
+prep FOO=1
+bm 2 "internal variable gets" 'echo $FOO'
+
+prep true
+bm 3 "internal function sets" 'foo () { echo hi; }'
+
+prep 'foo () { echo hi; }'
+bm 4 "internal function gets" 'foo'
+
+prep $DEF_PREP
+bm 5 "shoop variable sets" 'OBJECT . foo = 1'
+
+prep $DEF_PREP
+prep OBJECT . foo = 1
+bm 6 "shoop variable gets" 'OBJECT . foo'
+
+prep $DEF_PREP
+bm 7 "shoop method sets" 'OBJECT . foo : ":"'
+
+prep $DEF_PREP
+prep OBJECT . foo : ":"
+bm 8 "shoop method gets" 'OBJECT . foo'
+
+prep $DEF_PREP
+prep OBJECT . foo : ":"
+prep OBJECT . new BAR
+bm 9 "shoop 1st-stage resolver method calls" 'BAR . foo'
+
+prep $DEF_PREP
+prep OBJECT . foo  : ':'
+prep OBJECT . new BAR
+prep BAR . new BLAH
+bm 10 "shoop 2nd-stage resolver method calls" 'BLAH . foo'
+
+prep $DEF_PREP
+prep _shoopnocache_=1
+prep OBJECT . foo  : ':'
+prep OBJECT . new BAR
+prep BAR . new BLAH
+
+bm 11 "shoop 2nd-stage(nocache) resolver method calls" 'BLAH . foo'
+
+prep OBJECT . foo  : 'echo hi'
+prep OBJECT . new BAR
+prep OBJECT . new BLAH
+prep OBJECT . new BAZ
+prep BAR . new A
+prep A . parent BAR BLAH OBJECT BAZ
+prepsave 12
+
+prepclear
+prep $DEF_PREP
+preprestore 12
+bm 12 "shoop multi-inheritance resolver method calls" 'A . foo'
+
+prep $DEF_PREP
+prep _shoopnocache_=1
+preprestore 12
+bm 13 "shoop multi-inheritance(nocache) resolver method calls" 'A . foo'
+
+prep $DEF_PREP
+prep _shoop_introspect=1
+
+bm 14 "shoop variable sets(with introspect)" 'OBJECT . foo = 1'
