@@ -5,7 +5,7 @@
 
 _shoop () {
 	local cmd=$1; shift
-	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH
+	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH
 	shift 3
 
 	case "$cmd" in
@@ -68,10 +68,8 @@ _shoop () {
 		;;
 	esac
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		local THIS=$TRYOBJ oIFS="$IFS"
-		IFS=""
-		eval "eval \"IFS='$oIFS'; \$_shoop_$TRYMETH\""
-		return
+		local THIS=$TRYOBJ
+		eval GETMETH=\"\$_shoop_$TRYMETH\"
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
 			THIS=$TRUEOBJ GETMETH="" NEWPARENTS=""
@@ -80,10 +78,7 @@ _shoop () {
 			# the resolving code.
 			eval local CACHE=\"\$_shoopcache_link_$TRUEMETH\"
 			if [ "$CACHE" ]; then
-				local oIFS="$IFS"
-				IFS=""
-				eval "eval \"IFS='$oIFS'; \$$CACHE\""
-				return
+				eval GETMETH=\"\$$CACHE\"
 			fi
 		fi
 
@@ -132,15 +127,17 @@ _shoop () {
 			return 1
 		}
 
-		if resolve; then
-			eval "$GETMETH"
-		else
+		if ! resolve; then
 			echo "\"$METH\" is undefined for $TRYOBJ." >&2
 			return 1
 		fi
-
 	fi
-
+	if [ "$GETMETH" ]; then
+		local oIFS="$IFS"
+		IFS=""
+		eval "IFS='$oIFS'; $GETMETH"
+		return
+	fi
 }
 # _shoopcache_link_DESCENDENT_counter=_shoop_OBJECT_counter
 # _shoopcache_= _shoopcache_method_new _shoopcache_link_GRANDCHILD_new  _shoopcache_method_counter _shoopcache_link_DESCENDENT_counter 
