@@ -14,7 +14,7 @@ SHOOP() {
 		_shoopreverse="$class${_shoopreverse:+_$_shoopreverse}"
 		if [ "$1" = : ]; then
 			shift
-			eval "_shoopparents_$class=\"\$@\""
+			eval "_shoopparents_$class=\"\$@\" _shoop_${class}_parent=\"echo -n '\$@'\""
 		fi
 	}
 	_part() {
