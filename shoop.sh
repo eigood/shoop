@@ -7,21 +7,20 @@ _shoop () {
 	local METH=$3
 	shift 3
 
-	if [ "$1" = = ]; then
-		# Set value.
-		shift
+	if [ "$1" = = -o "$1" = : ]; then
 		if eval [ "\$_shooptype_${TRYOBJ}_$METH" ]; then
-			eval "_shoopdefines_$TRUEOBJ='$_shoopdefines_$TRUEOBJ $METH'"
+			eval "_shoopdefines_$TRUEOBJ=\"$_shoopdefines_$TRUEOBJ $METH\""
 		fi
-		eval "_shooptype_${TRUEOBJ}_$METH=variable"
-		eval "_shoop_${TRUEOBJ}_$METH () { echo $@; }"
-		echo $@
-	elif [ "$1" = : ]; then
-		# Set method.
-		shift
-		eval "_shoop_${TRUEOBJ}_$METH () { $@; }"
-		eval "_shooptype_${TRUEOBJ}_$METH=method"
-		eval "_shoopdefines_$TRUEOBJ=\$(echo \$_shoopdefines_$TRUEOBJ $METH|tr ' ' '\n'|sort|uniq)"
+		if [ "$1" = = ]; then
+			shift
+			eval "_shooptype_${TRUEOBJ}_$METH=variable"
+			eval "_shoop_${TRUEOBJ}_$METH () { echo $@; }"
+			echo $@
+		else
+			shift
+			eval "_shooptype_${TRUEOBJ}_$METH=method"
+			eval "_shoop_${TRUEOBJ}_$METH () { $@; }"
+		fi
 	elif eval [ "\$_shooptype_${TRYOBJ}_$METH" ]; then # Bwa ha ha.
 		eval _shoop_${TRYOBJ}_$METH $TRUEOBJ \"\$@\";
 	else
