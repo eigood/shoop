@@ -1,9 +1,3 @@
-Several modules expand shoop so it can do various object oriented things:
-
-introspect.sh  - list all methods and variables that are defined on a class
-final.sh       - make class variables and methods final
-serialize.sh   - dump out objects in a format that can be re-loaded later
-prettyprint.sh - output a c++/java like represantation of a class
-use.sh         - imports shoop modules, and keeps multiple definitions
-		 from happening.
-destroy.sh     - destroy objects
+If you come up with any useful base objects, or extention modules send them
+to me, Joey Hess <joey@kitenet.net>, copyrighted under the GPL, LGPL, or BSD
+copyright (sans advertising clause), and I'll add them into shoop.
