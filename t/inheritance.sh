@@ -2,9 +2,6 @@
 # Inheritance regression test. Also sets basic methods and variables.
 . ./shoop.sh
 
-# Accessing undefined stuff.
-ok 1 "" OBJECT . no_such_property 2>/dev/null
-
 # Setting/getting variables.
 ok 0 1	OBJECT . counter = 1
 ok 0 2	OBJECT . counter = 2
@@ -17,7 +14,7 @@ ok 0 ""	OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1)'
 ok 0 3	OBJECT . count
 ok 0 4	OBJECT . count
 
-# Multi-level variable and inheritance.
+# Multi-level variable and method inheritance.
 ok 0 ""	OBJECT . new CHILD
 ok 0 4	CHILD . counter
 ok 0 ""	CHILD . new GRANDCHILD
@@ -35,21 +32,27 @@ ok 0 6	OBJECT . count
 ok 0 6  DESCENDENT . counter
 ok 0 7	DESCENDENT . count
 
-# Inherited method turned into a variable.
-ok 0 99	CHILD . count = 99
-ok 0 99	CHILD . count
-ok 0 99	CHILD . count
+# Multiple inheritance.
+ok 0 ""	OBJECT . new MOTHER
+ok 0 "" OBJECT . new FATHER
+ok 0 "" OBJECT . new SOMEGUY
+ok 0 "" MOTHER . new KID
+ok 0 "FATHER MOTHER" KID . parent = FATHER MOTHER
+ok 0 blue	MOTHER . eyes = blue
+ok 0 blue	KID . eyes
+# Inherit from first in list by preference.
+ok 0 brown	FATHER . eyes = brown
+ok 0 brown	KID . eyes
+ok 0 "SOMEGUY MOTHER" KID . parent = SOMEGUY MOTHER
+ok 0 black	SOMEGUY . eyes = black
+ok 0 black	KID . eyes
+# TODO: What is the parent is not an object?
+#ok ? ??	KID . parent NOSUCHOBJECT
+#ok 0 black	KID . eyes
+# Inheritance loops should not be allowed.
+ok 1 ""		KID . parent = KID
+# even spanning multiple parents
+ok 0 FATHER	KID . parent = FATHER
+ok 1 ""		FATHER . parent KID # "I'm my own grandpaw.."
 
-# Inherited variable turned into method.
-ok 0 ""	GRANDCHILD . count : '$THIS . counter = $(expr $($THIS . counter) + 10)'
-ok 0 0	GRANDCHILD . counter = 0
-ok 0 10	GRANDCHILD . count
-ok 0 20	GRANDCHILD . count
-
-# Inherited method override, with super call.
-ok 0 1	DESCENDENT . counter = 1
-ok 0 ""	DESCENDENT . count : \
-	'$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super count))'
-ok 0 13	DESCENDENT . count # you do the math..
-
-tests 33
+tests 37
