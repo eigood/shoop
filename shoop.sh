@@ -38,11 +38,7 @@ _shoop () {
 		local THIS=$TRUEOBJ
 		eval eval "\$_shoop_$TRYMETH"
 	else
-		eval local PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
-		if [ -z "$PARENTS" ]; then
-			return 0
-		fi
-		local P
+		eval local P PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
 		# Try inheritance 1 level deep -- the quick way.
 		# TODO: benchmark to see if this helps.
 		#    (remember, it also lets errors be seen..)
@@ -62,8 +58,7 @@ _shoop () {
 		for P in $PARENTS; do
 			eval local _shoopresolve_parent_echo_$P=1
 		done
-		local PARENTS2="$(_shoopgetparent $TRYOBJ)"
-		for P in $PARENTS2; do
+		for P in $(_shoopgetparent $TRYOBJ); do
 			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
 				local THIS=$TRUEOBJ
 				eval eval "\$_shoop_${P}_$METH"
