@@ -1,0 +1,10 @@
+shoop (0.1) unstable; urgency=low
+
+  * Initial release (closes: Bug#84406).
+
+ -- Gergely Nagy <8@free.bsd.hu>  Wed, 31 Jan 2001 10:21:08 +0100
+
+Local variables:
+mode: debian-changelog
+add-log-mailing-address "8@free.bsd.hu"
+End:

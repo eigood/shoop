@@ -1,0 +1,27 @@
+Source: shoop
+Section: devel
+Priority: extra
+Maintainer: Gergely Nagy <8@free.bsd.hu>
+Build-Depends: debhelper (>= 2.0.40), perl5
+Standards-Version: 3.5.0
+
+Package: shoop
+Architecture: all
+Recommends: shoop-modules (>= ${Source-Version})
+Description: OOP in shell
+ Every language under the sun these days is Object Oriented.
+ In an effort to make POSIX shell more buzzword compliant, and
+ to show that it's really not a big deal for a language to lack
+ built-in OO support, we have added object orientation to plain
+ old shell script. Specifically, we have implemented classless
+ OO with introspection, finalization, serialization, and multiple
+ inheritance.
+
+Package: shoop-modules
+Architecture: all
+Depends: shoop (>= ${Source-Version})
+Description: A collection of shoop modules
+ This package includes various modules for shoop, such as
+ introspect, prettyprint, serialize, and some others.
+ .
+ It is a good idea to have these at hand!
