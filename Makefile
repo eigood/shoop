@@ -23,6 +23,7 @@ SUBDIRS=modules docs
 
 BINS=\
 	shoop.sh\
+	shoop2.sh\
 
 DOCS=\
 	COPYING\
@@ -51,8 +52,10 @@ test:
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			SHOOP2SH=$(tinstall)$(bindir)/shoop2.sh\
 			CURDIR=$(CURDIR)\
 			$(SHELL) $(CURDIR)/t/regress\
+			$(CURDIR)/t/shoop2.sh\
 			$(CURDIR)/t/ifs.sh\
 			$(CURDIR)/t/metachars.sh\
 			$(CURDIR)/t/super.sh\
@@ -70,6 +73,7 @@ www-test1:
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			SHOOP2SH=$(tinstall)$(bindir)/shoop2.sh\
 			CURDIR=$(CURDIR)\
 			$(SHELL) $(CURDIR)/t/benchmark\
 			$(CURDIR)/t/kbu.bm\
@@ -80,6 +84,7 @@ www-test2:
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			SHOOP2SH=$(tinstall)$(bindir)/shoop2.sh\
 			CURDIR=$(CURDIR)\
 			$(SHELL) $(CURDIR)/t/benchmark\
 			$(CURDIR)/t/kbhomes.bm\
@@ -90,6 +95,7 @@ example:
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			SHOOP2SH=$(tinstall)$(bindir)/shoop2.sh\
 			CURDIR=$(CURDIR)\
 			$(CURDIR)/example.sh
 
@@ -98,6 +104,7 @@ benchmark:
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			SHOOP2SH=$(tinstall)$(bindir)/shoop2.sh\
 			CURDIR=$(CURDIR)\
 			$(SHELL) $(CURDIR)/t/benchmark\
 			$(CURDIR)/t/benchmark.bm\
