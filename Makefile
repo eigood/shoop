@@ -40,7 +40,7 @@ PKG_VER=0.1
 TOPDIR=.
 
 strip_comment_space = $(TOPDIR)/utils/shell-stripper
-binstall = $(CURDIR)/benchmark-dir
+tinstall = $(CURDIR)/tmp-install
 
 all:
 	echo This makefile is only here to run benchmarks or examples,
@@ -51,15 +51,21 @@ all:
 	echo \	make test
 
 test:
-	t/regress t/*.sh
+	$(MAKE) install prefix=$(tinstall)
+	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
+			SHOOPMOD=$(tinstall)$(moddir)\
+			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			$(CURDIR)/t/regress\
+			$(CURDIR)/t/*.sh\
 
 example:
 	sh ./example.sh
 
 benchmark:
-	$(MAKE) install prefix=$(binstall)
-	cd $(binstall); SHOOPPATH=$(binstall)$(moddir)\
-			SHOOPSH=$(binstall)$(bindir)/shoop.sh\
+	$(MAKE) install prefix=$(tinstall)
+	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
+			SHOOPMOD=$(tinstall)$(moddir)\
+			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
 			$(CURDIR)/t/benchmark\
 			$(CURDIR)/t/benchmark.bm\
 			"$(bscr)"
@@ -67,7 +73,7 @@ benchmark:
 clean:
 	echo Cleaning
 	rm -f *~ .#* ChangeLog
-	rm -rf $(binstall)
+	rm -rf $(tinstall)
 
 install: installshare installbins installdocs installexamples
 
