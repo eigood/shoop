@@ -59,7 +59,7 @@
     </TD>
   </TR>
 </TABLE>
-<!-- shoop shoop shoop -->
+
 <!-- end footer table -->
 </BODY>
 </HTML>
