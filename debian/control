@@ -1,9 +1,9 @@
 Source: shoop
 Section: devel
 Priority: extra
-Maintainer: Gergely Nagy <shoop-devel@lists.sourceforge.net>
+Maintainer: SHOOP developers <shoop-devel@lists.sourceforge.net>
 Build-Depends: debhelper (>= 2.0.40), perl
-Standards-Version: 3.5.0
+Standards-Version: 3.5.5
 
 Package: shoop
 Architecture: all
