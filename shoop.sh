@@ -86,54 +86,59 @@ _shoop () {
 				return
 			fi
 		fi
-		eval "local orgargs=\"$@\""
-		eval set -- $PARENTS
-		# 1st stage resolver.  Look at the immediate parents.
-		while [ $# -gt 0 ]; do
-			P=$1
-			eval GETMETH=\"\$_shoop_${P}_$METH\"
-			if [ "$GETMETH" ]; then
-				set -- $orgargs
-				eval "$GETMETH"
-				return
-			fi
-			# Save the parents of the current parents, for use in the
-			# 2nd stage resolver.  Yes, this slows the 1st stage down,
-			# but barely.  However, it greatly speeds up the 2nd stage,
-			# which is where most of the time will be spent.  This
-			# gave an 8% speedup in the 2nd stage, and only noise in
-			# the first.
-			NEWPARENTS="${NEWPARENTS:+ $NEWPARENTS}$(eval eval "\$_shoop_${P}_parent")"
-			shift
-		done
-		# 1st stage found no match, so resolve the inheritance tree,
-		# starting at the second level, and loop over untested super
-		# classes.
-		set -- $NEWPARENTS
-		while [ $# -gt 0 ];do
-			P=$1
-			eval GETMETH=\"\$_shoop_${P}_$METH\"
-			if [ "$GETMETH" ]; then
-				set -- $orgargs
-				# Save a reference to the resolved object in the cache for the
-				# true object.
-				if [ -z "$_shoopnocache_" ]; then
-					eval _shoopcache_link_${THIS}_$METH=_shoop_${P}_$METH\
-					     _shoopcache_=\"\$_shoopcache_\
-						  _shoopcache_method_$METH _shoopcache_link_${THIS}_$METH \"\
-					     _shoopcache_method_$METH=\"\$_shoopcache_method_$METH\
-						  _shoopcache_link_${THIS}_$METH\"\
-					     _shoopcache_linkmethod_${P}_$METH=\"\$_shoopcache_linkmethod_${P}_$METH\
-						  _shoopcache_link_${THIS}_$METH\"
+
+		resolve() {
+			eval set -- $PARENTS
+			# 1st stage resolver.  Look at the immediate parents.
+			while [ $# -gt 0 ]; do
+				P=$1
+				eval GETMETH=\"\$_shoop_${P}_$METH\"
+				if [ "$GETMETH" ]; then
+					return
 				fi
-				eval "$GETMETH"
-				return
-			fi
-			shift
-			set -- $(eval eval "\$_shoop_${P}_parent") "$@"
-		done
-		echo "\"$METH\" is undefined for $TRYOBJ." >&2
-		return 1
+				# Save the parents of the current parents, for use in the
+				# 2nd stage resolver.  Yes, this slows the 1st stage down,
+				# but barely.  However, it greatly speeds up the 2nd stage,
+				# which is where most of the time will be spent.  This
+				# gave an 8% speedup in the 2nd stage, and only noise in
+				# the first.
+				NEWPARENTS="${NEWPARENTS:+ $NEWPARENTS}$(eval eval "\$_shoop_${P}_parent")"
+				shift
+			done
+			# 1st stage found no match, so resolve the inheritance tree,
+			# starting at the second level, and loop over untested super
+			# classes.
+			set -- $NEWPARENTS
+			while [ $# -gt 0 ];do
+				P=$1
+				eval GETMETH=\"\$_shoop_${P}_$METH\"
+				if [ "$GETMETH" ]; then
+					# Save a reference to the resolved object in the cache for the
+					# true object.
+					if [ -z "$_shoopnocache_" ]; then
+						eval _shoopcache_link_${THIS}_$METH=_shoop_${P}_$METH\
+						     _shoopcache_=\"\$_shoopcache_\
+							  _shoopcache_method_$METH _shoopcache_link_${THIS}_$METH \"\
+						     _shoopcache_method_$METH=\"\$_shoopcache_method_$METH\
+							  _shoopcache_link_${THIS}_$METH\"\
+						     _shoopcache_linkmethod_${P}_$METH=\"\$_shoopcache_linkmethod_${P}_$METH\
+							  _shoopcache_link_${THIS}_$METH\"
+					fi
+					return
+				fi
+				shift
+				set -- $(eval eval "\$_shoop_${P}_parent") "$@"
+			done
+			return 1
+		}
+
+		if resolve; then
+			eval "$GETMETH"
+		else
+			echo "\"$METH\" is undefined for $TRYOBJ." >&2
+			return 1
+		fi
+
 	fi
 
 }
