@@ -48,4 +48,4 @@ benchmark:
 		OBJECT . foo = 1)
 	
 clean:
-	rm -f *~
+	rm -f *~ .#*
