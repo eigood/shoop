@@ -25,3 +25,10 @@ Description: A collection of shoop modules
  introspect, prettyprint, serialize, and some others.
  .
  It is a good idea to have these at hand!
+
+Package: shoop-dev
+Architecture: all
+Depends: shoop (>= ${Source-Version})
+Description: Development files and documention for shoop
+ Herein lies example code, utility programs, and documentation
+ for shoop, the SHell Object Oriented Programming library.
