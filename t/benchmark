@@ -45,16 +45,15 @@ run () {
 		fi
 		seq="$(seq -s ' ' 1 $count)"
 		tmp=$(mktemp foo.XXXXXX)
-		time=$(/usr/bin/time -o $tmp -f "%E" $SHELL -c "
+		echo -ne "\t    : [$count] ($SHELL) $message\r"
+		/usr/bin/time -o $tmp -f "%E" $SHELL -c "
 				$prep;
 				for a in $seq; do
 					echo -n \$a;$script;
 				done
-			"
-		)
-		time=$(cat $tmp)
+			" >/dev/null 2>&1 || true
+		cat $tmp|egrep -v '^Command ((stopped|terminated) by signal|exited with non-zero status) [0-9]*$'
 		rm -f $tmp
-		echo -e "$time\t: [$count] ($SHELL) $message"
 	}
 	if [ "$1" ]; then
 		_bmtest_="$@"
