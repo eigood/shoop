@@ -36,21 +36,35 @@ ok "" 0 4		onexit . size
 ok "" 0 "echo 4"	onexit . get 4
 
 # running
-ok "" 0 "3 1 2 4 "	onexit . run
-ok "" 0 "3 1 2 4 "	ONEXIT . run
+ok "" 0 "3
+1
+2
+4"	onexit . run
+ok "" 0 "3
+1
+2
+4
+"	ONEXIT . run
 
 # multiple onexit objects
 ok "" 0 ""		ONEXIT . new onexit2
 ok "" 0 ""		onexit2 . add echo a
-ok "" 0 "a "		onexit2 . run
+ok "" 0 "a
+"		onexit2 . run
 
 # multiple onexit objects
 ok "" 0 ""		ONEXIT . inew onexit3
 ok "" 0 ""		onexit3 . add echo Z
-ok "" 0 "Z "		onexit3 . run
+ok "" 0 "Z
+"		onexit3 . run
 
 # global runnings
-ok "" 0 "Z 3 1 2 4 a "	ONEXIT . run
+ok "" 0 "Z
+3
+1
+2
+4
+a"	ONEXIT . run
 
 # at exit
 #ok "" 0 "Z3124a"	exit
