@@ -6,6 +6,7 @@
 # Copyright 2000 by Adam Heath <doogie@debian.org>
 # Licensed under the LGPL
 #
+use strict;
 
 ## A semi-simple shell comment stripper
 ## 
@@ -28,7 +29,7 @@
 ## ; is a command delimiter, so it is safe to combined a command from
 ## subsequent lines onto the end of the current line.
 ##<
-$first = 1;
+my $first = 1;
 while (<>) {
 
 	#
