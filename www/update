@@ -19,7 +19,7 @@ case "$1" in
 			if lockfile -0 -r 0 $HTDOCS/cvspulse.lock; then
 				# ok, new pulse active.
 				# remove master lock, so other pulses can come in.
-				rm -f $HTDOCS/cvspulse.lock
+				rm -f $HTDOCS/update.lock
 				$0 www;
 				# We do a loop, so that if while we are reupdating, another
 				# pulse comes in, we can be sure that it will still have its
@@ -28,6 +28,7 @@ case "$1" in
 					rm -f $HTDOCS/cvsflag.lock
 					$0 www
 				done
+				rf -f $HTDOCS/cvspulse.lock
 			elif lockfile -0 -r 0 $HTDOCS/cvsflag.lock; then
 				# 2nd(and subsequent) pulses set the above lock
 				# flag, which the 1st pulse we see and will do
