@@ -28,14 +28,15 @@ compare () {
 		local output=$4 return=$5
 		
 		if [ "$expected_return" != "$return" ]; then
-			echo "	test $count FAILED: expected return code $expected_return, but got $return"
+			say "test $count FAILED: expected return code $expected_return, but got $return"
 			testfailures=$(expr $testfailures + 1)
 		elif [ "$expected_output" = "$output" ]; then
 			if [ "$VERBOSE" ]; then
-				echo "	test $count succeeded"
+				say "test $count succeeded"
 			fi
 		else
-			echo "	test $count FAILED: expected $expected_output, but got $output"
+			spoke=1
+			say "test $count FAILED: expected $expected_output, but got $output"
 			testfailures=$(expr $testfailures + 1)
 		fi
 		
@@ -48,21 +49,33 @@ compare () {
 	eval $@
 }
 
+say () {
+	if [ -z "$spoke" ]; then
+		spoke=1
+		echo
+	fi
+	echo "	$*"
+}
+
 if [ "$1" ]; then
 	# This part runs a regression test script (which uses the code above),
 	# and parses the output to print a human-readable summary.
 	script=$1
 	shift
 
-	echo Beginning test of $script ..
+	spoke=""
+	echo -n Beginning test of $script ..
 	testcount=0
 	eval `. $script || echo woah`
 	if [ "$expected" -a "$expected" != "$testcount" ]; then
-		echo "$expected tests were expected, but $testcount were run."
+		say "$expected tests were expected, but $testcount were run."
 	fi
 	if [ "$testfailures" != 0 ]; then
-		echo "$testfailures test(s) FAILED."
+		echo ".. $testfailures test(s) FAILED."
 	else
-		echo ".. all test(s) successful."
+		if [ "$spoke" ]; then
+			echo -n ".."
+		fi		
+		echo " all test(s) successful."
 	fi
 fi
