@@ -2,8 +2,9 @@ shoop (UNRELEASE) unstable; urgency=low
 
   * Removed bashism from debian/rules.  Closes: #88067
   * Don't use "$@" when using local to assign variables.  Closes: #101623.
+  * debian/rules rewritten as a Makefile. Closes: #88063
 
- -- Gergely Nagy <8@free.bsd.hu>  UNRELEASED
+ -- Gergely Nagy <algernon@debian.org>  UNRELEASED
 
 shoop (0.1) unstable; urgency=low
 
