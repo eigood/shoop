@@ -57,7 +57,7 @@ _shoop () {
 				return 0
 			fi
 		done
-		echo "\"$METH\" is undefined." >&2
+		echo "\"$METH\" is undefined for $TRYOBJ." >&2
 		return 1
 	fi
 }
