@@ -32,6 +32,7 @@ case "$1" in
 				# 2nd(and subsequent) pulses set the above lock
 				# flag, which the 1st pulse we see and will do
 				# another update from cvs.  We don't have to do anything here.
+				: this is a null command(returns true)
 			fi
 			rm -f $HTDOCS/update.lock
 		fi
