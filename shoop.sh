@@ -24,14 +24,18 @@ _shoop () {
 				#set -- $(eval eval echo \"$\{DOLLAR\}\{{$(seq -s , 1 $(($#-1)))}\}\")
 				eval "_shooptype_$TRUEMETH=variable;
 				      _shoop_$TRUEMETH () { echo -n $@; }"
-				echo -n $@;;
+				echo -n $@
+			;;
 			*:)
 				eval "_shooptype_$TRUEMETH=method;
 				      _shoop_$TRUEMETH () { $@
 }";
+			;;
 		esac
 		case $DEFINE in
-			:?*)	eval "_shoopfinal_$TRUEMETH=1";;
+			:?*)
+				eval "_shoopfinal_$TRUEMETH=1"
+			;;
 		esac
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		eval _shoop_$TRYMETH $TRUEOBJ \"\$@\";
