@@ -4,8 +4,22 @@
 #			 Adam Heath <doogie@debian.org>
 
 _shoop () {
+	local cmd=$1; shift
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH
 	shift 3
+
+	case "$cmd" in
+		d)	if eval [ \"\$_shoopprivate_$TRUEMETH\" ]; then
+				echo "Previous declaration of ($TRUEOBJ:$METH) marked private" >&2
+				return 1
+			fi
+			unset _shoop_$TRUEMETH _shooptype_$TRUEMETH
+			if [ -z "$_shoopnocache_" ]; then
+				eval $_shoopcacheclear_
+			fi
+			return
+			;;
+	esac
 	case "$1" in
 		=|=q|=p|.=|.=q|.=p|.=qp|:|:p|.:|.:p)
 			local varmeth=$1 append="" quiet="" private=""; shift
@@ -108,6 +122,7 @@ _shoop () {
 		echo "\"$METH\" is undefined for $TRYOBJ." >&2
 		return 1
 	fi
+
 }
 # _shoopcache_link_DESCENDENT_counter=_shoop_OBJECT_counter
 # _shoopcache_= _shoopcache_method_new _shoopcache_link_GRANDCHILD_new  _shoopcache_method_counter _shoopcache_link_DESCENDENT_counter 
@@ -147,22 +162,22 @@ _shoop_introspect=1
 # that has already been resolved(and cached) by the first object,
 # this will lead to a cache inconsistency.
 
-_shoop OBJECT OBJECT new :p '
+_shoop . OBJECT OBJECT new :p '
 	local OBJNAME=$1
-	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \"\$@\"; };"
+	eval "$OBJNAME () { local cmd=\"\$1\"; shift; _shoop \$cmd $OBJNAME $OBJNAME \"\$@\"; };"
 	if [ $THIS != $OBJNAME ]; then
-		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null
+		_shoop . $OBJNAME $OBJNAME parent = $THIS >/dev/null
 	fi
 	eval unset _shoopcache_ \$_shoopcache_ || true
 '
 # Create the base object via the method already defined on it.
-_shoop OBJECT OBJECT new OBJECT
+_shoop . OBJECT OBJECT new OBJECT
 
 # Define the parent variable
 OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
-OBJECT . super :p '_shoop $THIS $($THIS . parent) "$LASTMETH" "$@"; return'
+OBJECT . super :p '_shoop . $THIS $($THIS . parent) "$LASTMETH" "$@"; return'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect
