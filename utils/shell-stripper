@@ -34,13 +34,14 @@ while (<>) {
 		#
 		next if(/^(#.*|)$/);
 	}
-	print;
+	print if(/^#!/);
 	if(defined $first) {
 		print "# This script has been preprocessed prior to installation\n";
 		print "# It has had comments, blank lines, and leading spaces\n";
 		print "# removed, and \\-style lines combined.  This was done so\n";
 		print "# that it could run quicker under some shells.\n"
 	}
+	print if(! /^#!/);
 	undef $first;
 
 }
