@@ -23,6 +23,7 @@ MODULES=\
 	serialize.sh\
 	thread.sh\
 	use.sh\
+	also_inherit.sh\
 
 DOCS=\
 	COPYING\

@@ -84,3 +84,11 @@ prep OBJECT . new BLAH
 prep FOO . new BAR
 bm 16 "shoop method sets dumping cache" 'BAR . foo; BLAH . foo : ":"'
 
+prep $DEF_PREP
+prep . ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
+prep OBJECT . use also_inherit
+prep OBJECT . new FOO
+prep FOO . new BAR
+prep BAR . new BLAH
+prep OBJECT . new A
+bm 17 "shoop multi-inheritance setting" 'FOO . also_inherit BLAH A'
