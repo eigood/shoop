@@ -34,8 +34,11 @@ DOCS=\
 EXAMPLES=\
 	example.sh\
 
+PKG=shoop
+PKG_VER=0.1
+
 TIME=/usr/bin/time -f "%E" 
-ITERATIONS=100 
+ITERATIONS=1000
 SEQ=$(shell seq 1 $(ITERATIONS)) 
 DEF_PREP = . ./shoop.sh
 
@@ -60,31 +63,31 @@ example:
 	@sh ./example.sh
 
 benchmark:
-	$(call nobenchmark,internal variable sets                    ,\
+	$(call benchmark,internal variable sets                    ,\
 		true,\
 		FOO=$x)
-	$(call nobenchmark,internal variable gets                    ,\
+	$(call benchmark,internal variable gets                    ,\
 		FOO=1,\
 		echo FOO)
-	$(call nobenchmark,internal function calls                   ,\
+	$(call benchmark,internal function calls                   ,\
 		foo () { echo hi; },\
 		foo)
-	$(call nobenchmark,shoop variable sets                       ,\
+	$(call benchmark,shoop variable sets                       ,\
 		$(DEF_PREP),\
 		OBJECT . foo = 1)
-	$(call nobenchmark,shoop variable gets                       ,\
+	$(call benchmark,shoop variable gets                       ,\
 		$(DEF_PREP); OBJECT . foo = $x,\
 		OBJECT . foo)
-	$(call nobenchmark,shoop method calls                        ,\
+	$(call benchmark,shoop method calls                        ,\
 		$(DEF_PREP); OBJECT . foo : echo hi,\
 		OBJECT . foo)
-	$(call nobenchmark,shoop resolver method calls               ,\
+	$(call benchmark,shoop resolver method calls               ,\
 		$(DEF_PREP); OBJECT . foo  : echo hi; OBJECT . new BAR,\
 		BAR . foo)
 	$(call benchmark,shoop multi-level resolver method calls   ,\
 		$(DEF_PREP); OBJECT . foo  : echo hi; OBJECT . new BAR; BAR . new BLAH,\
 		BLAH . foo)
-	$(call nobenchmark,shoop variable sets (with introspect)     ,\
+	$(call benchmark,shoop variable sets (with introspect)     ,\
 		$(DEF_PREP); _shoop_introspect=1,\
 		OBJECT . foo = 1)
 	
@@ -140,4 +143,29 @@ $(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(
 	@egrep -v '[ 	]*#' $< |(echo "#!/bin/sh -e";cat) > $@
 	@chmod +x $@
 
-.PHONY: installshowconfig installdirs installdocs installbins installshare  
+.PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
+
+#
+# Author only targets are below
+#
+
+cvs-build:
+	rm -rf cvs-build
+	$(MAKE) ChangeLog
+	tar c --exclude CVS --exclude cvs-build . |\
+		(mkdir -p cvs-build/$(PKG)-$(PKG_VER);cd cvs-build/$(PKG)-$(PKG_VER);tar x)
+
+NAMES=$(shell\
+	awk '\
+	/^CVS:/{\
+	sub(/^CVS:/, "");\
+	printf "-u \"%s:", $$1;\
+	sub($$1 " ","");\
+	split($$0, A, / *[<>] */);\
+	printf "%s:%s\"\n", A[1], A[2]}\
+' AUTHORS)
+#endef
+
+ChangeLog:
+	echo $(NAMES)
+	rcs2log $(NAMES) > $@
