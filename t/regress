@@ -10,7 +10,7 @@ ok () {
 	shift 3
 	
 	fixup() {
-		sed s/"'"/"''"'/g;s,\n,\\,'
+		sed 's/'"'/'"'\\'"''/g;s,"'\n,\\,'
 	}
 	testcount=$(($testcount + 1))
 	set +e
