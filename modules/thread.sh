@@ -1,4 +1,9 @@
 #!/bin/sh
+#                                                                               
+# Pseudothread module for shoop. These arn't real threads (no shared data),
+# but they start up like threads.
+#                                                                               
+# GPL copyright 2000 by Adam Heath <doogie@debian.org>
 OBJECT . new THREAD
 
 THREAD . start : '

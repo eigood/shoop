@@ -7,4 +7,4 @@ prettyprint.sh - output a c++/java like represantation of a class
 use.sh         - imports shoop modules, and keeps multiple definitions
 		 from happening.
 destroy.sh     - destroy objects
-thread.sh      - base support for simple threading.
+thread.sh      - pseudothreads
