@@ -26,7 +26,7 @@ use strict;
 ## A line ending with \\ has the \\ removed, and the next line is
 ## concatenated to the current line, before processing is continued.
 ##:;
-## ; is a command delimiter, so it is safe to combined a command from
+## ; is a command delimiter, so it is safe to combine a command from
 ## subsequent lines onto the end of the current line.
 ##<
 my $first = 1;
