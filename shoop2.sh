@@ -26,7 +26,7 @@ SHOOP() {
 			echo "Name already defined!($_shoop_current_class.$name)" >&2
 			return 1
 		fi
-		if eval [ -z \"\$_shoopabstract_${_shoop_current_class}\" ]; then
+		if eval [ -z \"\$_shoopabstract_${_shoop_current_class}\" -a \"\$abstract\" ]; then
 			echo "Can't create abstract $type $name on non-abstract class $_shoop_current_class!" >&2
 			return 1
 		fi
