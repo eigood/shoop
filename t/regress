@@ -78,7 +78,7 @@ if [ "$1" ]; then
 			say "($expected tests were expected, but $testcount were run)"
 		fi
 		if [ "$testfailures" != 0 ]; then
-			echo ".. $testfailures test(s) FAILED."
+			echo ".. $testfailures test(s)(of $expected) FAILED."
 		else
 			if [ "$spoke" ]; then
 				echo -n ".."
