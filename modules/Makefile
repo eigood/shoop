@@ -22,6 +22,7 @@ MODULES=\
 	ref.sh\
 	shoop.sh\
 	shoop_command.sh\
+	stringutil.sh\
 
 include $(TOPDIR)/Makefile.vars
 include $(TOPDIR)/Makefile.rules
