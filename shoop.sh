@@ -28,7 +28,7 @@ _shoop () {
 				eval "_shoop_$TRUEMETH='echo -n $@'
 				      _shooptype_$TRUEMETH=variable"
 			else
-				if [ "$quiet" ]; then echo "Invalid modified(q) on assignment!($TRUEOBJ.$METH)" >&2; fi
+				if [ "$quiet" ]; then echo "Invalid modifier(q) on assignment!($TRUEOBJ.$METH)" >&2; fi
 				if [ "$append" ];then
 					eval eval "_shoop_$TRUEMETH=\'\$_shoop_$TRUEMETH;\$@\'
 					      _shooptype_$TRUEMETH=method"
