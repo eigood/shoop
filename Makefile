@@ -73,62 +73,68 @@ example:
 
 
 binstall = benchmark-dir
-benchmark-install:
+benchmark:
 	$(MAKE) install prefix=$(binstall)
-	$(MAKE) benchmark\
+	$(MAKE) benchmark-install\
 		SHOOPPATH="$(binstall)/$(moddir)"\
 		DEF_PREP=". $(binstall)/$(bindir)/shoop.sh" 
-	rm -rf $(binstall)
+#	rm -rf $(binstall)
 	
-benchmark:
-	$(test1)
-	$(test2)
-	$(test3)
-	$(test4)
-	$(test5)
-	$(test6)
-	$(test7)
-	$(test8)
-	$(test9)
-	$(test10)
-	$(test11)
-	$(test12)
-
-test1 = $(call benchmark,internal variable sets                       ,\
+benchmark-install:
+#	$(int_var_set)
+#	$(int_var_get)
+#	$(int_fun_set)
+#	$(int_fun_get)
+#	$(shp_var_set)
+#	$(shp_var_get)
+#	$(shp_mth_set)
+#	$(shp_mth_get)
+	$(1st_stg_res)
+	$(2nd_stg_res)
+	$(2nd_stg_noc)
+#	$(mul_inh_res)
+#	$(mul_inh_noc)
+#	$(shp_set_int)
+int_var_set = $(call benchmark,internal variable sets                                 ,\
 		true,\
 		FOO=$x)
-
-test2 = $(call benchmark,internal variable gets                       ,\
+int_var_get = $(call benchmark,internal variable gets                                 ,\
 		FOO=1,\
 		echo FOO)
-test3 = $(call benchmark,internal function sets                       ,\
+int_fun_set = $(call benchmark,internal function sets                                 ,\
 		:,\
 		foo () { echo hi; })
-test4 = $(call benchmark,internal function calls                      ,\
+int_fun_get = $(call benchmark,internal function calls                                ,\
 		foo () { echo hi; },\
 		foo)
-test5 = $(call benchmark,shoop variable sets                          ,\
+shp_var_set = $(call benchmark,shoop variable sets                                    ,\
 		$(DEF_PREP),\
 		OBJECT . foo = 1)
-test6 = $(call benchmark,shoop variable gets                          ,\
+shp_var_get = $(call benchmark,shoop variable gets                                    ,\
 		$(DEF_PREP); OBJECT . foo = $x,\
 		OBJECT . foo)
-test7 = $(call benchmark,shoop method sets                            ,\
+shp_mth_set = $(call benchmark,shoop method sets                                      ,\
 		$(DEF_PREP) ,\
 		OBJECT . foo : '')
-test8 = $(call benchmark,shoop method calls                           ,\
+shp_msg_get = $(call benchmark,shoop method calls                                     ,\
 		$(DEF_PREP); OBJECT . foo : 'echo hi;return',\
 		OBJECT . foo)
 # OBJECT . foo
 #  BAR
-test9 = $(call benchmark,shoop 1st-stage resolver method calls        ,\
-		$(DEF_PREP); OBJECT . foo  : 'echo hi;return'; OBJECT . new BAR,\
+1st_stg_res = $(call benchmark,shoop 1st-stage resolver method calls                  ,\
+		$(DEF_PREP); OBJECT . foo  : 'echo hi;return'; OBJECT . new BAR ,\
 		BAR . foo)
 # OBJECT . foo
 #  BAR
 #   BLAH
-test10 = $(call benchmark,shoop 2nd-stage resolver method calls        ,\
-		$(DEF_PREP); OBJECT . foo  : 'echo hi;return'; OBJECT . new BAR; BAR . new BLAH,\
+2nd_stg_res = $(call benchmark,shoop 2nd-stage resolver method calls                  ,\
+		$(DEF_PREP);\
+OBJECT . foo  : 'echo hi;return';\
+OBJECT . new BAR;\
+BAR . new BLAH\
+		,BLAH . foo)
+2nd_stg_noc = $(call benchmark,shoop 2nd-stage(nocache) resolver method calls         ,\
+		$(DEF_PREP);_shoopnocache_=1;OBJECT . foo  : 'echo hi;return';OBJECT . new BAR;BAR . new BLAH,\
 		BLAH . foo)
 # OBJECT . foo
 #  BAR
@@ -138,15 +144,21 @@ test10 = $(call benchmark,shoop 2nd-stage resolver method calls        ,\
 #  A
 #  BAZ
 #   A
-test11 = $(call benchmark,shoop multi-inheritance resolver method calls,\
-		$(DEF_PREP); OBJECT . foo  : echo hi\;return; \
+test12prep=\
+OBJECT . foo  : 'echo hi;return'; \
 OBJECT . new BAR;\
 OBJECT . new BLAH;\
 OBJECT . new BAZ;\
 BAR . new A;\
-A . parent BAR BLAH OBJECT BAZ,\
+A . parent BAR BLAH OBJECT BAZ\
+
+mul_inh_res = $(call benchmark,shoop multi-inheritance resolver method calls         ,\
+		$(DEF_PREP), $(test12prep),\
 		A . random 2>/dev/null || true)
-test12 = $(call benchmark,shoop variable sets (with introspect)        ,\
+mul_inh_noc = $(call benchmark,shoop multi-inheritance(nocache) resolver method calls,\
+		$(DEF_PREP), _shoopcache_=1; $(test12prep),\
+		A . random 2>/dev/null || true)
+shp_set_int = $(call benchmark,shoop variable sets (with introspect)                 ,\
 		$(DEF_PREP); _shoop_introspect=1,\
 		OBJECT . foo = 1)
 
@@ -228,3 +240,7 @@ NAMES=$(shell\
 ChangeLog:
 	echo $(NAMES)
 	rcs2log $(NAMES) > $@
+
+ifndef NOISY
+.SILENT:
+endif
