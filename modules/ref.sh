@@ -11,7 +11,7 @@ OBJECT_REF . new :p '
 		eval local OBJNAME=\$$1
 	fi
 	$THIS . super $OBJNAME
-	$OBJNAME . parents .=q " $CLASS"
+	$OBJNAME . parents .=q "$CLASS"
 '
 OBJECT_REF . _ref :p '
 	eval $1=_$(($($THIS . __ref 2>/dev/null) + 1))
