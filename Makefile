@@ -45,7 +45,7 @@ DEF_PREP = . ./shoop.sh
 # run_command msg, prep code, loop code
 benchmark = @
 ifeq ($(NOBASH),)
-benchmark = \
+benchmark += \
 	echo -n "bash: $(ITERATIONS) $(1): ";$(TIME) bash -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null ;\
 
@@ -175,7 +175,7 @@ endef
 
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir)
 	@$(inst_msg)
-	@egrep -v '[ 	]*#' $< |(echo "#!/bin/sh -e";cat) > $@
+	@egrep -v '([ 	]*#|^[ 	]*$)' $< |(echo "#!/bin/sh -e";cat) > $@
 
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(docdir)
 	@$(inst_msg)
@@ -191,7 +191,7 @@ $(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
 
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir)
 	@$(inst_msg)
-	@egrep -v '[ 	]*#' $< |(echo "#!/bin/sh -e";cat) > $@
+	@egrep -v '([ 	]*#|^[ 	]*$)' $< |(echo "#!/bin/sh -e";cat) > $@
 	@chmod +x $@
 
 .PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
