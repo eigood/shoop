@@ -35,7 +35,7 @@ compare () {
 	while :; do
 		local name="$1" count="$2" expected_output="$3" expected_return="$4" output="$5" return="$6"
 		shift 6
-		if [ "$name" ]; then
+		if [ "x$name" != "x" ]; then
 			id="$name($count)"
 		else
 			id=$count
@@ -44,7 +44,7 @@ compare () {
 
 			say "test $id FAILED: expected return code $expected_return, but got $return"
 			testfailures=$(($testfailures + 1))
-		elif [ "$expected_output" = "$output" ]; then
+		elif [ "x$expected_output" = "x$output" ]; then
 			if [ "$VERBOSE" ]; then
 				say "test $id succeeded"
 			fi
