@@ -1,5 +1,7 @@
 destroy.sh:
-  * delete object references using new 'd' command
+DONE delete object references using new 'd' command
+  The above is being done the same was as the 'd' command, it just isn't
+  calling _shoop to do it, for speed reasons.
 
 final.sh:
   * set the variable/method to 'protected' using shoop commands
