@@ -133,11 +133,11 @@ _shoop_introspect=1
 # later.  Maybe we should not allow that, tho?
 
 IFS=" " _shoop OBJECT OBJECT new : '
-	local OBJNAME=$1;
+	local OBJNAME=$1
 	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };"
 	if [ $THIS != $OBJNAME ]; then
-		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null;
-	fi;
+		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null
+	fi
 	return
 '
 # Create the base object via the method already defined on it.

@@ -13,49 +13,49 @@ _shoop_introspect=1
 
 _shoop_quote="'"
 IFS=" " OBJECT . serialize : '
-	local DEFINES A DISPLAYOBJ;
-	local PARENTS=$($THIS . parent 2>/dev/null);
+	local DEFINES A DISPLAYOBJ
+	local PARENTS=$($THIS . parent 2>/dev/null)
 	if [ "$2" ]; then
-		DISPLAYOBJ=$2;
+		DISPLAYOBJ=$2
 	else
-		DISPLAYOBJ=$THIS;
-		local oldargs="$@";
-		set -- $PARENTS;
+		DISPLAYOBJ=$THIS
+		local oldargs="$@"
+		set -- $PARENTS
 		if [ "$1" ]; then
-			echo "$1 . new $THIS";
+			echo "$1 . new $THIS"
 			if [ $# -gt 1 ]; then
-				echo "$THIS . parent $PARENTS";
-			fi;
-			eval _shoopseen_parent=1;
-		fi;
-		set -- $oldargs;
-	fi;
-	eval DEFINES=\$_shoopdefines_$THIS;
+				echo "$THIS . parent $PARENTS"
+			fi
+			eval _shoopseen_parent=1
+		fi
+		set -- $oldargs
+	fi
+	eval DEFINES=\$_shoopdefines_$THIS
 	for A in $DEFINES; do
 		if eval [ -z \"\$_shoopseen_$A\" ]; then
-			eval echo -n "$DISPLAYOBJ . $A\ ";
+			eval echo -n "$DISPLAYOBJ . $A\ "
 			if eval [ \$_shooptype_${THIS}_$A = variable ]; then
-				echo -n "= ";
-				$DISPLAYOBJ . $A;
+				echo -n "= "
+				$DISPLAYOBJ . $A
 			else
-				echo -n ": $_shoop_quote";
-				IFS=" " eval echo -n "\$_shoop_${THIS}_$A";
-				echo -n "$_shoop_quote";
-			fi;
-			echo ;
-			eval _shoopseen_$A=1;
-		fi;
-	done;
+				echo -n ": $_shoop_quote"
+				IFS=" " eval echo -n "\$_shoop_${THIS}_$A"
+				echo -n "$_shoop_quote"
+			fi
+			echo
+			eval _shoopseen_$A=1
+		fi
+	done
 	if eval [ \"\$_shoopfinal_$DISPLAYOBJ\" ]; then
-		eval echo "$DISPLAYOBJ . finalize \$_shoopfinal_$DISPLAYOBJ";
-	fi;
+		eval echo "$DISPLAYOBJ . finalize \$_shoopfinal_$DISPLAYOBJ"
+	fi
 	if [ "$1" = resolve ];then
 		for P in $PARENTS; do
-			$P . serialize resolve $DISPLAYOBJ;
-		done;
-	fi;
+			$P . serialize resolve $DISPLAYOBJ
+		done
+	fi
 	for A in $DEFINES; do
-		unset _shoopseen_$A;
-	done;
+		unset _shoopseen_$A
+	done
 	return
 '

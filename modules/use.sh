@@ -10,22 +10,22 @@
 OBJECT . usepath = $SHOOPPATH:. > /dev/null
 
 IFS=" " OBJECT . use : '
-	local A B usepath;
-	local oIFS="$IFS" IFS=:; 
-	usepath="$($THIS . usepath)";
-	IFS="$oIFS";
+	local A B usepath
+	local oIFS="$IFS" IFS=:
+	usepath="$($THIS . usepath)"
+	IFS="$oIFS"
 	for A in "$@"; do
 		if eval [ -z \"\$_shoopuse_$A\" ]; then
 			for B in $usepath;do
 				if [ -e $B/$A.sh ]; then
-					. $B/$A.sh;
-					_shoopuse_="$_shoopuse_ $A";
-					eval "_shoopuse_$A=1";
-					break;
-				fi;
-			done;
-		fi;
-	done;
+					. $B/$A.sh
+					_shoopuse_="$_shoopuse_ $A"
+					eval "_shoopuse_$A=1"
+					break
+				fi
+			done
+		fi
+	done
 	return
 '
 _shoopuse_use=1

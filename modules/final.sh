@@ -5,13 +5,13 @@
 # that should become final. (Though they may be overridden in a child class.)
 
 IFS=" " OBJECT . finalize : '
-	local item;
+	local item
 	for item in $@; do
 		if eval  [ -z \"\$_shoopfinal_${THIS}_$item\" ]; then
-			eval "readonly _shoop_${THIS}_$item;
-			      _shoopfinal_${THIS}_$item=1;
-			      _shoopfinal_$THIS=\"\$_shoopfinal_$THIS $item\"";
+			eval "readonly _shoop_${THIS}_$item
+			      _shoopfinal_${THIS}_$item=1
+			      _shoopfinal_$THIS=\"\$_shoopfinal_$THIS $item\""
 		fi
-	done;
+	done
 	return
 '
