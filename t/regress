@@ -1,16 +1,21 @@
 #!/bin/sh -e
 # Regression test framework (modeled on perl's if you can't tell).
 
+TMPF=$(mktemp $(/bin/pwd)/regress.XXXXXX)
+trap 'rm -rf $TMPF' 0
+
 # Call this function to test something.
 ok () {
-	local name="$1" expected_return="$2" expected_output="$3"
+	local name="$1" expected_return="$2" expected_output="$3" ret
 	shift 3
 	
 	testcount=$(($testcount + 1))
-	echo -n "compare '$name' '$testcount' '$expected_output' '$expected_return' '"
+	echo -n "compare '$name' '$testcount' '$(echo $expected_output | sed "s/'/''/g")' '$expected_return' '"
 	set +e
-	"$@"
-	echo "' $?"
+	"$@" > $TMPF
+	ret=$?
+	sed "s/'/''/g" < $TMPF
+	echo "' $ret"
 	set -e
 }
 
