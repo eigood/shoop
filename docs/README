@@ -1,7 +1,7 @@
 What on earth is this?
 
 Well, every language under the sun these days is Object Oriented. In an
-effort to make POSIX shell more buzzword complient, I have added objection
+effort to make POSIX shell more buzzword complient, I have added object
 orientation to that language. (Next up: awk.) Specifically, it impliments
 classless OO with single inheritance.
 
@@ -23,6 +23,7 @@ You can call the method or get the value of the property like this:
 OBJ . property
 OBJ . method
 
-Both will output the value of the property or method to stdout.
+Both will output the value of the property or return value of the method to
+stdout.
 
 That's about it. Now run off and write a MOO or something.
