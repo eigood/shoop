@@ -4,3 +4,4 @@ advertising clause), and I'll add them in. Currently, I have:
 
 introspect.sh - list all methods and variables that are defined on a class
 final.sh      - make class variables and methods final
+serialize.sh  - dump out objects in a format that can be re-loaded later

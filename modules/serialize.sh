@@ -1,9 +1,12 @@
 #!/bin/sh -e
 #
-# Introspect module for shoop. Expands the OBJECT class with an introspect
-# method, that can list all methods and variables that are defined on a class.
+# Serialization module for shoop. Expands the OBJECT class with a serialize
+# method, that can dump out machine-readable definitions of objects.
 #
-# Smell the Java. GPL copyright 2000 by Adam Heath <doogie@debian.org>
+# For example: FOO . serialize > FOO.sh; exit
+# To restart: . ./FOO.sh
+#
+# GPL copyright 2000 by Adam Heath <doogie@debian.org>
 
 # Enable introspection inside _shoop
 _shoop_introspect=1
