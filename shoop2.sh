@@ -12,6 +12,9 @@ SHOOP() {
 		_shoop_location=class
 		_shoopforward="${_shoopforward:+${_shoopforward}_}$class"
 		_shoopreverse="$class${_shoopreverse:+_$_shoopreverse}"
+		if [ "$abstract" ]; then
+			eval _shoopabstract_$class=1
+		fi
 		if [ "$1" = : ]; then
 			shift
 			eval "_shoopparents_$class=\"\$@\" _shoop_${class}_parent=\"echo -n '\$@'\""
@@ -21,6 +24,10 @@ SHOOP() {
 		local type=$1 name=$2; shift 2
 		if eval [ \"\$_shooptype_${_shoop_current_class}_$name\" ]; then
 			echo "Name already defined!($_shoop_current_class.$name)" >&2
+			return 1
+		fi
+		if eval [ -z \"\$_shoopabstract_${_shoop_current_class}\" ]; then
+			echo "Can't create abstract $type $name on non-abstract class $_shoop_current_class!" >&2
 			return 1
 		fi
 		eval "_shoopflags_${_shoop_current_class}_$name=$flags\
@@ -96,6 +103,10 @@ SHOOP() {
 		fi
 		if eval [ -z \"\$_shoopclass_$class\" ]; then
 			echo "$class not defined!" >&2
+			return 1
+		fi
+		if eval [ \"\$_shoopabstract_$class\" ]; then
+			echo "Can't create instance of abstract class $class!" >&2
 			return 1
 		fi
 		if eval [ \"\$_shoopdata_${class}_$class\" ];then
