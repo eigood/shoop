@@ -54,6 +54,8 @@ test:
 			$(SHELL) $(CURDIR)/t/regress\
 			$(CURDIR)/t/inheritance.sh\
 			$(CURDIR)/t/list.sh\
+			$(CURDIR)/t/stack.sh\
+			$(CURDIR)/t/onexit.sh\
 
 www-test1:
 	$(MAKE) installbins installmodules prefix=$(tinstall)
