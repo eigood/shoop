@@ -12,7 +12,6 @@ _shoop () {
 			eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
 				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
-		
 		if [ "$1" = = ]; then
 			shift
 			eval "_shoop_$TRUEMETH='echo -n $@'
