@@ -5,11 +5,11 @@ LIST . _count =q 0
 LIST . _order =q ''
 
 LIST . add :p '
-	local count=$(($($THIS . _count) + 1))
+	local count=$(($($THIS . _count) + 1)) size=$(($($THIS . size) + 1))
 	$THIS . _count =q $count
-	$THIS . size =q $(($($THIS . size) + 1))
+	$THIS . size =q $size
 	$THIS . _order =q "$($THIS . _order) $count"
-	$THIS . set $count "$@"
+	$THIS . set $size "$@"
 '
 LIST . insert :p '
 	$THIS . insertat 1 "$@"
