@@ -175,7 +175,7 @@ _shoop_introspect=1
 _shoop . OBJECT OBJECT new :p '
 	local OBJNAME
 	if [ $# -gt 1 ]; then
-		OBJNAME="_$(OBJECT . _ref)"
+		OBJNAME="$(OBJECT . _ref)"
 		eval "$@ :p ''$OBJNAME \\\"\\\$@\\\"''"
 	else
 		OBJNAME=$1
@@ -187,7 +187,7 @@ _shoop . OBJECT OBJECT new :p '
 	eval unset _shoopcache_ \$_shoopcache_ || true
 '
 _shoop . OBJECT OBJECT _ref :p '
-	$THIS . __ref = $(($($THIS . __ref 2>/dev/null) + 1))
+	echo _$($THIS . __ref = $(($($THIS . __ref 2>/dev/null) + 1)))
 '
 # Create the base object via the method already defined on it.
 _shoop . OBJECT OBJECT new OBJECT
