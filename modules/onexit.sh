@@ -12,7 +12,7 @@ ONEXIT . new :p '
 	$THIS . super "$@"
 	$OBJNAME . size =q 0
 	$OBJNAME . _count =q 0
-	$OBJNAME . _order =q ''
+	$OBJNAME . _order =q ""
 	ONEXIT . add "$OBJNAME . run"
 '
 ONEXIT . inew :p '
