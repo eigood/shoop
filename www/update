@@ -19,7 +19,7 @@ case "$1" in
 			if lockfile -0 -r 0 $HTDOCS/cvspulse.lock; then
 				# ok, new pulse active.
 				# remove master lock, so other pulses can come in.
-				rm -f $HTDOCS/update.lock
+				rm -f $HTDOCS/cvspulse.lock
 				$0 www;
 				# We do a loop, so that if while we are reupdating, another
 				# pulse comes in, we can be sure that it will still have its
@@ -34,7 +34,7 @@ case "$1" in
 				# another update from cvs.  We don't have to do anything here.
 				: this is a null command, which returns true
 			fi
-			rm -f $HTDOCS/cvspulse.lock
+			rm -f $HTDOCS/update.lock
 		fi
 	;;
 esac
