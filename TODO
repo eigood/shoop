@@ -15,3 +15,6 @@
   DONE
 * protected/private methods/variables.
   DONE
+
+* A module that implements hashes.
+* Command-line option parsing module.
