@@ -38,7 +38,7 @@ IFS=" " OBJECT . serialize :p '
 		if eval [ -z \"\$_shoopseen_$A\" ]; then
 			eval echo -n "$DISPLAYOBJ . $A\ "
 			if eval [ \$_shooptype_${THIS}_$A = variable ]; then
-				echo -n "= "
+				echo -n "=q "
 				$DISPLAYOBJ . $A
 			else
 				echo -n ": $_shoop_quote"
