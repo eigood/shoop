@@ -9,12 +9,15 @@ ok () {
 	local name="$1" expected_return="$2" expected_output="$3" ret
 	shift 3
 	
+	fixup() {
+		sed s/"'"/"''"'/g;s,\n,\\,'
+	}
 	testcount=$(($testcount + 1))
 	set +e
 	"$@" > $TMPF
 	ret=$?
 	local IFS=""
-	echo "compare '$name' '$testcount' '$(echo "$expected_output" | sed s/"'"/"''"'/g;s,\n,\\,')' '$expected_return' '$(sed s/"'"/"''"'/g;s,\n,\\,' < $TMPF)' $ret"
+	echo "compare '$(echo "$name" | fixup)' '$testcount' '$(echo "$expected_output" | fixup)' '$expected_return' '$(fixup < $TMPF)' $ret"
 	set -e
 }
 
