@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# This is a perl script that can strip uneeded characters from a
+# This is a perl script that can strip unneeded characters from a
 # shell script, so that certain shells(bash!) can run it faster.
 #
 # Copyright 2000 by Adam Heath <doogie@debian.org>
