@@ -72,6 +72,14 @@ example:
 	@sh ./example.sh
 
 
+binstall = benchmark-dir
+benchmark-install:
+	$(MAKE) install prefix=$(binstall)
+	$(MAKE) benchmark\
+		SHOOPPATH="$(binstall)/$(moddir)"\
+		DEF_PREP=". $(binstall)/$(bindir)/shoop.sh" 
+	rm -rf $(binstall)
+	
 benchmark:
 	$(test1)
 	$(test2)
@@ -138,12 +146,12 @@ OBJECT . new BAZ;\
 BAR . new A;\
 A . parent BAR BLAH OBJECT BAZ,\
 		A . random 2>/dev/null || true)
-test12 = $(call benchmark,shoop variable sets (with introspect)     ,\
+test12 = $(call benchmark,shoop variable sets (with introspect)        ,\
 		$(DEF_PREP); _shoop_introspect=1,\
 		OBJECT . foo = 1)
 
 clean:
-	rm -f *~ .#* ChangeLog
+	rm -f *~ .#* ChangeLog $(binstall)
 
 install: installshare installbins installdocs installexamples
 
