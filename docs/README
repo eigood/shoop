@@ -28,7 +28,7 @@ OBJ . method
 Both will output the value of the property or return value of the method to
 stdout.
 
-You can change the parent of an object like this. List multiple parents and
+You can change the parent of an object like this. Specify multiple parents and
 multiple inheritance starts happening:
 
 OBJ . parent = FOO
@@ -38,6 +38,8 @@ You can call an overridden method like this (used inside the method that
 overrode it, generally):
 
 THIS . super method
+
+If you want introspection, finalization, or serialization, see CONTRIBUTING.
 
 That's about it. Now run off and write a MOO or something.
 
