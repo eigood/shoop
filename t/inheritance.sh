@@ -3,13 +3,14 @@
 . ./shoop.sh
 
 # Setting/getting variables.
-ok 1	OBJECT . counter = 1
-ok 2	OBJECT . counter = 2
-ok hi	OBJECT . moo = hi
-ok 2	OBJECT . counter
-ok hi	OBJECT . moo
+ok 0 1	OBJECT . counter = 1
+ok 0 2	OBJECT . counter = 2
+ok 0 hi	OBJECT . moo = hi
+ok 0 2	OBJECT . counter
+ok 0 hi	OBJECT . moo
 
 # Methods.
-ok ""	OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1)'
+ok 0 ""	OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1)'
+ok 0 3	OBJECT . count
 
-tests 6
+tests 7
