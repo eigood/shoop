@@ -36,7 +36,7 @@ _shoop () {
 			if [ "${varmeth#.}" != $varmeth ]; then append=1 varmeth=${varmeth#.}; fi
 			if [ "${varmeth%q}" != $varmeth ]; then quiet=1 varmeth=${varmeth%q}; fi
 			if eval [ \"\$_shoopprivate_$TRYMETH\" ]; then
-				echo "Previous declaration of ($TRUEOBJ:$METH) marked private" >&2
+				echo "Previous declaration of ($TRYOBJ:$METH) marked private" >&2
 				return 1
 			fi
 			if [ "$private" ]; then
@@ -62,7 +62,7 @@ _shoop () {
 		;;
 	esac
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		local THIS=$TRUEOBJ
+		local THIS=$TRYOBJ
 		eval eval "\$_shoop_$TRYMETH"
 		return
 	else
@@ -177,7 +177,13 @@ _shoop . OBJECT OBJECT new OBJECT
 OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
-OBJECT . super :p '_shoop . $THIS $($THIS . parent) "$LASTMETH" "$@"; return'
+OBJECT . super :p '
+	if [ -z "$__super" ]; then
+		local __super=$THIS
+	fi
+	_shoop . $__super $($THIS . parent) "$LASTMETH" "$@"
+	return
+'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect
