@@ -14,5 +14,5 @@ IFS=" " OBJECT . destroy : '
 	for A in $DEFINES; do
 		unset _shooptype_${THIS}_$A _shoopfinal_${THIS}_$A _shoop_${THIS}_$A;
 	done;
-	unset _shoopdefines_$THIS $THIS
+	eval unset _shoopdefines_$THIS $THIS _shoopcache_ \$_shoopcache_
 '
