@@ -52,6 +52,21 @@
 <tr>
 <td><a href="http://cvs.sourceforge.net/cgi-bin/cvsweb.cgi/?cvsroot=shoop">Browse CVS</a></td>
 </tr>
+<tr>
+<td><a href="http://sourceforge.net/bugs/?group_id=1981">Browse Bug Reports</a></td>
+</tr>
+<tr>
+<td><a href="http://sourceforge.net/forum/?group_id=1981">Visit the Message Forums</a></td>
+</tr>
+<tr>
+<td><a href="http://sourceforge.net/patch/?group_id=1981">Look at Published Patches</a></td>
+</tr>
+<tr>
+<td><a href="http://sourceforge.net/survey/?group_id=1981">Would you like to take a survey?(with appologies to Warners)</a></td>
+</tr>
+<tr>
+<td><a href="ftp://shoop.sourceforge.net/pub/shoop">View the FTP Site</a></td>
+</tr>
 </table>
 <!-- end center table -->
 
