@@ -65,7 +65,7 @@ www-test1:
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
 			CURDIR=$(CURDIR)\
-			$(CURDIR)/t/benchmark\
+			$(SHELL) $(CURDIR)/t/benchmark\
 			$(CURDIR)/t/kbu.bm\
 			""
 
@@ -75,7 +75,7 @@ www-test2:
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
 			CURDIR=$(CURDIR)\
-			$(CURDIR)/t/benchmark\
+			$(SHELL) $(CURDIR)/t/benchmark\
 			$(CURDIR)/t/kbhomes.bm\
 			""
 
@@ -93,7 +93,7 @@ benchmark:
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
 			CURDIR=$(CURDIR)\
-			$(CURDIR)/t/benchmark\
+			$(SHELL) $(CURDIR)/t/benchmark\
 			$(CURDIR)/t/benchmark.bm\
 			"$(bscr)"
 
