@@ -15,7 +15,7 @@ BASE . new BAR
 BAR . parent = A B C D FOO >/dev/null
 BAR . test
 echo
-FOO . count : '$1 . counter = $(expr $($1 . counter) \* 2 + $($1 . super))'
+FOO . count : '$1 . counter = $(expr $($1 . counter) \* 2 + $($1 . super count))'
 FOO . counter = 1
 echo
 FOO . count

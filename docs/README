@@ -36,4 +36,6 @@ OBJ . parent = BAR BAZ QUUX
 
 That's about it. Now run off and write a MOO or something.
 
-Joey Hess <joey@kitenet.net>
+Shoop is copyright 2000 under the terms of the GNU GPL by:
+	Joey Hess <joey@kitenet.net>
+	Adam Heath <doogie@debian.org>
