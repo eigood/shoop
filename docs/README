@@ -44,9 +44,11 @@ overrode it, generally):
 
 THIS . super method
 
-If you want introspection, finalization, or serialization, or various
-other features, see MODULES.  If you have a module you think would be
-benefitial to the shoop community, see CONTRIBUTING.
+If you want introspection, finalization, or serialization, or various other
+features, see MODULES.  If you have a module you think would be benefitial
+to the shoop community, see CONTRIBUTING.  If you've written something
+interesting that actually _uses_ shoop, the authors would love to hear about
+it.
 
 That's about it.  Now run off and write a MOO or something.
 
