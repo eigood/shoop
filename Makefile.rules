@@ -53,24 +53,36 @@ $(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: thisdir=bindir
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: thisdir=docdir
 $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: thisdir=empdir
 
+ifneq ($(MODULES),)
+DIRS += $(moddir)
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir) $(strip_comment_space)
 	$(inst_msg)
 	$(strip_comment_space) < $< > $@
+endif
 
+ifneq ($(BINS),)
+DIRS += $(bindir)
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir) $(strip_comment_space)
 	$(inst_msg)
 	$(strip_comment_space) < $< > $@
 	chmod +x $@
+endif
 
+ifneq ($(DOCS),)
+DIRS += $(docdir)
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(docdir)
 	$(inst_msg)
 	install -m 644 $< $@
+endif
 
+ifneq ($(EXAMPLES),)
+DIRS += $(empdir)
 $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES)): $(prefix)$(empdir)/%: % $(prefix)$(empdir)
 	$(inst_msg)
 	install -m 644 $< $@
+endif
 
-$(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
+$(patsubst %,$(prefix)%,$(sort $(DIRS))): $(prefix)%:
 	echo Making dir $$\(prefix\)$*
 	mkdir -p $@
 
