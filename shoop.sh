@@ -9,7 +9,7 @@ _shoop () {
 
 	if [ "$1" = = -o "$1" = : ]; then
 		if eval [ -z "\$_shooptype_${TRYOBJ}_$METH" ]; then
-			eval "_shoopdefines_$TRUEOBJ=\"$_shoopdefines_$TRUEOBJ $METH\""
+			eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
 		if [ "$1" = = ]; then
 			shift
