@@ -34,6 +34,13 @@ while (<>) {
 		#
 		next if(/^(#.*|)$/);
 	}
+
+	#
+	# If a line ends with ;, then combine it with the next
+	# line, as the new line character is extraneous.
+	#
+	chop if(/\;[ \t]*$/);
+
 	print if(/^#!/);
 	if(defined $first) {
 		print "# This script has been preprocessed prior to installation\n";
