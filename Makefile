@@ -53,12 +53,15 @@ nobenchmark =
 
 all:
 	@echo This makefile is only here to run benchmarks or examples,
-	@echo or install shoop.
+	@echo or install shoop, or do regression tests.
 	@echo \	make benchmark
 	@echo \	make example
 	@echo \	make install
+	@echo \	make test
 
-test: example
+test:
+	for f in t/*.sh; do t/regress $$f; done
+
 example:
 	@sh ./example.sh
 
