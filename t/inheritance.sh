@@ -1,6 +1,5 @@
 #!/bin/sh -e
 # Inheritance regression test. Also sets basic methods and variables.
-. ./t/testlib.sh
 . ./shoop.sh
 
 # Setting/getting variables.
