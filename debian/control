@@ -1,7 +1,7 @@
 Source: shoop
 Section: devel
 Priority: extra
-Maintainer: Gergely Nagy <8@free.bsd.hu>
+Maintainer: Gergely Nagy <shoop-devel@lists.sourceforge.net>
 Build-Depends: debhelper (>= 2.0.40), perl5
 Standards-Version: 3.5.0
 
