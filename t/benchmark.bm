@@ -54,19 +54,33 @@ prep OBJECT . new BLAH
 prep OBJECT . new BAZ
 prep BAR . new A
 prep A . parent BAR BLAH OBJECT BAZ
-prepsave 12
+prepsave mi
 
 prepclear
 prep $DEF_PREP
-preprestore 12
+preprestore mi
 bm 12 "shoop multi-inheritance resolver method calls" 'A . foo'
 
 prep $DEF_PREP
 prep _shoopnocache_=1
-preprestore 12
+preprestore mi
 bm 13 "shoop multi-inheritance(nocache) resolver method calls" 'A . foo'
 
 prep $DEF_PREP
 prep _shoop_introspect=1
 
 bm 14 "shoop variable sets(with introspect)" 'OBJECT . foo = 1'
+
+prep $DEF_PREP
+prep OBJECT . foo : ":"
+prep OBJECT . new FOO
+prep FOO . new BAR
+bm 15 "shoop method sets not dumping cache" 'BAR . foo; OBJECT . foo : ":"'
+
+prep $DEF_PREP
+prep OBJECT . foo : ":"
+prep OBJECT . new FOO
+prep OBJECT . new BLAH
+prep FOO . new BAR
+bm 16 "shoop method sets dumping cache" 'BAR . foo; BLAH . foo : ":"'
+
