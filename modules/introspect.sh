@@ -6,7 +6,7 @@
 # Smell the Java. GPL copyright 2000 by Adam Heath <doogie@debian.org>
 
 BASE . introspect : '
-local OBJNAME=$1 DEFINES TYPE A DISPLAYOBJ;
+local OBJNAME=$1 DEFINES A DISPLAYOBJ;
 shift;
 if [ "$2" ];then
 	DISPLAYOBJ=$2;
@@ -15,10 +15,9 @@ else
 fi;
 eval DEFINES=\$_shoopdefines_$OBJNAME;
 for A in $DEFINES; do
-	if ! echo $_shoop_introspect_seen | tr " " "\n" | grep -q "^$A$";then
-		eval TYPE=\$_shooptype_${OBJNAME}_$A;
-		echo "$DISPLAYOBJ: $A is $TYPE";
-		_shoop_introspect_seen="$_shoop_introspect_seen $A";
+	if eval [ -z \"\$_shoopseen_$A\" ];then
+		eval echo "$DISPLAYOBJ\($OBJNAME\): $A is \$_shooptype_${OBJNAME}_$A";
+		eval _shoopseen_$A="1";
 	fi
 done;
 if [ "$1" = resolve ];then
@@ -28,6 +27,6 @@ if [ "$1" = resolve ];then
 	done
 fi;
 for A in $DEFINES; do
-	_shoop_introspect_seen=$(echo $_shoop_introspect_seen | tr " " "\n" | grep -v "^$A$");
+	eval unset _shoopseen_$A;
 done
 '
