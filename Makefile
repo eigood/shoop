@@ -18,8 +18,8 @@ example:
 	@sh ./example.sh
 
 benchmark:
-	$(call benchmark,internal variable sets                    , \
-		true, \
+	$(call benchmark,internal variable sets                    ,\
+		true,\
 		FOO=$x)
 	$(call benchmark,internal variable gets                    ,\
 		FOO=1,\
@@ -43,7 +43,7 @@ benchmark:
 		$(DEF_PREP); OBJECT . foo  : echo hi; OBJECT . new BAR; BAR . new BLAH,\
 		BLAH . foo)
 	$(call benchmark,shoop variable sets (with introspect)     ,\
-		$(DEF_PREP_I),
+		$(DEF_PREP_I),\
 		OBJECT . foo = 1)
 	
 clean:
