@@ -5,27 +5,40 @@ _shoop () {
 	local TRUEOBJ=$1
 	local TRYOBJ=$2
 	local METH=$3
+	local TRUEMETH=${1}_$3
+	local TRYMETH=${2}_$3
 	shift 3
 
-	if [ "$1" = = -o "$1" = : ]; then
+	if [ "$1" = = -o "$1" = := -o "$1" = : -o "$1" = :: ]; then
+		local FINAL DEFINE
+		# This block is for introspect.
 		if [ "$_shoop_introspect" ] &&
-		   eval [ "$_shoop_introspect" -a -z "\$_shooptype_${TRYOBJ}_$METH" ]; then
-			eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
+			eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
+				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
-		
-		if [ "$1" = = ]; then
-			shift
-			eval "_shooptype_${TRUEOBJ}_$METH=variable;
-			      _shoop_${TRUEOBJ}_$METH () { echo -n $@; }"
-			echo -n $@
-		else
-			shift
-			eval "_shooptype_${TRUEOBJ}_$METH=method;
-			      _shoop_${TRUEOBJ}_$METH () { $@
-}"
+		DEFINE=$1
+		shift
+		if eval [ \"\$_shoopfinal_$TRUEMETH\" ]; then
+			eval "echo \"Can't redefine final $TRUEOBJ.$METH(\$_shooptype_$TRUEMETH)\"" >&2
+			return 1
 		fi
-	elif eval [ \"\$_shooptype_${TRYOBJ}_$METH\" ]; then
-		eval _shoop_${TRYOBJ}_$METH $TRUEOBJ \"\$@\";
+		case $DEFINE in
+			*=)
+				#local DOLLAR=\$
+				#set -- $(eval eval echo \"$\{DOLLAR\}\{{$(seq -s , 1 $(($#-1)))}\}\")
+				eval "_shooptype_$TRUEMETH=variable;
+				      _shoop_$TRUEMETH () { echo -n $@; }"
+				echo -n $@;;
+			*:)
+				eval "_shooptype_$TRUEMETH=method;
+				      _shoop_$TRUEMETH () { $@
+}";
+		esac
+		case $DEFINE in
+			:?*)	eval "_shoopfinal_$TRUEMETH=1";;
+		esac
+	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
+		eval _shoop_$TRYMETH $TRUEOBJ \"\$@\";
 	else
 		eval local PARENTS=\"`_shoop_${TRYOBJ}_parent`\"
 		local P
