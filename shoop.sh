@@ -8,7 +8,6 @@ _shoop () {
 	shift 3
 
 	if [ "$1" = = -o "$1" = : ]; then
-		# This block is for introspect.
 		if [ "$_shoop_introspect" ] &&
 		   eval [ "$_shoop_introspect" -a -z "\$_shooptype_${TRYOBJ}_$METH" ]; then
 			eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
@@ -69,5 +68,5 @@ _shoop_BASE_new '' BASE
 # Sadly, you have to pass in the method name to call.
 BASE . super : 'THIS=$1; shift; _shoop $THIS $($THIS . parent) $@'
 
-# Now if you want it, you have to turn it back on.
+# Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect
