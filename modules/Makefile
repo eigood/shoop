@@ -20,6 +20,8 @@ MODULES=\
 	onexit.sh\
 	alist.sh\
 	ref.sh\
+	shoop.sh\
+	shoop_command.sh\
 
 include $(TOPDIR)/Makefile.vars
 include $(TOPDIR)/Makefile.rules
