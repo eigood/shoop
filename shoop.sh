@@ -4,9 +4,9 @@
 _shoopgetparent() {
 	local a
 	for a in $(eval eval "\$_shoop_${1}_parent"); do
-		if eval [ -z \"\$_shoopresolve_parent_echo_$a\" ]; then
-			eval local _shoopresolve_parent_echo_$a=1
-			echo $a
+		if eval [ -z \"\$_shoopresolve_parent_seen_$a\" ]; then
+			eval local _shoopresolve_parent_send_$a=1
+			echo -n $a
 		fi
 		if eval [ -z \"\$_shoopresolve_parent_get_$a\" ]; then
 			eval local _shoopresolve_parent_get_$a=1
@@ -56,7 +56,7 @@ _shoop () {
 		# level of parents.  However, getparent still needs to
 		# walk the entire parent tree.
 		for P in $PARENTS; do
-			eval local _shoopresolve_parent_echo_$P=1
+			eval local _shoopresolve_parent_seen_$P=1
 		done
 		for P in $(_shoopgetparent $TRYOBJ); do
 			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
