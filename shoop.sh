@@ -80,7 +80,7 @@ _shoop () {
 			P=$1
 			eval GETMETH="\$_shoop_${P}_$METH"
 			if [ "$GETMETH" ]; then
-				set -- "$orgargs"
+				set -- $orgargs
 				# Save a reference to the resolved object in the cache for the
 				# true object.
 				if [ -z "$_shoopnocache_" ]; then
