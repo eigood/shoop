@@ -35,32 +35,43 @@ ok "" 0 "second"	list . get 2
 ok "" 0 "SECOND"	list . add "SECOND"
 ok "" 0 3		list . size
 
+# increase to size 5 for rotation test
+ok "" 0 "fourth"	list . add "fourth"
+ok "" 0 "FIFTH"		list . add "FIFTH"
+
 # sanity check
 ok "" 0 "third"		list . get 1
 ok "" 0 "second"	list . get 2
 ok "" 0 "SECOND"	list . get 3
+ok "" 0 "fourth"	list . get 4
+ok "" 0 "FIFTH"		list . get 5
 
+#set -x
 # rotation
 ok "" 0 ""		list . ror 1
-ok "" 0 3		list . size
-ok "" 0 "SECOND"	list . get 1
+ok "" 0 5		list . size
+ok "" 0 "FIFTH"		list . get 1
 ok "" 0 "third"		list . get 2
 ok "" 0 "second"	list . get 3
+ok "" 0 "SECOND"	list . get 4
+ok "" 0 "fourth"	list . get 5
 ok "" 0 ""		list . rol 2
-ok "" 0 3		list . size
+ok "" 0 5		list . size
 ok "" 0 "second"	list . get 1
 ok "" 0 "SECOND"	list . get 2
-ok "" 0 "third"		list . get 3
+ok "" 0 "fourth"	list . get 3
+ok "" 0 "FIFTH"		list . get 4
+ok "" 0 "third"		list . get 5
 
 ok "" 0 ""		list . increase_size 5
-ok "" 0 "8"		list . size
+ok "" 0 "10"		list . size
 ok "" 0 "second"	list . get 1
 ok "" 0 "SECOND"	list . get 2
-ok "" 0 "third"		list . get 3
-ok "" 0 ""		list . get 4
-ok "" 0 ""		list . get 5
+ok "" 0 "fourth"	list . get 3
+ok "" 0 "FIFTH"		list . get 4
+ok "" 0 "third"		list . get 5
 ok "" 0 ""		list . get 6
 ok "" 0 ""		list . get 7
 ok "" 0 ""		list . get 8
 
-tests 41
+tests 49

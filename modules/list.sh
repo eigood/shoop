@@ -18,14 +18,14 @@ LIST . _count =q 0
 LIST . _order =q ''
 
 LIST . add :p '
-	local count=$(($($THIS . _count) + 1)) size=$(($($THIS . size) + 1))
+	local count=$(($($THIS . _count) + 1)) size=$(($($THIS . size) + 1)) order=$($THIS . _order)
 	$THIS . _count =q $count
 	$THIS . size =q $size
-	$THIS . _order =q "$($THIS . _order) $count"
+	$THIS . _order =q "${order:+$order }$count"
 	$THIS . set $size "$@"
 '
 LIST . increase_size :p '
-	local count=$(($($THIS . _count) + 1)) neworder
+	local count=$(($($THIS . _count) + 1)) neworder order=$($THIS . _order)
 	local i=$count
 	count=$(($count + $1))
 	while [ $i -lt $count ]; do
@@ -35,17 +35,17 @@ LIST . increase_size :p '
 	done
 	$THIS . _count =q $count
 	$THIS . size =q $(($($THIS . size) + $1))
-	$THIS . _order =q "$($THIS . _order) $neworder"
+	$THIS . _order =q "${order:+$order }$neworder"
 '
 LIST . insert :p '
 	$THIS . insertat 1 "$@"
 '
 LIST . insertat :p '
 	local pos="$1"; shift
-	local count=$(($($THIS . _count) + 1))
+	local count=$(($($THIS . _count) + 1)) order=$($THIS . _order)
 	$THIS . _count =q $count
 	$THIS . size =q $(($($THIS . size) + 1))
-	$THIS . _order =q "$count $($THIS . _order)"
+	$THIS . _order =q "$count${order:+ $order}"
 	$THIS . set $pos "$@"
 '
 LIST . get :p '
@@ -68,7 +68,7 @@ LIST . delete :p '
 	shift $(($pos - 1))
 	left="${order%%$@}"
 	shift
-	$THIS . _order =q "$left $@"
+	$THIS . _order =q "${left:+$left }$@"
 	$THIS . size =q $(($($THIS . size) - 1))
 	order="$($THIS . _order)"
 	: order $order
@@ -83,7 +83,7 @@ LIST . rol :p '
 		order="$($THIS . _order)"
 		set -- $order
 		shift $count
-		set -- "$@ ${order%%$@}"
+		set -- "$@ ${order%% $@}"
 		$THIS . _order =q "$@"
 	fi
 '
@@ -94,7 +94,7 @@ LIST . ror :p '
 		order="$($THIS . _order)"
 		set -- $order
 		shift $count
-		set -- "$@ ${order%%$@}"
+		set -- "$@ ${order%% $@}"
 		$THIS . _order =q "$@"
 	fi
 '
