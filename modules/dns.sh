@@ -105,7 +105,7 @@ DNS . host_mx :p '
 '
 
 IFS=" " DNS . serialize :p '
-	local DISPLAYOBJ=$THIS oldargs="$@" PARENTS=$($THIS . parent)
+	local DISPLAYOBJ=$THIS oldargs PARENTS=$($THIS . parent); oldargs="$@"
 	set -- $PARENTS
 	if [ "$1" ]; then
 		if [ $# -gt 1 ]; then

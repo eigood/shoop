@@ -46,7 +46,7 @@ run () {
 	benchmark() {
 		local count=$1 message=$2 prep=$3
 		shift 3
-		local script="$@"
+		local script; script="$@"
 		if [ "$count" = done ]; then
 			return
 		fi

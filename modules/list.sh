@@ -54,8 +54,8 @@ LIST . get :p '
 	eval $THIS . _\$$pos
 '
 LIST . set :p '
-	local pos=$1; shift
-	eval "local args=\"$@\""
+	local pos=$1 args; shift
+	eval "args=\"$@\""
 	set -- $($THIS . _order)
 	eval $THIS . _\$$pos = \"\$args\"
 '

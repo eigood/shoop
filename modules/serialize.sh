@@ -22,7 +22,7 @@ IFS=" " OBJECT . serialize :p '
 	local DEFINES A
 	local PARENTS=$($THIS . parent 2>/dev/null)
 	if [ -z "$2" ]; then
-		local DISPLAYOBJ=$THIS oldargs="$@"
+		local DISPLAYOBJ=$THIS oldargs; oldargs="$@"
 		set -- $PARENTS
 		if [ "$1" ]; then
 			echo "$1 . new $THIS;"
