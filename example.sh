@@ -30,6 +30,7 @@ OBJECT . new BAR
 BAR . parent = A B FOO C D OBJECT > /dev/null
 BAR . test
 echo
+# This will produce an error.
 BAR . blah
 FOO . count : '$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super count)); return'
 FOO . counter = 1
