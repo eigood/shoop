@@ -1,0 +1,28 @@
+What on earth is this?
+
+Well, every language under the sun these days is Object Oriented. In an
+effort to make POSIX shell more buzzword complient, I have added objection
+orientation to that language. (Next up: awk.) Specifically, it impliments
+classless OO with single inheritance.
+
+When you source shoop.sh, you start out with a single base object, BASE.
+You can make a new object named OBJ that has BASE as its parent like so:
+
+BASE . new OBJ
+
+You can add/change a property of FOO like this:
+
+OBJ . property = 3
+
+You can add/change a method of FOO like this:
+
+OBJ . method : echo "hello world!"
+
+You can call the method or get the value of the property like this:
+
+OBJ . property
+OBJ . method
+
+Both will output the value of the property or method to stdout.
+
+That's about it. Now run off and write a MOO or something.
