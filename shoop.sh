@@ -13,27 +13,16 @@ _shoop () {
 				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
 		
-		DEFINE=$1
-		shift
-		case $DEFINE in
-			=)
-				eval "_shoop_$TRUEMETH='echo -n $@'
-				      _shooptype_$TRUEMETH=variable"
-				echo -n $@
-			;;
-			:=)
-				eval "readonly _shoop_$TRUEMETH='echo -n $@'
-				      _shooptype_$TRUEMETH=variable"
-				echo -n $@
-			;;
-			:)
-				eval "_shoop_$TRUEMETH='$@'
-				      _shooptype_$TRUEMETH=method"
-			;;
-			::)
-				eval "readonly _shoop_$TRUEMETH='$@'
-				      _shooptype_$TRUEMETH=method"
-		esac
+		if [ "$1" = = ]; then
+			shift
+			eval "_shoop_$TRUEMETH='echo -n $@'
+			      _shooptype_$TRUEMETH=variable"
+			echo -n $@
+		else
+			shift
+			eval "_shoop_$TRUEMETH='$@'
+			      _shooptype_$TRUEMETH=method"
+		fi
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		local THIS=$TRUEOBJ
 		eval eval "\$_shoop_$TRYMETH"

@@ -1,6 +1,7 @@
 #!/bin/sh
 . ./shoop.sh
 . ./introspect.sh
+. ./final.sh
 
 echo some counters:
 BASE . counter = 10
