@@ -11,7 +11,28 @@ OBJECT . new DNS
 ##:builddns
 ## This rather long method is responsible for walking all hosts, mx, and
 ## cnames, and building a properly formatted dns database file.
-
+##:host <host> <address>
+## Add a host -> ip mapping
+##:cname <host> <name>
+## Add a host -> name mapping
+##:gethost <host>
+## Return the ip address for a host.
+##:host_mx <host> <mx> <name>
+## Create an mx mapping for a host.
+##<
+##>4
+## Global variables
+##:serial
+##:refresh
+##:retry
+##:expire
+##:ttl
+## These all following the meaning from a standard SOA record.
+##:address
+## The default address for a domain.
+##:mx
+## The default mx entry for a domain
+##<
 IFS=" " DNS . builddns :p '
 	local counter\
 		title=$($THIS . title) domain=$($THIS . domain)\
@@ -24,32 +45,19 @@ IFS=" " DNS . builddns :p '
 	echo ";"
 	echo
 	echo "@ IN SOA ns1.$domain root.ns1.$domain ("
-##>4
-## Global variables
-##:serial
 	echo "	$($THIS . serial)"
-##:refresh
 	echo "	$($THIS . refresh)"
-##:retry
 	echo "	$($THIS . retry)"
-##:expire
 	echo "	$($THIS . expire)"
-##:ttl
 	echo "	$($THIS . ttl)"
 	echo ")"
-## These all following the meaning from a standard SOA record.
 	echo
-##:address
-## The default address for a domain.
 	if [ "$address" ]; then
 		echo "	IN A	$address"
 	fi
-##:mx
-## The default mx entry for a domain
 	if [ "$mx" ]; then
 		echo "	IN MX	$mx"
 	fi
-##<
 	echo
 	for counter in $(seq -s " " 1 $num_ns); do
 		echo "	IN NS	ns$counter.$domain."
@@ -76,8 +84,6 @@ IFS=" " DNS . buildhost :p '
 	done
 
 '
-##:host <host> <address>
-## Add a host -> ip mapping
 IFS=" " DNS . host :p '
 	local host=$1; shift
 	if [ -z "$($THIS . host_ip_$host 2>/dev/null)" ]; then
@@ -85,8 +91,6 @@ IFS=" " DNS . host :p '
 	fi
 	$THIS . host_ip_$host =q "$@"
 '
-##:cname <host> <name>
-## Add a host -> name mapping
 IFS=" " DNS . cname :p '
 	local host=$1; shift
 	if [ -z "$($THIS . cname_$host 2>/dev/null)" ]; then
@@ -94,11 +98,7 @@ IFS=" " DNS . cname :p '
 	fi
 	$THIS . cname_$host =q "$@"
 '
-##:gethost <host>
-## Return the ip address for a host.
 IFS=" " DNS . gethost :p '$THIS . host_ip_$1'
-##:mx <host> <mx> <name>
-## Create an mx mapping for a host.
 DNS . host_mx :p '
 	local host=$1;shift
 	$THIS . host_mx_$host =q "$@"

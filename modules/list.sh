@@ -1,5 +1,18 @@
 OBJECT . new LIST
 
+## Variables:
+##>4
+##:size
+## This holds the number of elements in this list.  As elements are added
+## and removed, the value of this variable goes up and down to match.
+##:_count
+## The next internal pointer to use when adding an element.  This is
+## always incremented.
+##:_order
+## The element number to physical slot mapping is maintained in this
+## variable.
+##<
+
 LIST . size =q 0
 LIST . _count =q 0
 LIST . _order =q ''
