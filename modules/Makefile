@@ -21,4 +21,5 @@ MODULES=\
 	alist.sh\
 	ref.sh\
 
+include $(TOPDIR)/Makefile.vars
 include $(TOPDIR)/Makefile.rules
