@@ -2,7 +2,6 @@
 . ./shoop.sh
 . ./introspect.sh
 
-BASE . moo
 echo some counters:
 BASE . counter = 10
 echo
@@ -16,9 +15,12 @@ BASE . new BAR
 BAR . parent = A B C D FOO >/dev/null
 BAR . test
 echo
-FOO . counter
-echo
+FOO . count : '$1 . counter = $(expr $($1 . counter) \* 2 + $($1 . super))'
 FOO . counter = 1
+echo
+FOO . count
+echo
+FOO . count
 echo
 FOO . count
 echo

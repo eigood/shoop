@@ -4,7 +4,8 @@ Well, every language under the sun these days is Object Oriented. In an
 effort to make POSIX shell more buzzword compliant, and to show that built
 in object orientation support is just not a big deal at all, I have added
 object orientation to the language. (Next up: awk.) Specifically, it
-implements classless OO with multiple inheritance.
+implements classless OO with multiple inheritance, supporting object
+introspection and serialization.
 
 When you source shoop.sh, you start out with a single base object, BASE.
 You can make a new object named OBJ that has BASE as its parent like so:
