@@ -1,0 +1,14 @@
+#!/bin/sh -e
+GHOME=/home/groups/shoop
+ID_FILE=$GHOME/.ssh/identity
+HTDOCS=$GHOME/htdocs
+if [ "$RUNNING_UNDER_CVS" ]; then
+	exec ssh -i $ID_FILE "$@"
+fi
+CVS_RSH=$GHOME/update
+export CVS_RSH
+if [ "$1" = www ]; then
+	RUNNING_UNDER_CVS=1
+	export RUNNING_UNDER_CVS
+	(cd $HTDOCS;exec cvs update)
+fi
