@@ -1,6 +1,6 @@
 #!/bin/sh -e
 # Inheritance regression test. Also sets basic methods and variables.
-. ${SHOOPSH:-/usr/bin/shoop.sh}
+. ${SHOOPSH:-/usr/share/shoop/shoop.sh}
 . ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 
 # Setting/getting variables.

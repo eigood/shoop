@@ -1,5 +1,5 @@
 #!/bin/sh
-DEF_PREP=". ${SHOOPSH:-./shoop.sh}"
+DEF_PREP=". ${SHOOPSH:-/usr/share/shoop/shoop.sh}"
 
 bmcount ${ITERATIONS:-100}
 
