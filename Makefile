@@ -115,10 +115,14 @@ NAMES=$(shell\
 #endef
 
 docs/modules.txt: utils/shelldoc $(MODULES)
-	utils/shelldoc $(MODULES) > $@
+	rm -f modules_tmp
+	$(MAKE) modules_tmp
+	utils/shelldoc $$(cat modules_tmp) > $@
+	rm -f modules_tmp
+
+.PHONY: docs/modules.txt
 
 ChangeLog:
-	echo $(NAMES)
 	rcs2log $(NAMES) > $@
 
 include $(TOPDIR)/Makefile.rules

@@ -5,6 +5,7 @@
 
 inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
 strip_comment_space = $(TOPDIR)/utils/shell-stripper
+this_dir := $(patsubst $(shell cd $(TOPDIR); /bin/pwd)/%,%,$(CURDIR))
 
 install:\
 	installshowconfig\
@@ -70,6 +71,10 @@ $(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
 	mkdir -p $@
 
 .PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
+
+modules_tmp: modules_tmp.subdirs
+	echo $(patsubst %,$(this_dir)/%,$(MODULES)) >> $(TOPDIR)/$@
+
 
 ifndef NOISY
 .SILENT:
