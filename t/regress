@@ -72,6 +72,7 @@ if [ "$1" ]; then
 		spoke=""
 		echo -n Beginning test of $script ..
 		testcount=0
+		testfailures=0
 		eval `. $script || echo woah`
 		if [ "$expected" -a "$expected" != "$testcount" ]; then
 			say "($expected tests were expected, but $testcount were run)"
