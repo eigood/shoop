@@ -16,7 +16,7 @@ install:\
 	installdocs.real\
 	installexamples.real\
 
-%.subdirs:
+$(patsubst %,install%.subdirs,modules bins docs examples dirs): %.subdirs:
 ifdef SUBDIRS
 	set -e;\
 	for a in $(SUBDIRS); do\
