@@ -14,8 +14,7 @@ _shoop () {
 		if [ "$1" = = ]; then
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=variable;
-			      _shoop_${TRUEOBJ}_$METH () { echo $@; }"
-#			eval "_shoop_${TRUEOBJ}_$METH=$@"
+			      _shoop_${TRUEOBJ}_$METH () { echo -n $@; }"
 			echo $@
 		else
 			shift
@@ -23,9 +22,6 @@ _shoop () {
 			      _shoop_${TRUEOBJ}_$METH () { $@
 }"
 		fi
-# Alternate, variable method. Benchmark before turning on. (See line above, too.)
-#	elif eval [ \"\$_shooptype_${TRYOBJ}_$METH\" = variable ]; then
-#		eval echo \$_shoop_${TRYOBJ}_$METH
 	elif eval [ \"\$_shooptype_${TRYOBJ}_$METH\" ]; then
 		eval _shoop_${TRYOBJ}_$METH $TRUEOBJ \"\$@\";
 	else
