@@ -11,26 +11,40 @@
 ## This module defines a convience method for importing shoop modules.
 ## When passed the basename of a module(minus any path and .sh
 ## extension), it will look for the first match in $SHOOPPATH.
+## 
+## There is also '_USE . findmodule <path> <module>' convience method,
+## which looks thru the path trying to find <module>.sh.
 
 OBJECT . usepath = $SHOOPPATH:. > /dev/null
 
-IFS=" " OBJECT . use :p '
-	local A B usepath
+OBJECT . new _USE
+
+_USE . findmodule :p '
 	local oIFS="$IFS" IFS=:
-	usepath="$($THIS . usepath)"
+	local usepath="$1"; shift
 	IFS="$oIFS"
+	for B in $usepath;do
+		if [ -e $B/$1.sh ]; then
+			echo $B/$1.sh
+			break
+		fi
+	done
+'
+IFS=" " OBJECT . use :p '
+	local A B usepath="$($THIS . usepath)" module
 	for A in "$@"; do
-		if eval [ -z \"\$_shoopuse_$A\" ]; then
-			for B in $usepath;do
-				if [ -e $B/$A.sh ]; then
-					. $B/$A.sh
-					_shoopuse_="$_shoopuse_ $A"
-					eval "_shoopuse_$A=1"
-					break
-				fi
-			done
+		if [ -z "$(_USE . _used_$A 2>/dev/null)" ]; then
+			module=$(_USE . findmodule "$usepath" $A)
+			if [ "$module" ]; then
+				. $module
+				_USE . _used_ .=q " $A"
+				_USE . _used_$A =q 1
+			fi
 		fi
 	done
 	return
 '
 _shoopuse_use=1
+
+Add convience method '_USE . findmodule'.  Also, store all state variables
+in internal object _USE, instead of globally.
