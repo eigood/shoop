@@ -32,7 +32,7 @@ BAR . test
 echo
 # This will produce an error.
 BAR . blah
-FOO . count : '$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super count)); return'
+FOO . count : '$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super)); return'
 FOO . counter = 1
 echo
 FOO . count

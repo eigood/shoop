@@ -2,7 +2,7 @@
 # OOP in shell. GPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
 _shoop () {
-	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
+	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3 LASTMETH=$METH
 	shift 3
 	case "$1" in
 		=|=q|.=|.=q|:)
@@ -147,8 +147,7 @@ _shoop OBJECT OBJECT new OBJECT
 OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
-# Sadly, you have to pass in the method name to call.
-OBJECT . super : '_shoop $THIS $($THIS . parent) $@; return'
+OBJECT . super : '_shoop $THIS $($THIS . parent) "$LASTMETH" $@; return'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect
