@@ -22,14 +22,24 @@ _shoop () {
 			*=)
 				#local DOLLAR=\$
 				#set -- $(eval eval echo \"$\{DOLLAR\}\{{$(seq -s , 1 $(($#-1)))}\}\")
-				eval "_shooptype_$TRUEMETH=variable;
-				      _shoop_$TRUEMETH () { echo -n $@; }"
+				if [ "$_shoop_introspect" ]; then
+					eval "_shooptype_$TRUEMETH=variable;
+					      _shoop_$TRUEMETH='echo -n $@'"
+				else
+					eval "_shooptype_$TRUEMETH=variable;
+					      _shoop_$TRUEMETH () { echo -n $@; }"
+				fi
 				echo -n $@
 			;;
 			*:)
-				eval "_shooptype_$TRUEMETH=method;
-				      _shoop_$TRUEMETH () { $@
-}";
+				if [ "$_shoop_introspect" ]; then
+					eval "_shooptype_$TRUEMETH=method;
+					      _shoop_$TRUEMETH='$@'"
+				else
+					eval "_shooptype_$TRUEMETH=method;
+					      _shoop_$TRUEMETH () { $@;
+}"
+				fi
 			;;
 		esac
 		case $DEFINE in
@@ -38,9 +48,18 @@ _shoop () {
 			;;
 		esac
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		eval _shoop_$TRYMETH $TRUEOBJ \"\$@\";
+		if [ "$_shoop_introspect" ]; then
+			set -- $TRUEOBJ $@
+			eval eval "\$_shoop_$TRYMETH"
+		else
+			_shoop_$TRYMETH $TRUEOBJ "$@"
+		fi
 	else
-		eval local PARENTS=\"`_shoop_${TRYOBJ}_parent`\"
+		if [ "$_shoop_introspect" ]; then
+			eval local PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
+		else
+			eval local PARENTS=$(_shoop_${TRYOBJ}_parent)
+		fi
 		local P
 		# Try inheritance 1 level deep -- the quick way.
 		# TODO: benchmark to see if this helps.
