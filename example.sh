@@ -2,6 +2,7 @@
 . ${SHOOPSH:-/usr/bin/shoop.sh}
 . ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 OBJECT . use introspect serialize final destroy thread prettyprint
+_USE . showdeps
 
 THREAD . new TT
 TT . run : '

@@ -14,14 +14,19 @@
 ## 
 ## There is also '_USE . findmodule <path> <module>' convience method,
 ## which looks thru the path trying to find <module>.sh.
+## 
+## If '_USE . recorduse' is set, then all top-level modules will get
+## recorded, and '_USE . showdeps' will print out a table of
+## module/path values.
 
 OBJECT . usepath = $SHOOPPATH:. > /dev/null
 
 OBJECT . new _USE
 
+_USE . recorduse =q 1
 _USE . findmodule :p '
-	local oIFS="$IFS" IFS=:
-	local usepath="$1"; shift
+	local oIFS="$IFS" IFS=: usepath
+	usepath="$1"; shift
 	for B in $usepath;do
 		IFS="$oIFS"
 		if [ -e $B/$1.sh ]; then
@@ -30,8 +35,21 @@ _USE . findmodule :p '
 		fi
 	done
 '
+_USE . showdeps :p '
+	local A usepath="$($THIS . usepath)" module
+	for A in $(_USE . _record_ 2>/dev/null); do
+		module=$(_USE . findmodule "$usepath" $A)
+		if [ -z "$module" ]; then
+			echo "$A disappeared!" 1>&2
+		else
+			echo "$A: $module"
+		fi
+	done
+'
 IFS=" " OBJECT . use :p '
-	local A B usepath="$($THIS . usepath)" module
+	local A B usepath="$($THIS . usepath)" module recorduse
+	recorduse="$(_USE . recorduse 2>/dev/null)"
+	_USE . recorduse =q 0
 	for A in "$@"; do
 		if [ -z "$(_USE . _used_$A 2>/dev/null)" ]; then
 			module=$(_USE . findmodule "$usepath" $A)
@@ -39,6 +57,9 @@ IFS=" " OBJECT . use :p '
 				. $module
 				_USE . _used_ .=q " $A"
 				_USE . _used_$A =q 1
+				if [ "$recorduse" ]; then
+					_USE . _record_ .=q " $A"
+				fi
 			fi
 		fi
 	done
