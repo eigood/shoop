@@ -9,14 +9,16 @@ _shoop () {
 
 	if [ "$1" = = ]; then
 		# Set value.
-		shift 1
-		eval "_shoop_${TRUEOBJ}_$METH () { echo $@; }"
+		shift
+		if eval [ "\$_shooptype_${TRYOBJ}_$METH" ]; then
+			eval "_shoopdefines_$TRUEOBJ='$_shoopdefines_$TRUEOBJ $METH'"
+		fi
 		eval "_shooptype_${TRUEOBJ}_$METH=variable"
-		eval "_shoopdefines_$TRUEOBJ=\$(echo \$_shoopdefines_$TRUEOBJ $METH|tr ' ' '\n'|sort|uniq)"
+		eval "_shoop_${TRUEOBJ}_$METH () { echo $@; }"
 		echo $@
 	elif [ "$1" = : ]; then
 		# Set method.
-		shift 1
+		shift
 		eval "_shoop_${TRUEOBJ}_$METH () { $@; }"
 		eval "_shooptype_${TRUEOBJ}_$METH=method"
 		eval "_shoopdefines_$TRUEOBJ=\$(echo \$_shoopdefines_$TRUEOBJ $METH|tr ' ' '\n'|sort|uniq)"
