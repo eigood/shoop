@@ -45,6 +45,3 @@ IFS=" " OBJECT . use :p '
 	return
 '
 _shoopuse_use=1
-
-Add convience method '_USE . findmodule'.  Also, store all state variables
-in internal object _USE, instead of globally.
