@@ -46,3 +46,25 @@ LIST . delete :p '
 	order="$($THIS . _order)"
 	: order $order
 '
+LIST . rol :p '
+	local count size=$($THIS . size) order left
+	count=$((${1:-1} % $size))
+	if [ $count -gt 0 ]; then
+		order="$($THIS . _order)"
+		set -- $order
+		shift $count
+		set -- "$@ ${order%%$@}"
+		$THIS . _order =q "$@"
+	fi
+'
+LIST . ror :p '
+	local count size=$($THIS . size) order left
+	count=$(($size - (${1:-1} % $size)))
+	if [ $count -gt 0 ]; then
+		order="$($THIS . _order)"
+		set -- $order
+		shift $count
+		set -- "$@ ${order%%$@}"
+		$THIS . _order =q "$@"
+	fi
+'

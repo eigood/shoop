@@ -35,4 +35,21 @@ ok "" 0 "second"	list . get 2
 ok "" 0 "SECOND"	list . add "SECOND"
 ok "" 0 3		list . size
 
-tests 18
+# sanity check
+ok "" 0 "third"		list . get 1
+ok "" 0 "second"	list . get 2
+ok "" 0 "SECOND"	list . get 3
+
+# rotation
+ok "" 0 ""		list . ror 1
+ok "" 0 3		list . size
+ok "" 0 "SECOND"	list . get 1
+ok "" 0 "third"		list . get 2
+ok "" 0 "second"	list . get 3
+ok "" 0 ""		list . rol 2
+ok "" 0 3		list . size
+ok "" 0 "second"	list . get 1
+ok "" 0 "SECOND"	list . get 2
+ok "" 0 "third"		list . get 3
+
+tests 31
