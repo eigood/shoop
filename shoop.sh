@@ -142,7 +142,7 @@ _shoop_introspect=1
 
 IFS=" " _shoop OBJECT OBJECT new :p '
 	local OBJNAME=$1
-	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };"
+	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \"\$@\"; };"
 	if [ $THIS != $OBJNAME ]; then
 		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null
 	fi
