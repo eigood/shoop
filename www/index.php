@@ -2,7 +2,7 @@
 // Default Web Page for groups that haven't setup their page yet
 // Please replace this file with your own website
 //
-// $Id: index.php,v 1.1 2000/01/31 08:50:26 doogie Exp $
+// $Id: index.php,v 1.2 2000/01/31 09:08:48 doogie Exp $
 //
 $headers = getallheaders();
 ?>
@@ -47,9 +47,10 @@ $headers = getallheaders();
   <TR>
     <TD>
       <CENTER><BR>
-      <H1>Welcome to http://<?php print $headers[Host]; ?>/</H1>
-      <P>We're Sorry but this Project hasn't yet uploaded their personal webpage yet.<BR>
-      Please check back soon for updates or visit <A href="http://sourceforge.net/">SourceForge</A></P><BR>
+      <H1>Welcome to http://shoop.sourceforge.net/</H1>
+      <P>shoop is still a new project, and we are slowly getting things setup<BR>
+      Please check back soon for updates or visit 
+      <A href="http://sourceforge.net/project/?group_id=1981">shoop's SourceForge info page</A></P><BR>
       </CENTER>
     </TD>
   </TR>
@@ -60,7 +61,8 @@ $headers = getallheaders();
 <TABLE width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="737b9c">
   <TR>
     <TD align="center"><FONT color="#ffffff"><SPAN class="titlebar">
-      All trademarks and copyrights on this page are properties of their respective owners. Forum comments are owned by the poster. The rest is copyright ©1999-2000 VA Linux Systems, Inc.</SPAN></FONT>
+      All trademarks and copyrights on this page are properties of their respective owners.
+      The rest is copyright ©1999-2000 VA Linux Systems, Inc.</SPAN></FONT>
     </TD>
   </TR>
 </TABLE>
