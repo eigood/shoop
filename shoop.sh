@@ -104,16 +104,16 @@ _shoop () {
 # _shoopcache_method_counter= _shoopcache_link_DESCENDENT_counter
 # _shoopcache_linkmethod_OBJECT_counter= _shoopcache_link_DESCENDENT_counter
 
-			# Ok, the current METH is already in someone's cache.
-			# Find out if it is THIS object that is referenced.
-				# Someone is referencing \$METH, and it isn't TRUEMETH, so
-				# that means we have to erase all references for \$METH.
-				#
-				# TODO: Only erase if $TRUE was in the parent path of
-				# \$_shoopcache_method_\$METH
 IFS=" " _shoopcacheclear_="
 	if eval [ \\\"\\\$_shoopcache_method_\$METH\\\" ]; then
+		# Ok, the current METH is already in someone's cache.
+		# Find out if it is THIS object that is referenced.
 		if eval [ -z \\\"\\\$_shoopcache_linkmethod_\$TRUEMETH\\\" ]; then
+			# Someone is referencing \$METH, and it isn't TRUEMETH, so
+			# that means we have to erase all references for \$METH.
+			#
+			# TODO: Only erase if $TRUE was in the parent path of
+			# \$_shoopcache_method_\$METH
 			eval unset _shoopcache_method_\$METH\
 				 \\\$_shoopcache_method_\$METH\
 				   _shoopcache_linkmethod_\$TRUEMETH\
