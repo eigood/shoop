@@ -1,0 +1,5 @@
+destroy.sh:
+  * delete object references using new 'd' command
+
+final.sh:
+  * set the variable/method to 'protected' using shoop commands
