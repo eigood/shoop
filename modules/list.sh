@@ -36,8 +36,8 @@ LIST . set :p '
 LIST . delete :p '
 	local ret left pos=$1 order="$($THIS . _order)"; shift
 	$THIS . get $pos
-	eval $THIS d _\$$pos
 	set -- $order
+	eval $THIS d _\$$pos
 	shift $(($pos - 1))
 	left="${order%%$@}"
 	shift
