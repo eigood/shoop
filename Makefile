@@ -31,7 +31,8 @@ DOCS=\
 	MODULES\
 	README\
 	TODO\
-
+	docs/modules.txt\
+	
 EXAMPLES=\
 	example.sh\
 
@@ -148,6 +149,9 @@ NAMES=$(shell\
 	' AUTHORS)
 #endef
 
+docs/modules.txt: utils/shelldoc $(MODULES)
+	utils/shelldoc $(MODULES) > $@
+
 ChangeLog:
 	echo $(NAMES)
 	rcs2log $(NAMES) > $@
@@ -155,3 +159,4 @@ ChangeLog:
 ifndef NOISY
 .SILENT:
 endif
+
