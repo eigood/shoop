@@ -6,7 +6,7 @@ _shoopgetparent() {
 	for a in $(eval eval "\$_shoop_${1}_parent"); do
 		if eval [ -z \"\$_shoopresolve_parent_seen_$a\" ]; then
 			eval local _shoopresolve_parent_send_$a=1
-			echo -n $a
+			echo -n "$a "
 		fi
 		if eval [ -z \"\$_shoopresolve_parent_get_$a\" ]; then
 			eval local _shoopresolve_parent_get_$a=1
