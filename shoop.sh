@@ -23,7 +23,7 @@ _shoop () {
 	case "$1" in
 		:|:p|.:|.:p|\=|\=q|\=p|\.\=|\.\=q|\.\=p|\.\=qp)
 			local varmeth=$1 append="" quiet="" private=""; shift
-			if [ "${varmeth%p}" != "$varmeth" ]; then private=1; varmeth=${varmeth%p}; fi
+			if [ "${varmeth%p}" != "$varmeth" ]; then private=1 varmeth=${varmeth%p}; fi
 			# This block is for introspect.
 			if [ "$_shoop_introspect" ] &&
 			   eval [ -z \"\$_shooptype_$TRYMETH\$private\" ]; then
