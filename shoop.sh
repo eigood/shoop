@@ -5,7 +5,7 @@
 
 _shoop () {
 	local cmd=$1; shift
-	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH THIS
+	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH THIS CLASS
 	shift 3
 
 	case "$cmd" in
@@ -68,10 +68,9 @@ _shoop () {
 		;;
 	esac
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		THIS=$TRYOBJ
-		eval GETMETH=\"\$_shoop_$TRYMETH\"
+		THIS=$TRYOBJ CLASS=$TRYOBJ
 	else
-		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
+		eval local CLASS PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
 			NEWPARENTS=""
 		THIS=$TRUEOBJ
 		if [ -z "$_shoopnocache_" ]; then
@@ -87,8 +86,8 @@ _shoop () {
 			eval set -- $PARENTS
 			# 1st stage resolver.  Look at the immediate parents.
 			while [ $# -gt 0 ]; do
-				P=$1
-				eval GETMETH=\"\$_shoop_${P}_$METH\"
+				CLASS=$1
+				eval GETMETH=\"\$_shoop_${CLASS}_$METH\"
 				if [ "$GETMETH" ]; then
 					return
 				fi
@@ -98,7 +97,7 @@ _shoop () {
 				# which is where most of the time will be spent.  This
 				# gave an 8% speedup in the 2nd stage, and only noise in
 				# the first.
-				NEWPARENTS="${NEWPARENTS:+ $NEWPARENTS}$(eval eval "\$_shoop_${P}_parent")"
+				NEWPARENTS="${NEWPARENTS:+ $NEWPARENTS}$(eval eval "\$_shoop_${CLASS}_parent")"
 				shift
 			done
 			# 1st stage found no match, so resolve the inheritance tree,
@@ -106,32 +105,34 @@ _shoop () {
 			# classes.
 			set -- $NEWPARENTS
 			while [ $# -gt 0 ];do
-				P=$1
-				eval GETMETH=\"\$_shoop_${P}_$METH\"
+				CLASS=$1
+				eval GETMETH=\"\$_shoop_${CLASS}_$METH\"
 				if [ "$GETMETH" ]; then
 					# Save a reference to the resolved object in the cache for the
 					# true object.
 					if [ -z "$_shoopnocache_" ]; then
-						eval _shoopcache_link_${THIS}_$METH=_shoop_${P}_$METH\
+						eval _shoopcache_link_${THIS}_$METH=_shoop_${CLASS}_$METH\
 						     _shoopcache_=\"\$_shoopcache_\
 							  _shoopcache_method_$METH _shoopcache_link_${THIS}_$METH \"\
 						     _shoopcache_method_$METH=\"\$_shoopcache_method_$METH\
 							  _shoopcache_link_${THIS}_$METH\"\
-						     _shoopcache_linkmethod_${P}_$METH=\"\$_shoopcache_linkmethod_${P}_$METH\
+						     _shoopcache_linkmethod_${CLASS}_$METH=\"\$_shoopcache_linkmethod_${CLASS}_$METH\
 							  _shoopcache_link_${THIS}_$METH\"
 					fi
 					return
 				fi
 				shift
-				set -- $(eval eval "\$_shoop_${P}_parent") "$@"
+				set -- $(eval eval "\$_shoop_${CLASS}_parent") "$@"
 			done
 			return 1
 		}
-
 		if ! resolve; then
 			echo "\"$METH\" is undefined for $TRYOBJ." >&2
 			return 1
 		fi
+	fi
+	if [ "$CLASS" ]; then
+		eval GETMETH=\"\$_shoop_${CLASS}_$METH\"
 	fi
 	if [ "$GETMETH" ]; then
 		local oIFS="$IFS"
