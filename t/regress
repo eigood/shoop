@@ -21,6 +21,8 @@ tests () {
 	echo testcount=$testcount
 }
 
+# This is uber-disgusing. Our IFS is messed up, so this gets the full output
+# of the test program. It then parses it.
 testfailures=0
 compare () {
 	while :; do
@@ -35,7 +37,6 @@ compare () {
 				say "test $count succeeded"
 			fi
 		else
-			spoke=1
 			say "test $count FAILED: expected $expected_output, but got $output"
 			testfailures=$(expr $testfailures + 1)
 		fi
@@ -57,7 +58,7 @@ say () {
 	echo "	$*"
 }
 
-if [ "$1" ]; then
+for script in "$@"; do
 	# This part runs a regression test script (which uses the code above),
 	# and parses the output to print a human-readable summary.
 	script=$1
@@ -68,7 +69,7 @@ if [ "$1" ]; then
 	testcount=0
 	eval `. $script || echo woah`
 	if [ "$expected" -a "$expected" != "$testcount" ]; then
-		say "$expected tests were expected, but $testcount were run."
+		say "($expected tests were expected, but $testcount were run)"
 	fi
 	if [ "$testfailures" != 0 ]; then
 		echo ".. $testfailures test(s) FAILED."
@@ -78,4 +79,4 @@ if [ "$1" ]; then
 		fi		
 		echo " all test(s) successful."
 	fi
-fi
+done
