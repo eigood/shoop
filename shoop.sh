@@ -30,7 +30,7 @@ _shoop () {
 				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 			fi
 			if [ -z "$_shoopnocache_" ]; then
-				eval $_shoopcacheclear_
+				eval $_shoopcacheclear_ || true
 			fi
 			# Some various assignment modifiers.
 			if [ "${varmeth#.}" != "$varmeth" ]; then append=1 varmeth=${varmeth#.}; fi
