@@ -77,7 +77,7 @@ SHOOP() {
 			fi
 			eval "parents=\$_shoopparents_$class"
 			if [ "$parents" ]; then
-				resolve $parents
+				_resolve $parents
 			fi
 			for parent in $parents; do
 				eval methods=${methods:-$methods }\$_shoop
