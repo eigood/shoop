@@ -34,6 +34,11 @@ multiple inheritance starts happening:
 OBJ . parent = FOO
 OBJ . parent = BAR BAZ QUUX
 
+You can call an overridden method like this (used inside the method that
+overrode it, generally):
+
+THIS . super method
+
 That's about it. Now run off and write a MOO or something.
 
 Shoop is copyright 2000 under the terms of the GNU GPL by:
