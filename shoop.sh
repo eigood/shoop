@@ -13,14 +13,14 @@ _shoop () {
 		fi
 		if [ "$1" = = ]; then
 			shift
-			eval "_shooptype_${TRUEOBJ}_$METH=variable"
-			eval "_shoop_${TRUEOBJ}_$METH () { echo $@; }"
+			eval "_shooptype_${TRUEOBJ}_$METH=variable;
+			      _shoop_${TRUEOBJ}_$METH () { echo $@; }"
 #			eval "_shoop_${TRUEOBJ}_$METH=$@"
 			echo $@
 		else
 			shift
-			eval "_shooptype_${TRUEOBJ}_$METH=method"
-			eval "_shoop_${TRUEOBJ}_$METH () { $@
+			eval "_shooptype_${TRUEOBJ}_$METH=method;
+			      _shoop_${TRUEOBJ}_$METH () { $@
 }"
 		fi
 # Alternate, variable method. Benchmark before turning on. (See line above, too.)
