@@ -41,9 +41,9 @@ compare () {
 		
 		shift 5
 		if [ "$1" != compare ]; then
-			break 1
+			break
 		fi
-		shift 1
+		shift
 	done
 	eval $@
 }
