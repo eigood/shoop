@@ -12,7 +12,7 @@
 _shoop_introspect=1
 
 _shoop_quote="'"
-IFS=" " OBJECT . serialize : '
+IFS=" " OBJECT . serialize :p '
 	local DEFINES A DISPLAYOBJ
 	local PARENTS=$($THIS . parent 2>/dev/null)
 	if [ "$2" ]; then

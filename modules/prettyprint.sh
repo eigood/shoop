@@ -9,7 +9,7 @@
 # Enable introspection inside _shoop
 _shoop_introspect=1
 
-IFS=" " OBJECT . prettyprint : '
+IFS=" " OBJECT . prettyprint :p '
 	local DEFINES A DISPLAYOBJ
 	if [ "$2" ]; then
 		DISPLAYOBJ=$2

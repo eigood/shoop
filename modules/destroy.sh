@@ -9,7 +9,7 @@
 # Enable introspection inside _shoop
 _shoop_introspect=1
 
-IFS=" " OBJECT . destroy : '
+IFS=" " OBJECT . destroy :p '
 	eval local A DEFINES=\$_shoopdefines_$THIS METH="" TRUEMETH=""
 	for A in $DEFINES; do
 		METH=$A TRUEMETH=${THIS}_$A

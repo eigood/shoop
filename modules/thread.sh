@@ -6,18 +6,18 @@
 # GPL copyright 2000 by Adam Heath <doogie@debian.org>
 OBJECT . new THREAD
 
-THREAD . start : '
+THREAD . start :p '
 	if [ -z "$($THIS . running)" ]; then
 		$THIS . run &
 		$THIS . pid = $! > /dev/null
 		$THIS . running = 1 > /dev/null
 	fi
 '
-THREAD . stop : '
+THREAD . stop :p '
 	if [ -z "$($THIS . running)" ]; then
 		kill $($THIS . pid)
 	fi
 '
-THREAD . wait : '
+THREAD . wait :p '
 	wait $($THIS . pid)
 '

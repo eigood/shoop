@@ -9,7 +9,7 @@
 # GPL copyright 2000 by Adam Heath <doogie@debian.org>
 OBJECT . usepath = $SHOOPPATH:. > /dev/null
 
-IFS=" " OBJECT . use : '
+IFS=" " OBJECT . use :p '
 	local A B usepath
 	local oIFS="$IFS" IFS=:
 	usepath="$($THIS . usepath)"

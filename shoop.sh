@@ -5,11 +5,12 @@ _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3 LASTMETH=$METH
 	shift 3
 	case "$1" in
-		=|=q|.=|.=q|:)
-			local varmeth=$1 append="" quiet=""; shift
+		=|=q|=p|.=|.=q|.=p|.=qp|:|:p)
+			local varmeth=$1 append="" quiet="" private=""; shift
+			if [ "${varmeth%p}" != $varmeth ]; then private=1; varmeth=${varmeth%p}; fi
 			# This block is for introspect.
 			if [ "$_shoop_introspect" ] &&
-			   eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
+			   eval [ -z \"\$_shooptype_$TRYMETH\$private\" ]; then
 				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 			fi
 			if [ -z "$_shoopnocache_" ]; then
@@ -132,7 +133,7 @@ _shoop_introspect=1
 # parents to non-existant objects, and then define those parents
 # later.  Maybe we should not allow that, tho?
 
-IFS=" " _shoop OBJECT OBJECT new : '
+IFS=" " _shoop OBJECT OBJECT new :p '
 	local OBJNAME=$1
 	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };"
 	if [ $THIS != $OBJNAME ]; then
@@ -147,7 +148,7 @@ _shoop OBJECT OBJECT new OBJECT
 OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
-OBJECT . super : '_shoop $THIS $($THIS . parent) "$LASTMETH" $@; return'
+OBJECT . super :p '_shoop $THIS $($THIS . parent) "$LASTMETH" $@; return'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect

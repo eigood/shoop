@@ -4,7 +4,7 @@
 # method. The method takes the names of a list of properites and/or methods
 # that should become final. (Though they may be overridden in a child class.)
 
-IFS=" " OBJECT . finalize : '
+IFS=" " OBJECT . finalize :p '
 	local item
 	for item in $@; do
 		if eval  [ -z \"\$_shoopfinal_${THIS}_$item\" ]; then
