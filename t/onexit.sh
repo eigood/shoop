@@ -36,10 +36,11 @@ ok "" 0 4		onexit . size
 ok "" 0 "echo 4"	onexit . get 4
 
 # running
-ok "" 0 "3
+ok "a" 0 "3
 1
 2
-4"	onexit . run
+4
+"	onexit . run
 ok "" 0 "3
 1
 2
@@ -64,7 +65,8 @@ ok "" 0 "Z
 1
 2
 4
-a"	ONEXIT . run
+a
+"	ONEXIT . run
 
 # at exit
 #ok "" 0 "Z3124a"	exit

@@ -76,7 +76,7 @@ ok "" 0 ""		NOMETH1 . new NOMETH2
 ok "" 0 ""		NOMETH2 . new NOMETH3
 ok "" 0 ""		OBJECT . new METHTEST
 ok "" 0 ""		METHTEST . parent .=q NOMETH2 NOMETH3
-ok "" 0 ""		NOMETH1 . print :p 'echo "$@"'
+ok "" 0 ""		NOMETH1 . print :p 'echo -n "$@"'
 ok "" 0 "a b c d"	METHTEST . print a b c d
 
 tests 46

@@ -19,22 +19,22 @@ STRINGUTIL . ord : '
 # \201,\210	These are only here because ash is not 8-bit clean.
 
 	if [ " " = "$1" ]; then
-		echo 32
+		echo -n 32
 	elif [ "*" = "$1" ]; then
-		echo 42
+		echo -n 42
 	elif [ "?" = "$1" ]; then
-		echo 63
+		echo -n 63
 	elif [ "" = "$1" ]; then
-		echo 129
+		echo -n 129
 	elif [ "ˆ" = "$1" ]; then
-		echo 136
+		echo -n 136
 	else
 		local chars="$($THIS . chars)"
 		local left="${chars%%$1*}"
-		echo $((${#left}))
+		echo -n $((${#left}))
 	fi
 '
 STRINGUTIL . chr : '
 	local zero=$($THIS . zero)
-	echo -e "\\$zero$(( $1 >> 6 ))$(( $1 >> 3 & 7 ))$(( $1 & 7 ))"
+	echo -n -e "\\$zero$(( $1 >> 6 ))$(( $1 >> 3 & 7 ))$(( $1 & 7 ))"
 '

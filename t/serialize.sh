@@ -12,5 +12,6 @@ ok "" 0 ""	object . bar : '$THIS . foo'
 #fixup sed "s/'/''/g"
 ok "" 0 "OBJECT . new object;
 object . foo =q 1;
-object . bar : '\$THIS . foo';"	object . serialize
+object . bar : '\$THIS . foo';
+"	object . serialize
 tests 5

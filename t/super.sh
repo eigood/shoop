@@ -9,12 +9,15 @@ ok "" 0 ""	ONE . count :p 'echo ONE-$THIS;$THIS . super'
 ok "" 0 ""	ONE . new TWO
 ok "" 0 ""	TWO . count :p 'echo TWO-$THIS;$THIS . super'
 
-ok "" 0 "OBJECT-OBJECT"		OBJECT . count
+ok "" 0 "OBJECT-OBJECT
+"		OBJECT . count
 ok "" 0 "ONE-ONE
-OBJECT-ONE"	ONE . count
+OBJECT-ONE
+"	ONE . count
 ok "" 0 "TWO-TWO
 ONE-TWO
-OBJECT-TWO"	TWO . count
+OBJECT-TWO
+"	TWO . count
 
 tests 8
 
