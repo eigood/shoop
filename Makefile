@@ -4,7 +4,7 @@ ITERATIONS=10000
 SEQ=\$$(seq 1 $(ITERATIONS))
 DEF_PREP = . shoop.sh
 # run_command msg, prep code, loop code
-run_command = @echo -n "$(1): $(ITERATIONS) in";$(TIME) sh -c "$(2); \
+run_command = @echo -n "$(1): $(ITERATIONS) in ";$(TIME) sh -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null
 
 benchmark:
