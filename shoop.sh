@@ -15,13 +15,17 @@ _shoop () {
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=variable"
 			eval "_shoop_${TRUEOBJ}_$METH () { echo $@; }"
+#			eval "_shoop_${TRUEOBJ}_$METH=$@"
 			echo $@
 		else
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=method"
 			eval "_shoop_${TRUEOBJ}_$METH () { $@; }"
 		fi
-	elif eval [ "\$_shooptype_${TRYOBJ}_$METH" ]; then # Bwa ha ha.
+# Alternate, variable method. Benchmark before turning on. (See line above, too.)
+#	elif eval [ \"\$_shooptype_${TRYOBJ}_$METH\" = variable ]; then
+#		eval echo \$_shoop_${TRYOBJ}_$METH
+	elif eval [ "\$_shooptype_${TRYOBJ}_$METH" ]; then
 		eval _shoop_${TRYOBJ}_$METH $TRUEOBJ \"\$@\";
 	else
 		eval local PARENTS=\$_shoopparent_$TRYOBJ
