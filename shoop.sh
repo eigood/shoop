@@ -98,7 +98,7 @@ _shoop () {
 				# which is where most of the time will be spent.  This
 				# gave an 8% speedup in the 2nd stage, and only noise in
 				# the first.
-				NEWPARENTS="${NEWPARENTS:+ $NEWPARENTS}$(eval eval "\$_shoop_${CLASS}_parent")"
+				NEWPARENTS="${NEWPARENTS:+$NEWPARENTS }$(eval eval "\$_shoop_${CLASS}_parent")"
 				shift
 			done
 			# 1st stage found no match, so resolve the inheritance tree,

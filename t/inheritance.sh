@@ -65,4 +65,18 @@ ok "" 0 black	KID . eyes
 #ok "" 0 "SON"	PARENT . parent = SON
 #ok "" 1 ""		SON . count
 
-tests 39
+
+# Ok, this is a good one.
+# when there are more than 2 parents, and the requested method is not
+# in the immediate parents, the second-level parents would be
+# combined without a space between them, so the resolver wouldn't be
+# able to walk into them.  ugh.
+ok "" 0 ""		OBJECT . new NOMETH1
+ok "" 0 ""		NOMETH1 . new NOMETH2
+ok "" 0 ""		NOMETH2 . new NOMETH3
+ok "" 0 ""		OBJECT . new METHTEST
+ok "" 0 ""		METHTEST . parent .=q NOMETH2 NOMETH3
+ok "" 0 ""		NOMETH1 . print :p 'echo "$@"'
+ok "" 0 "a b c d"	METHTEST . print a b c d
+
+tests 46
