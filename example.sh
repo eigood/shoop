@@ -14,9 +14,10 @@ OBJECT . count
 echo
 OBJECT . new FOO
 OBJECT . new BAR
-BAR . parent = A B C D FOO >/dev/null
+BAR . parent = A B FOO C D OBJECT > /dev/null
 BAR . test
 echo
+BAR . blah
 FOO . count : '$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super count))'
 FOO . counter = 1
 echo
@@ -35,7 +36,7 @@ echo introspecting FOO
 FOO . introspect resolve
 
 echo serializing OBJECT
-OBJECT . serialize
+#OBJECT . serialize
 echo serializing FOO to temporary file
 FOO . serialize > FOO.sh.tmp
 
