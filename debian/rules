@@ -51,7 +51,6 @@ DEBIAN . do_install : '$THIS . build
 		      debian/shoop-modules/usr/share/doc/shoop-modules/'
 DEBIAN . do_packages : '$THIS . build
 	$THIS . install
-	$THIS . do dh_testversion 2.0.40
 	$THIS . do dh_testdir
 	$THIS . do dh_testroot
 #	$THIS . do dh_installdebconf
