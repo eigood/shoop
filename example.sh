@@ -1,9 +1,7 @@
 #!/bin/sh
 . ./shoop.sh
 . ./use.sh
-OBJECT . use introspect
-OBJECT . use serialize
-OBJECT . use final
+OBJECT . use introspect serialize final destroy
 echo some counters:
 OBJECT . counter = 10
 echo
@@ -36,5 +34,12 @@ echo introspecting FOO
 FOO . introspect resolve
 echo serializing OBJECT
 OBJECT . serialize
-echo serializing FOO
-FOO . serialize
+echo serializing FOO to temporary file
+FOO . serialize > FOO.sh.tmp
+echo destoying FOO
+FOO . destroy
+set | grep FOO
+#FOO . serialize
+#echo reinstantiating FOO
+#. ./FOO.sh.tmp
+#rm -f FOO.sh.tmp

@@ -9,3 +9,4 @@ serialize.sh   - dump out objects in a format that can be re-loaded later
 prettyprint.sh - output a c++/java like represantation of a class
 use.sh         - imports shoop modules, and keeps multiple definitions
 		 from happening.
+destroy.sh     - destroy objects
