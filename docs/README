@@ -9,7 +9,8 @@ and multiple inheritance.
 
 Shoop whould work in any POSIX shell. It requires no third-party UNIX tools
 at all. We do reccommend you do not run it under bash, since bash is very
-slow at recursion. Use ash: it's significantly faster.
+slow at recursion. Use ash: it's significantly faster. To see just how fast,
+run "make benchmark".
 
 When you source shoop.sh, you start out with a single base object, OBJECT.
 You can make a new object named OBJ that has OBJECT as its parent like so:

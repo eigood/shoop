@@ -40,19 +40,16 @@ _shoop () {
 		set -- $TRYOBJ
 		while [ $# -gt 0 ];do
 			TRUEOBJ=$1
-			if eval [ \"\$_shooptype_$1_$METH\" ];then
-				local THIS=$TRUEOBJ
-				set "$orgargs"
+			if eval [ \"\$_shooptype_$1_$METH\" ]; then
+				set -- "$orgargs"
 				eval eval "\$_shoop_${P}_$METH"
 				return
 			fi
 			shift
 			set -- $(eval eval "\$_shoop_${TRUEOBJ}_parent") "$@"
 		done
-		if [ "$PARENTS" ];then
-			echo "\"$METH\" is undefined for $TRYOBJ." >&2
-			return 1
-		fi
+		echo "\"$METH\" is undefined for $TRYOBJ." >&2
+		return 1
 	fi
 	return 0
 }
