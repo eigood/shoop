@@ -5,10 +5,35 @@ HTDOCS=$GHOME/htdocs
 if [ "$RUNNING_UNDER_CVS" ]; then
 	exec ssh -i $ID_FILE "$@"
 fi
-CVS_RSH=$GHOME/update
+CVS_RSH=$HTDOCS/update
 export CVS_RSH
-if [ "$1" = www ]; then
-	RUNNING_UNDER_CVS=1
-	export RUNNING_UNDER_CVS
-	(cd $HTDOCS;exec cvs update)
-fi
+case "$1" in
+	www)
+		RUNNING_UNDER_CVS=1
+		export RUNNING_UNDER_CVS
+		(cd $HTDOCS;exec cvs update)
+	;;
+	cvspulse)
+		if lockfile -1 -r 2 $HTDOCS/update.lock; then
+			# we have obtained the lock on the cvspulse script.
+			if lockfile -0 -r 0 $HTDOCS/cvspulse.lock; then
+				# ok, new pulse active.
+				# remove master lock, so other pulses can come in.
+				rm -f $HTDOCS/update.lock
+				$0 www;
+				# We do a loop, so that if while we are reupdating, another
+				# pulse comes in, we can be sure that it will still have its
+				# changes noticed by this script.
+				while [ -e $HTDOCS/cvsflag.lock ]; then
+					rm -f $HTDOCS/cvsflag.lock
+					$0 www
+				done
+			elif lockfile -0 -r 0 $HTDOCS/cvsflag.lock; then
+				# 2nd(and subsequent) pulses set the above lock
+				# flag, which the 1st pulse we see and will do
+				# another update from cvs.  We don't have to do anything here.
+			fi
+			rm -f $HTDOCS/update.lock
+		fi
+	;;
+esac
