@@ -1,10 +1,10 @@
 #!/bin/sh -e
 #
-# Destroy module for shoop. Expands the BASE class with a destroy method, that
-# completly whipes out any object it is called on (if that object has children,
-# they stick around, so use with caution.
+# Destroy module for shoop. Expands the OBJECT class with a destroy method
+# that completly whipes out any object it is called on (if that object has
+# children, they stick around, so use with caution.
 #
-# GPL copyright 2000 by Joey Hess <doogie@debian.org>
+# GPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
 # Enable introspection inside _shoop
 _shoop_introspect=1
