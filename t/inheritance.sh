@@ -34,9 +34,11 @@ ok "" 0 6	DESCENDENT . counter
 ok "" 0 7	DESCENDENT . count
 
 # calling super
-ok "" 0 ""		CHILD . supertest : 'echo -n CHILD'
-ok "" 0 ""		GRANDCHILD . supertest : 'echo -n GRANDCHILD; $THIS . super'
-ok "" 0 "GRANDCHILDCHILD" GRANDCHILD . supertest
+ok "" 0 ""			CHILD . supertest : 'echo -n CHILD'
+ok "" 0 ""			GRANDCHILD . supertest : 'echo -n GRAND; $THIS . super'
+ok "" 0 "GRANDCHILD"		GRANDCHILD . supertest
+ok "" 0 ""			DESCENDENT . supertest : 'echo -n DESCENDENT; $THIS . super'
+ok "" 0 "DESCENDENTGRANDCHILD"	DESCENDENT . supertest
 
 # Multiple inheritance.
 ok "a" 0 "" OBJECT . new MOTHER
@@ -63,4 +65,4 @@ ok "" 0 black	KID . eyes
 #ok "" 0 "SON"	PARENT . parent = SON
 #ok "" 1 ""		SON . count
 
-tests 37
+tests 39
