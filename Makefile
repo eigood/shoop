@@ -57,7 +57,11 @@ example:
 
 benchmark:
 	$(MAKE) install prefix=$(binstall)
-	cd $(binstall); SHOOPSH=$(binstall)$(bindir)/shoop.sh $(CURDIR)/t/benchmark $(CURDIR)/t/benchmark.bm ""
+	cd $(binstall); SHOOPPATH=$(binstall)$(moddir)\
+			SHOOPSH=$(binstall)$(bindir)/shoop.sh\
+			$(CURDIR)/t/benchmark\
+			$(CURDIR)/t/benchmark.bm\
+			"$(bscr)"
 
 clean:
 	echo Cleaning
