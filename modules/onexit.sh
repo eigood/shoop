@@ -3,7 +3,7 @@ STACK . new ONEXIT
 
 ## This module allows for running of several commands when the shell
 ## script exits.  It inherits from stack.sh, so the normal add/insert/
-## push/pop commands are available.  Note, that add/insert to not
+## push/pop commands are available.  Note, that add/insert do not
 ## return what was passed to them.  pop does, however.
 ## 
 ## When the end of the script is reached, the code that is run iterates
