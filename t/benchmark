@@ -4,7 +4,6 @@
 # LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
 SHELL=$(basename ${SHELL:-bash})
-ITERATIONS=${ITERATIONS:-100}
 
 trap '[ "$tmp" ] && rm -f $tmp; exit' 2
 # Call this function to benchmark something.
@@ -23,6 +22,10 @@ preprestore() {
 }
 prepclear() {
 	_bmprep_=""
+}
+
+bmcount() {
+	ITERATIONS=$1
 }
 
 bm () {

@@ -1,6 +1,7 @@
 #!/bin/sh
 DEF_PREP=". ${SHOOPSH:-./shoop.sh}"
-ITERATIONS=${ITERATIONS:-100}
+
+bmcount ${ITERATIONS:-100}
 
 prep true
 bm 1 "internal variable sets" 'FOO=1'
