@@ -11,6 +11,7 @@ all:
 	@echo This makefile is only here to run benchmarks or examples.
 	@echo \"make benchmark\" or \"make example\" will do that.
 
+test: example
 example:
 	@sh ./example.sh
 

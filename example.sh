@@ -1,4 +1,7 @@
+#!/bin/sh -e
 . shoop.sh
+
+echo some counters:
 BASE . counter = 10
 BASE . count : '$1 . counter = $(expr $($1 . counter) + 1)'
 BASE . test = 20
