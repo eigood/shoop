@@ -5,24 +5,21 @@
 #. ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 
 SHOOP abstract class TEST
-#	SHOOP abstract method _print
+	SHOOP abstract method _print
 	SHOOP public method print '
 		$THIS . _print "$@"
 	'
 	SHOOP public variable var = 1
-	SHOOP public method _print '
-		echo "default:$@"
-	'
 SHOOP end
 SHOOP public class REAL : TEST
 	SHOOP public method _print '
-		echo "$@"
+		echo "real:$@"
 	'
 SHOOP end
 
 
-ok "" 0 ""	SHOOP new t : TEST
-ok "" 0 ""	t . var
-ok "" 0 ""	t . print $(t . var)
+ok "" 0 ""		SHOOP new t : REAL
+ok "" 0 "1"		t . var
+ok "" 0 "real:1"	t . print $(t . var)
 
 tests 3
