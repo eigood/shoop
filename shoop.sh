@@ -11,10 +11,8 @@ _shoop () {
 			eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
 		
-		if [ "$_shoopcache_" ];then
-			# We are redefining something, so blow away the entire cache.
-			# TODO: Figure out a way to just clear part of the cache.
-			eval unset _shoopcache_ \$_shoopcache_
+		if [ -z "$_shoopnocache_" ]; then
+			eval $_shoopcacheclear_
 		fi
 		if [ "$1" = = ]; then
 			shift
@@ -33,16 +31,19 @@ _shoop () {
 		return
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
-			THIS=$TRUEOBJ GETMETH="" NEWPARENTS="" CACHE=\"\$_shoopcache_${TRUEOBJ}_$METH\"
-		# If this object is found in the cache, than short-circuit
-		# the resolving code.
-		if [ "$CACHE" ]; then
-			eval eval \$$CACHE
-			return
+			THIS=$TRUEOBJ GETMETH="" NEWPARENTS=""
+		if [ -z "$_shoopnocache_" ]; then
+			# If this object is found in the cache, than short-circuit
+			# the resolving code.
+			eval local CACHE=\"\$_shoopcache_link_$TRUEMETH\"
+			if [ "$CACHE" ]; then
+				eval eval \$$CACHE
+				return
+			fi
 		fi
 		# 1st stage resolver.  Look at the immediate parents.
 		for P in $PARENTS; do
-			eval GETMETH="\$_shoop_${P}_$METH"
+			eval GETMETH=\"\$_shoop_${P}_$METH\"
 			if [ "$GETMETH" ]; then
 				eval "$GETMETH"
 				return
@@ -68,8 +69,13 @@ _shoop () {
 				# Save a reference to the resolved object in the cache for the
 				# true object.
 				if [ -z "$_shoopnocache_" ]; then
-					eval _shoopcache_${THIS}_$METH=_shoop_${P}_$METH\
-						_shoopcache_=\"\$_shoopcache_ _shoopcache_${THIS}_$METH\"
+					eval _shoopcache_link_${THIS}_$METH=_shoop_${P}_$METH\
+					     _shoopcache_=\"\$_shoopcache_\
+						  _shoopcache_method_$METH _shoopcache_link_${THIS}_$METH \"\
+					     _shoopcache_method_$METH=\"\$_shoopcache_method_$METH\
+						  _shoopcache_link_${THIS}_$METH\"\
+					     _shoopcache_linkmethod_${P}_$METH=\"\$_shoopcache_linkmethod_${P}_$METH\
+						  _shoopcache_link_${THIS}_$METH\"
 				fi
 				eval "$GETMETH"
 				return
@@ -81,16 +87,43 @@ _shoop () {
 		return 1
 	fi
 }
+# _shoopcache_link_DESCENDENT_counter=_shoop_OBJECT_counter
+# _shoopcache_= _shoopcache_method_new _shoopcache_link_GRANDCHILD_new  _shoopcache_method_counter _shoopcache_link_DESCENDENT_counter 
+# _shoopcache_method_counter= _shoopcache_link_DESCENDENT_counter
+# _shoopcache_linkmethod_OBJECT_counter= _shoopcache_link_DESCENDENT_counter
 
+			# Ok, the current METH is already in someone's cache.
+			# Find out if it is THIS object that is referenced.
+				# Someone is referencing \$METH, and it isn't TRUEMETH, so
+				# that means we have to erase all references for \$METH.
+				#
+				# TODO: Only erase if $TRUE was in the parent path of
+				# \$_shoopcache_method_\$METH
+IFS=" " _shoopcacheclear_="
+	if eval [ \\\"\\\$_shoopcache_method_\$METH\\\" ]; then
+		eval echo \\\"\\\$_shoopcache_linkmethod_\$TRUEMETH\\\"
+		if eval [ -z \\\"\\\$_shoopcache_linkmethod_\$TRUEMETH\\\" ]; then
+			eval unset _shoopcache_method_\$METH\
+				 \\\$_shoopcache_method_\$METH\
+				   _shoopcache_linkmethod_\$TRUEMETH\
+				 \\\$_shoopcache_linkmethod_\$TRUEMETH
+		fi
+	fi
+"
 # Temporarily turn on introspection, so the base object has everything 
 # recorded about it as it is being created.
 _shoop_introspect=1
 
 # Create a method to create a new object.
+
+# TODO: clear cache !!!!<<<< CRITICAL >>>>!!!!
+# Not as simple as it first looks, because you can set your
+# parents to non-existant objects, and then define those parents
+# later.  Maybe we should not allow that, tho?
+
 IFS=" " _shoop OBJECT OBJECT new : '
 	local OBJNAME=$1;
-	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };
-	      unset _shoopcache_ \$_shoopcache_";
+	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };"
 	if [ $THIS != $OBJNAME ]; then
 		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null;
 	fi;
