@@ -53,7 +53,7 @@ echo serializing OBJECT
 echo serializing FOO to temporary file
 FOO . serialize > FOO.sh.tmp
 
-echo destoying FOO
+echo destroying FOO
 FOO . destroy
 set | grep FOO
 echo loading FOO
