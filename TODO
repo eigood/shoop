@@ -1,0 +1,4 @@
+* Here is an optimization to consider. Keep a cache of recently called methods
+  (by object), and what was finally called. Invalidate when any parent is
+  changed, or any new method added. Add to the cache whenever a second level
+  resolve is done to call a method.
