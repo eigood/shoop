@@ -4,7 +4,7 @@
 _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
 	shift 3
-	if [ "$1" = = -o "$1" = : ]; then
+	if [ "$1" = = -o "$1" = =q -o "$1" = : ]; then
 		# This block is for introspect.
 		if [ "$_shoop_introspect" ] &&
 		   eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
@@ -14,11 +14,15 @@ _shoop () {
 		if [ -z "$_shoopnocache_" ]; then
 			eval $_shoopcacheclear_
 		fi
-		if [ "$1" = = ]; then
-			shift
+		if [ "$1" = = -o "$1" = =q ]; then
+			if [ "$1" = = ]; then
+				shift
+				echo -n $@
+			else
+				shift
+			fi
 			eval "_shoop_$TRUEMETH='echo -n $@'
 			      _shooptype_$TRUEMETH=variable"
-			echo -n $@
 		else
 			shift
 			eval "_shoop_$TRUEMETH='$@'
