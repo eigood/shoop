@@ -10,7 +10,7 @@ ok () {
 	shift 3
 	
 	testcount=$(($testcount + 1))
-	echo -n "compare '$name' '$testcount' '$(echo $expected_output | sed "s/'/''/g")' '$expected_return' '"
+	echo -n "compare '$name' '$testcount' '$(echo "$expected_output" | sed "s/'/''/g")' '$expected_return' '"
 	set +e
 	"$@" > $TMPF
 	ret=$?
