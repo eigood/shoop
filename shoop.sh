@@ -1,20 +1,6 @@
 #!/bin/sh -e
 # OOP in shell. GPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
-_shoopgetparent() {
-	local a
-	for a in $(eval eval "\$_shoop_${1}_parent"); do
-		if eval [ -z \"\$_shoopresolve_parent_seen_$a\" ]; then
-			eval local _shoopresolve_parent_seen_$a=1
-			echo -n "$a "
-		fi
-		if eval [ -z \"\$_shoopresolve_parent_get_$a\" ]; then
-			eval local _shoopresolve_parent_get_$a=1
-			_shoopgetparent $a
-		fi
-	done
-}
-
 _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
 	shift 3
@@ -50,18 +36,18 @@ _shoop () {
 		# 1 level deep found no match, so resolve the inheritance
 		# tree, and loop over untested super classes.
 
-		# Tell getparent that we have already checked the first
-		# level of parents.  However, getparent still needs to
-		# walk the entire parent tree.
-		for P in $PARENTS; do
-			eval local _shoopresolve_parent_seen_$P=1
-		done
-		for P in $(_shoopgetparent $TRYOBJ); do
-			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
+		local orgargs="$@"
+		set -- $TRYOBJ
+		while [ $# -gt 0 ];do
+			TRUEOBJ=$1
+			if eval [ \"\$_shooptype_$1_$METH\" ];then
 				local THIS=$TRUEOBJ
+				set "$orgargs"
 				eval eval "\$_shoop_${P}_$METH"
 				return
 			fi
+			shift
+			set -- $(eval eval "\$_shoop_${TRUEOBJ}_parent") "$@"
 		done
 		if [ "$PARENTS" ];then
 			echo "\"$METH\" is undefined for $TRYOBJ." >&2
