@@ -2,67 +2,64 @@
 # Regression test framework (modeled on perl's if you can't tell).
 
 set -e
-TMPF=$(mktemp $(/bin/pwd)/regress.XXXXXX)
-trap 'rm -rf $TMPF' 0
+TMPF1=$(mktemp $(/bin/pwd)/regress.XXXXXX)
+TMPF2=$(mktemp $(/bin/pwd)/regress.XXXXXX)
+trap 'rm -rf $TMPF1 $TMPF2' 0
 
 # Call this function to test something.
 ok () {
-	local name="$1" expected_return="$2" expected_output="$3" ret
-	shift 3
-	
-	fixup() {
-		sed 's/'"'/'"'\\'"''/g;s,"'\n,\\,'
-	}
+	local name expected_return="$2" expected_output="$3" ret output
 	testcount=$(($testcount + 1))
+	if [ "x$1" != "x" ]; then
+		name="$1($testcount)"
+	else
+		name=$testcount
+	fi
+	shift 3
+	rm -f $TMPF1 $TMPF2	
 	set +e
-	"$@" > $TMPF
+	"$@" > $TMPF1
 	ret=$?
-	local IFS=""
-	echo "compare '$(echo "$name" | fixup)' '$testcount' '$(echo "$expected_output" | fixup)' '$expected_return' '$(fixup < $TMPF)' $ret"
 	set -e
+	bad=0
+	if [ "$expected_return" != "$ret" ]; then
+		echo "say \"test $name FAILED: expected return code $expected_return, but got $ret\""
+		bad=1
+	fi
+	output="$(< $TMPF1)"
+	if [ ${#output} -eq ${#expected_output} ]; then
+		if [ "z$output" != "z$expected_output" ]; then
+			echo "say \"test $name FAILED: expected \\\`$expected_output', but got \\\`$output'\""
+			bad=1
+		fi
+	else
+		if [ $(wc -c < $TMPF1) -gt 0 ]; then
+			echo >> $TMPF1
+		fi
+		if [ ${#expected_output} -gt 0 ]; then
+			echo "$expected_output" > $TMPF2
+		else
+			: > $TMPF2
+		fi
+		if ! diff -q $TMPF1 $TMPF2 1>/dev/null; then
+			echo "say \"test $name FAILED: expected \\\`$expected_output', but got \\\`$(cat $TMPF1)'\""
+			bad=1
+		fi
+	fi
+
+	if [ $bad = 0 ]; then
+		if [ "$VERBOSE" ]; then
+			say "\"test $name succeeded\""
+		fi
+	else
+		testfailures=$(($testfailures + 1))
+	fi
 }
 
 # Call this function last say how many tests you should have run.
 tests () {
 	echo expected=$1
 	echo testcount=$testcount
-}
-
-# This is uber-disgusing. Our IFS is messed up, so this gets the full output
-# of the test program. It then parses it.
-compare () {
-	local id
-	while :; do
-		local name="$1" count="$2" expected_output="$3" expected_return="$4" output="$5" return="$6" bad=0
-		shift 6
-		if [ "x$name" != "x" ]; then
-			id="$name($count)"
-		else
-			id=$count
-		fi
-		if [ "$expected_return" != "$return" ]; then
-
-			say "test $id FAILED: expected return code $expected_return, but got $return"
-			bad=1
-		fi
-		if [ "x$expected_output" != "x$output" ]; then
-			say "test $id FAILED: expected \`$expected_output', but got \`$output'"
-			bad=1
-		fi
-		if [ $bad = 0 ]; then
-			if [ "$VERBOSE" ]; then
-				say "test $id succeeded"
-			fi
-		else
-			testfailures=$(($testfailures + 1))
-		fi
-		
-		if [ "$1" != compare ]; then
-			break
-		fi
-		shift
-	done
-	eval "$@"
 }
 
 say () {
