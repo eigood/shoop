@@ -8,7 +8,7 @@ SH=sh
 benchmark = @echo -n "$(ITERATIONS) $(1): ";$(TIME) $(SH) -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null
 
-nobenchmark2 =
+nobenchmark =
 
 all:
 	@echo This makefile is only here to run benchmarks or examples.
