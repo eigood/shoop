@@ -24,11 +24,10 @@ _shoop () {
 		local THIS=$TRUEOBJ
 		eval eval "\$_shoop_$TRYMETH"
 	else
-		eval local P PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
+		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\" THIS=$TRUEOBJ
 		# Try inheritance 1 level deep -- the quick way.
 		for P in $PARENTS; do
 			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
-				local THIS=$TRUEOBJ
 				eval eval "\$_shoop_${P}_$METH"
 				return
 			fi
@@ -37,16 +36,16 @@ _shoop () {
 		# tree, and loop over untested super classes.
 
 		local orgargs="$@"
-		set -- $TRYOBJ
+		set -- $PARENTS
 		while [ $# -gt 0 ];do
-			TRUEOBJ=$1
-			if eval [ \"\$_shooptype_$1_$METH\" ]; then
+			P=$1
+			if eval [ \"\$_shooptype_${P}_$METH\" ];then
 				set -- "$orgargs"
 				eval eval "\$_shoop_${P}_$METH"
 				return
 			fi
 			shift
-			set -- $(eval eval "\$_shoop_${TRUEOBJ}_parent") "$@"
+			set -- $(eval eval "\$_shoop_${P}_parent") "$@"
 		done
 		echo "\"$METH\" is undefined for $TRYOBJ." >&2
 		return 1
