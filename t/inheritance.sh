@@ -39,7 +39,7 @@ ok "" 0 ""		GRANDCHILD . supertest : 'echo -n GRANDCHILD; $THIS . super'
 ok "" 0 "GRANDCHILDCHILD" GRANDCHILD . supertest
 
 # Multiple inheritance.
-ok "a" 0 ""	OBJECT . new MOTHER
+ok "a" 0 "" OBJECT . new MOTHER
 ok "b" 0 "" OBJECT . new FATHER
 ok "c" 0 "" OBJECT . new SOMEGUY
 ok "d" 0 "" MOTHER . new KID
