@@ -2,12 +2,6 @@
 #
 # This makefile needs GNU make.
 #
-TIME=/usr/bin/time -f "%E"
-ITERATIONS=100
-SEQ=$(shell seq 1 $(ITERATIONS))
-DEF_PREP = . ./shoop.sh
-
-
 prefix=$(CURDIR)/debian/tmp
 
 moddir=/usr/share/shoop/modules
@@ -21,24 +15,28 @@ BINS=\
 shoop.sh\
 
 MODULES=\
-destroy.sh\
-final.sh\
-introspect.sh\
-prettyprint.sh\
-serialize.sh\
-thread.sh\
-use.sh\
+	destroy.sh\
+	final.sh\
+	introspect.sh\
+	prettyprint.sh\
+	serialize.sh\
+	thread.sh\
+	use.sh\
 
 DOCS=\
-COPYING\
-CONTRIBUTING\
-MODULES\
-README\
-TODO\
+	COPYING\
+	CONTRIBUTING\
+	MODULES\
+	README\
+	TODO\
 
 EXAMPLE=\
 example.sh\
 
+TIME=/usr/bin/time -f "%E" 
+ITERATIONS=100 
+SEQ=$(shell seq 1 $(ITERATIONS)) 
+DEF_PREP = . ./shoop.sh
 
 # run_command msg, prep code, loop code
 benchmark = \
