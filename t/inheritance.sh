@@ -22,14 +22,14 @@ ok 0 4	GRANDCHILD . counter
 ok 0 ""	GRANDCHILD . new DESCENDENT
 ok 0 4  DESCENDENT . counter
 ok 0 5	OBJECT . count
-ok 0 6	DESCENDENT . count
+ok 0 6	GRANDCHILD . count
 
 # Inherited variable override.
 ok 0 6	CHILD . count
 ok 0 6	DESCENDENT . counter
 ok 0 7	CHILD . count
 ok 0 6	OBJECT . count
-ok 0 7  DESCENDENT . counter
-ok 0 8	DESCENDENT . count
+ok 0 6  DESCENDENT . counter
+ok 0 7	DESCENDENT . count
 
 tests 22
