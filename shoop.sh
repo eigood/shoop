@@ -2,11 +2,7 @@
 # OOP in shell. GPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
 _shoop () {
-	local TRUEOBJ=$1
-	local TRYOBJ=$2
-	local METH=$3
-	local TRUEMETH=${1}_$3
-	local TRYMETH=${2}_$3
+	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
 	shift 3
 
 	if [ "$1" = = -o "$1" = := -o "$1" = : -o "$1" = :: ]; then
@@ -68,8 +64,7 @@ _shoop_introspect=1
 
 # Create a method to create a new object.
 _shoop BASE BASE new : '
-	local PARENT=$1;
-	local OBJNAME=$2;
+	local PARENT=$1 OBJNAME=$2;
 	
 	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };
 	      $OBJNAME . parent = $PARENT >/dev/null"
