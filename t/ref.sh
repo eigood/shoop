@@ -19,6 +19,9 @@ ok "" 0 3	OBJECT . counter
 # creating a simple reference
 ok "" 0 ""	OBJECT_REF . new OBJECT o
 
+# old code incorrectly set 'parents', instead of 'parent'
+ok "" 0 "OBJECT_REF OBJECT"	eval '$o' . parent
+
 # getting/setting
 ok "" 0 "3"	eval '$o' . counter
 ok "" 0 "10"	eval '$o' . counter = 10
@@ -56,4 +59,4 @@ ok "" 0 3	OBJECT . counter
 ok "" 0 3	object . counter
 ok "" 0 10	object . o . counter
 
-tests 33
+tests 34
