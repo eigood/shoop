@@ -26,11 +26,7 @@ benchmark:
 		OBJECT . foo)
 	$(call benchmark,shoop method calls , $(DEF_PREP); OBJECT . foo : echo hi , \
 		OBJECT . foo)
-	$(call benchmark,shoop variable sets(i), $(DEF_PREP_I) , OBJECT . foo = 1)
-#	$(call benchmark,shoop variable gets(i), $(DEF_PREP_I); OBJECT . foo = $x , \
-#		OBJECT . foo)
-#	$(call benchmark,shoop method calls(i) , $(DEF_PREP_I); OBJECT . foo : echo hi , \
-#		OBJECT . foo)
+	$(call benchmark,shoop variable sets (with introspect), $(DEF_PREP_I) , OBJECT . foo = 1)
 	
 clean:
 	rm -f *~

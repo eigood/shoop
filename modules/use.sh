@@ -17,3 +17,4 @@ IFS=" " OBJECT . use : '
 		fi;
 	done
 '
+_shoopuse_use=1
