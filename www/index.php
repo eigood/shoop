@@ -48,6 +48,11 @@
     </TD>
   </TR>
 </TABLE>
+<table>
+<tr>
+<td><a href="http://cvs.sourceforge.net/cgi-bin/cvsweb.cgi/?cvsroot=shoop">Browse CVS</a></td>
+</tr>
+</table>
 <!-- end center table -->
 
 <!-- footer table -->
