@@ -57,7 +57,11 @@ _shoop BASE BASE new : '
 '
 # Make the base object.
 _shoop_BASE_new '' BASE
-
+BASE . parent : '
+local OBJNAME=$1;
+shift;
+eval _shoopparent_$OBJNAME=\"$@\"
+'
 BASE . introspect : '
 local OBJNAME=$1 DEFINES TYPE A DISPLAYOBJ;
 shift;
