@@ -29,24 +29,22 @@ _shoop () {
 		eval _shoop_${TRYOBJ}_$METH $TRUEOBJ \"\$@\";
 	else
 		eval local PARENTS=\"`_shoop_${TRYOBJ}_parent`\"
-		if [ "$PARENTS" ]; then
-			local P
-			# Try inheritance 1 level deep, the quick way.
-			# TODO: benchmark to see if this helps.
-			#    (remember, it also lets errors be seen..)
-			for P in $PARENTS; do
-				if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
-					_shoop $TRUEOBJ $P $METH $@
-					return $?
-				fi
-			done
-			# When the quick way fails, try the hard way.
-			for P in $PARENTS; do
-				if _shoop $TRUEOBJ $P $METH $@ 2>/dev/null; then
-					return 0
-				fi
-			done
-		fi
+		local P
+		# Try inheritance 1 level deep, the quick way.
+		# TODO: benchmark to see if this helps.
+		#    (remember, it also lets errors be seen..)
+		for P in $PARENTS; do
+			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
+				_shoop $TRUEOBJ $P $METH $@
+				return $?
+			fi
+		done
+		# When the quick way fails, try the hard way.
+		for P in $PARENTS; do
+			if _shoop $TRUEOBJ $P $METH $@ 2>/dev/null; then
+				return 0
+			fi
+		done
 		echo "\"$METH\" is undefined." >&2
 		return 1
 	fi

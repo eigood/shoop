@@ -2,6 +2,7 @@
 . ./shoop.sh
 . ./introspect.sh
 
+BASE . moo
 echo some counters:
 BASE . counter = 10
 echo
