@@ -74,7 +74,7 @@ _shoop BASE BASE new : '
 	      $OBJNAME . parent = $PARENT >/dev/null"
 '
 # Create the base object via the method already defined on it.
-_shoop_BASE_new '' BASE
+_shoop BASE BASE new BASE
 
 # This method handles calling an overridden method of your parent.
 # Sadly, you have to pass in the method name to call.
