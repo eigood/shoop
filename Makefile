@@ -18,15 +18,33 @@ example:
 	@sh ./example.sh
 
 benchmark:
-	$(call benchmark,internal variable sets , true , FOO=$x)
-	$(call benchmark,internal variable gets , FOO=1 , echo FOO)
-	$(call benchmark,internal function calls, foo () { echo hi; } , foo)
-	$(call benchmark,shoop variable sets, $(DEF_PREP) , OBJECT . foo = 1)
-	$(call benchmark,shoop variable gets, $(DEF_PREP); OBJECT . foo = $x , \
+	$(call benchmark,internal variable sets                    , \
+		true, \
+		FOO=$x)
+	$(call benchmark,internal variable gets                    ,\
+		FOO=1,\
+		echo FOO)
+	$(call benchmark,internal function calls                   ,\
+		foo () { echo hi; },\
+		foo)
+	$(call benchmark,shoop variable sets                       ,\
+		$(DEF_PREP),\
+		OBJECT . foo = 1)
+	$(call benchmark,shoop variable gets                       ,\
+		$(DEF_PREP); OBJECT . foo = $x,\
 		OBJECT . foo)
-	$(call benchmark,shoop method calls , $(DEF_PREP); OBJECT . foo : echo hi , \
+	$(call benchmark,shoop method calls                        ,\
+		$(DEF_PREP); OBJECT . foo : echo hi,\
 		OBJECT . foo)
-	$(call benchmark,shoop variable sets (with introspect), $(DEF_PREP_I) , OBJECT . foo = 1)
+	$(call benchmark,shoop resolver method calls               ,\
+		$(DEF_PREP); OBJECT . foo  : echo hi; OBJECT . new BAR,\
+		BAR . foo)
+	$(call benchmark,shoop multi-level resolver method calls,\
+		$(DEF_PREP); OBJECT . foo  : echo hi; OBJECT . new BAR; BAR . new BLAH,\
+		BLAH . foo)
+	$(call benchmark,shoop variable sets (with introspect)     ,\
+		$(DEF_PREP_I),
+		OBJECT . foo = 1)
 	
 clean:
 	rm -f *~
