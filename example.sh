@@ -39,7 +39,6 @@ FOO . serialize > FOO.sh.tmp
 echo destoying FOO
 FOO . destroy
 set | grep FOO
-FOO . serialize
 echo loading FOO
 . ./FOO.sh.tmp >/dev/null
 rm -f FOO.sh.tmp
