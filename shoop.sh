@@ -28,24 +28,33 @@ _shoop () {
 		eval eval "\$_shoop_$TRYMETH"
 		return
 	else
-		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\" THIS=$TRUEOBJ
+		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\" THIS=$TRUEOBJ GETMETH="" NEWPARENTS=""
 		# Try inheritance 1 level deep -- the quick way.
 		for P in $PARENTS; do
-			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
-				eval eval "\$_shoop_${P}_$METH"
+			eval GETMETH="\$_shoop_${P}_$METH"
+			if [ "$GETMETH" ]; then
+				eval "$GETMETH"
 				return
 			fi
+			# Save the parents of the current parents, for use in the
+			# 2nd stage resolver.  Yes, this slows the 1st stage down,
+			# but barely.  However, it greatly speeds up the 2nd stage,
+			# which is where most of the time will be spent.  This
+			# gave an 8% speedup in the 2nd stage, and only noise in
+			# the first.
+			NEWPARENTS="$NEWPARENTS $(eval eval "\$_shoop_${P}_parent")"
 		done
 		# 1 level deep found no match, so resolve the inheritance
 		# tree, and loop over untested super classes.
 
 		local orgargs="$@"
-		set -- $PARENTS
+		set -- $NEWPARENTS
 		while [ $# -gt 0 ];do
 			P=$1
-			if eval [ \"\$_shooptype_${P}_$METH\" ];then
+			eval GETMETH="\$_shoop_${P}_$METH"
+			if [ "$GETMETH" ]; then
 				set -- "$orgargs"
-				eval eval "\$_shoop_${P}_$METH"
+				eval "$GETMETH"
 				return
 			fi
 			shift
