@@ -37,7 +37,7 @@ compare () {
 				say "test $count succeeded"
 			fi
 		else
-			say "test $count FAILED: expected $expected_output, but got $output"
+			say "test $count FAILED: expected \`$expected_output', but got \`$output'"
 			testfailures=$(($testfailures + 1))
 		fi
 		
