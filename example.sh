@@ -19,6 +19,7 @@ TT . run : '
 
 echo some counters:
 OBJECT . counter = 10
+OBJECT . counter
 echo
 OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1); return'
 OBJECT . test = 20
