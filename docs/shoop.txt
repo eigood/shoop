@@ -17,7 +17,7 @@ Statements:
 
 	A valid shoop statement has the following form: 
 
-		<obj> . <name> [ \.?[=:]q?) (<value>|<code>)]
+		<obj> . <name> [ \.?[=:]q?p?) (<value>|<code>)]
 
 	Each item as the following definitions:
 
@@ -47,19 +47,19 @@ Assignments:
 	the name refers to a variable, and the value is treated as a text
 	string.  If the character is ':', then the name is a method.
 
-	There are currently 2 assignment modifiers that can be used.  If
-	the above character is preceeded with '.', then this means to
-	append the new value to the current value.  A 'q' on the end means
-	to not echo the results of the assignment.  'q' only makes sense
-	when assigning to a variable.
+	There are 3 assignment modifiers that can be used.  If the above
+        character is preceeded with '.', then this means to append the new
+	value to the current value.  A 'q' on the end means to not echo
+	the results of the assignment('q' only makes sense when assigning
+	to a variable).  If the 'p' modifier is used, then the method/
+	variable is invisible to introspection.  All the distributed
+	modules use :p.
 
 Methods:
 
 	Methods are short shell snippets, that process arguments, and
 	optionally return data.  
 	
-
-
 code:
 
 	The program code that should be run.  The shell variable $THIS
@@ -71,9 +71,6 @@ method:
 	A function or subroutine that optionally takes a list of argu-
 	ments.
 
-
-
 See also:
 
-	introspect.txt, finalize.txt, serialize.txt, also_inherit.txt,
-	and use.txt.
+	modules.txt
