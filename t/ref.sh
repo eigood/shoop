@@ -16,7 +16,27 @@ ok "" 0 2	OBJECT . counter
 ok "" 0 3	OBJECT . incr
 ok "" 0 3	OBJECT . counter
 
-# creating the reference
+# creating a simple reference
+ok "" 0 ""	OBJECT_REF . new OBJECT o
+
+# getting/setting
+ok "" 0 "3"	eval '$o' . counter
+ok "" 0 "10"	eval '$o' . counter = 10
+ok "" 0 "10"	eval '$o' . counter
+
+# methods
+ok "" 0 ""	eval '$o' . decr :p \''$THIS . counter = $(($($THIS . counter) - 1))'\'
+ok "" 0 "11"	eval '$o' . incr
+ok "" 0 "11"	eval '$o' . counter
+ok "" 0 "10"	eval '$o' . decr
+ok "" 0 "10"	eval '$o' . counter
+
+# sanity check
+ok "" 0 3	OBJECT . counter
+ok "" 0 3	object . counter
+ok "" 0 10	eval '$o' . counter
+
+# creating a complex reference
 ok "" 0 ""	OBJECT_REF . new OBJECT object . o
 
 # getting/setting
@@ -36,4 +56,4 @@ ok "" 0 3	OBJECT . counter
 ok "" 0 3	object . counter
 ok "" 0 10	object . o . counter
 
-tests 21
+tests 33
