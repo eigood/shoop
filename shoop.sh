@@ -67,6 +67,7 @@ IFS=" " _shoop OBJECT OBJECT new : '
 '
 # Create the base object via the method already defined on it.
 _shoop OBJECT OBJECT new OBJECT
+OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
 # Sadly, you have to pass in the method name to call.
