@@ -32,4 +32,4 @@ ok 0 6	OBJECT . count
 ok 0 7  DESCENDENT . counter
 ok 0 8	DESCENDENT . count
 
-tests 21
+tests 22
