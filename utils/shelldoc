@@ -7,16 +7,47 @@
 # Licensed under the LGPL
 #
 
+## A wrapper around perlpod for shell scripts.
+## 
+## This program looks for specially formatted comment lines
+## in shell scripts, and then passes that on to perlpod for
+## formatting.
+## 
+## A shelldoc line is prefixed with '##'(hash, hash), followed by
+## a command character, then the text.
+##>4
+##:<space>
+## raw text, passed unmodified
+##:><number>
+## start a new block, with indentation <number>
+##:<
+## end a block
+##::<text>
+## list an item in a block
+##<
+
 use Text::Wrap;
 
 print "=head1 $ARGV[0]\n\n";
-print "=over\n\n";
+print "=over 4\n\n";
 for($a = 1; $a < @ARGV; $a++) {
 	open(FILE, "<" . $ARGV[$a]);
 	while(<FILE>) {
-		next if(! /^## /);
-		s/^## //;
-		$line .= $_;
+		next if(! /^##[:<> ]/);
+		s/^##(.)//;
+		$char = $1;
+		if ( $char =~ /^ / ) {
+			$line .= $_;
+		} elsif ( $char =~ /^>/ ) {
+			$line .= "\n=over $_\n";
+		} elsif ( $char =~ /^:/ ) {
+			$line .= "\n=item $_\n";
+		} elsif ( $char =~ /^</ ) {
+			$line .= "\n=back\n\n";
+		} else {
+			chomp;
+			print STDERR "'$_'\n";
+		}
 	}
 	if(defined $line) {
 		$file = $ARGV[$a];
@@ -29,4 +60,4 @@ for($a = 1; $a < @ARGV; $a++) {
 	}
 	close FILE;
 }
-print "=back\n\n";
+print "\n=back";
