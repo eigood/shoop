@@ -69,7 +69,7 @@ _shoop () {
 	esac
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		local THIS=$TRYOBJ
-		eval eval "\$_shoop_$TRYMETH"
+		eval eval \$_shoop_$TRYMETH
 		return
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
