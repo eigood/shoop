@@ -2,7 +2,7 @@
 // Default Web Page for groups that haven't setup their page yet
 // Please replace this file with your own website
 //
-// $Id: index.php,v 1.2 2000/01/31 09:08:48 doogie Exp $
+// $Id: index.php,v 1.3 2000/02/01 19:54:57 doogie Exp $
 //
 $headers = getallheaders();
 ?>
@@ -50,7 +50,8 @@ $headers = getallheaders();
       <H1>Welcome to http://shoop.sourceforge.net/</H1>
       <P>shoop is still a new project, and we are slowly getting things setup<BR>
       Please check back soon for updates or visit 
-      <A href="http://sourceforge.net/project/?group_id=1981">shoop's SourceForge info page</A></P><BR>
+      <A href="http://sourceforge.net/project/?group_id=1981">shoop</a>'s
+      <a href="http://sourceforge.net/">SourceForge</a> info page</P><BR>
       </CENTER>
     </TD>
   </TR>
