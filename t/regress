@@ -44,18 +44,18 @@ compare () {
 		if [ "$expected_return" != "$return" ]; then
 
 			say "test $id FAILED: expected return code $expected_return, but got $return"
-			testfailures=$(($testfailures + 1))
 			bad=1
 		fi
 		if [ "x$expected_output" != "x$output" ]; then
 			say "test $id FAILED: expected \`$expected_output', but got \`$output'"
-			testfailures=$(($testfailures + 1))
 			bad=1
 		fi
 		if [ $bad = 0 ]; then
 			if [ "$VERBOSE" ]; then
 				say "test $id succeeded"
 			fi
+		else
+			testfailures=$(($testfailures + 1))
 		fi
 		
 		if [ "$1" != compare ]; then
