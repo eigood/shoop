@@ -83,12 +83,13 @@ _shoop () {
 		fi
 
 		resolve() {
+			local GETTYPE
 			eval set -- $PARENTS
 			# 1st stage resolver.  Look at the immediate parents.
 			while [ $# -gt 0 ]; do
 				CLASS=$1
-				eval GETMETH=\"\$_shoop_${CLASS}_$METH\"
-				if [ "$GETMETH" ]; then
+				eval GETTYPE=\"\$_shooptype_${CLASS}_$METH\"
+				if [ "$GETTYPE" ]; then
 					return
 				fi
 				# Save the parents of the current parents, for use in the
