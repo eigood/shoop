@@ -3,9 +3,11 @@ TIME=/usr/bin/time -f "%E"
 ITERATIONS=100
 SEQ=\$$(seq 1 $(ITERATIONS))
 DEF_PREP = . ./shoop.sh
-SH=sh
 # run_command msg, prep code, loop code
-benchmark = @echo -n "$(ITERATIONS) $(1): ";$(TIME) $(SH) -c "$(2); \
+benchmark = \
+	@echo -n "bash: $(ITERATIONS) $(1): ";$(TIME) bash -c "$(2); \
+	for x in $(SEQ); do $(3); done " > /dev/null ; \
+	echo -n "ash:  $(ITERATIONS) $(1): ";$(TIME) ash -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null
 
 nobenchmark =
