@@ -4,7 +4,7 @@
 # method, that can list all methods and variables that are defined on a class,
 # pretty-printing them.
 #
-# Smell the Java. GPL copyright 2000 by Adam Heath <doogie@debian.org>
+# Smell the Java. LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
 # Enable introspection inside _shoop
 _shoop_introspect=1

@@ -2,7 +2,7 @@
 #
 # Simplistic debian/rules module for shoop.
 #
-# GPL copyright 2000 by Adam Heath <doogie@debian.org>
+# LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
 OBJECT . new DEBIAN
 

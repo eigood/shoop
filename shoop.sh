@@ -1,5 +1,7 @@
 #!/bin/sh -e
-# OOP in shell. GPL copyright 2000 by Joey Hess <joey@kitenet.net>
+# OOP in shell.
+# LGPL copyright 2000 by Joey Hess <joey@kitenet.net>
+#			 Adam Heath <doogie@debian.org>
 
 _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH

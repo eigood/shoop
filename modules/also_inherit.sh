@@ -8,7 +8,7 @@
 #
 # For example: FOO . also_inherit BAR BAZ
 #
-# GPL copyright 2000 by Adam Heath <doogie@debian.org>
+# LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
 IFS=" " OBJECT . also_inherit : '
 	eval local a curp=$1 newparents="" parents="" retval=0 lastp _seen_child_$THIS=1 p

@@ -4,7 +4,7 @@
 # that completly whipes out any object it is called on (if that object has
 # children, they stick around, so use with caution.
 #
-# GPL copyright 2000 by Joey Hess <joey@kitenet.net>
+# LGPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
 # Enable introspection inside _shoop
 _shoop_introspect=1

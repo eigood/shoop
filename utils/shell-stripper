@@ -4,7 +4,7 @@
 # shell script, so that certain shells(bash!) can run it faster.
 #
 # Copyright 2000 by Adam Heath <doogie@debian.org>
-# Licensed under the GPL
+# Licensed under the LGPL
 #
 
 $first = 1;

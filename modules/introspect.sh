@@ -4,7 +4,16 @@
 # method, that can list all methods and variables that are defined on a
 # class.
 #
-# Smell the Java. GPL copyright 2000 by Adam Heath <doogie@debian.org>
+# Smell the Java. LGPL copyright 2000 by Adam Heath <doogie@debian.org>
+
+## This adds an 'introspect' method to the base object.  When called,
+## it will print out a brief synopsis of the methods and variables
+## defined for the current object.  If passed the parameter 'resolve',
+## it will walk the parent tree, and print out everything, all the way
+## back to the base OBJECT.
+## 
+## If you are going to use introspection, it is suggested you 'use'
+## it early, as the introspection hooks are not normally enabled.
 
 # Enable introspection inside _shoop
 _shoop_introspect=1

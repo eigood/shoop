@@ -6,8 +6,14 @@
 # For example: FOO . serialize > FOO.sh; exit
 # To restart: . ./FOO.sh
 #
-# GPL copyright 2000 by Adam Heath <doogie@debian.org>
+# LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
+## If you need to save the state of your objects, so that you can later
+## restore their internal values, then include this into your shoop
+## script.  Any object that you then wish to save should then be done
+## with the following syntax:
+## 
+## C<FOO . serialize E<gt> save_FOO.sh>
 # Enable introspection inside _shoop
 _shoop_introspect=1
 

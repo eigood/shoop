@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+#
+# This is a perl script that can strip uneeded characters from a
+# shell script, so that certain shells(bash!) can run it faster.
+#
+# Copyright 2000 by Adam Heath <doogie@debian.org>
+# Licensed under the LGPL
+#
+
+use Text::Wrap;
+
+print "=head1 $ARGV[0]\n\n";
+print "=over\n\n";
+for($a = 1; $a < @ARGV; $a++) {
+	open(FILE, "<" . $ARGV[$a]);
+	while(<FILE>) {
+		next if(! /^## /);
+		s/^## //;
+		$line .= $_;
+	}
+	if(defined $line) {
+		$file = $ARGV[$a];
+		$file =~ s/.sh$//;
+		$file =~ s/.*\///;
+		print "=item $file\n\n$line\n";
+		undef $line;
+	}
+	close FILE;
+}
+print "=back\n\n";
