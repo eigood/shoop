@@ -24,6 +24,8 @@ OBJECT . usepath = $SHOOPPATH:. > /dev/null
 OBJECT . new _USE
 
 _USE . recorduse =q 1
+_USE . quiet =q 0
+_USE . error =q 1
 _USE . findmodule :p '
 	local oIFS="$IFS" IFS=: usepath
 	usepath="$1"; shift
@@ -60,6 +62,14 @@ IFS=" " OBJECT . use :p '
 				if [ "$recorduse" ]; then
 					_USE . _record_ .=q " $A"
 				fi
+			else
+				if [ ! "$(_USE quiet)" = 1 ]; then
+					echo "Could not find module $A" 1>&2
+				fi
+				if [ ! "$(_USE error 2>/dev/null)" = 1 ]; then
+					return 1
+				fi
+
 			fi
 		fi
 	done
