@@ -1,217 +1,79 @@
-#! /bin/sh
+#! /usr/bin/make -f
 ## debian/rules for SHOOP
 ## by Gergely Nagy <algernon@debian.org>
 ##
-## Trapped in time
-## A miracle of hope and change
-## A swirling mass, no mercy now
-## If the truth hurts prepare for pain
-## ...Do you think we're forever ?
-##
-##	- Anathema: Eternity Part I
 
-# exports
-export SHOOPPATH=${PWD}:${PWD}/modules
-export SHOOPMOD=${PWD}/modules
-export DH_COMPAT=2
+export DH_COMPAT	= 2
+DPKG_BUILDPACKAGE	= ${DPKG_BUILDPACKAGE:-dpkg-buildpackage}
+INSTALL_OPTIONS		= 
 
-# #include <shoop>
-. ${PWD}/shoop.sh
+ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_OPTIONS	= strip_comment_space=/bin/cat
+endif
 
-# basic setup
-OBJECT . new DEBIAN
+build-stamp:
+	dh_testdir
+	$(MAKE) docs/modules.txt 2>/dev/null
+	touch $@
 
-DEBIAN . MAKE_LEVEL =q 1
-DEBIAN . dry_run =q no
-DEBIAN . verbose =q yes
-DEBIAN . keep_going =q no
-DEBIAN . DPKG_BUILDPACKAGE =q ${DPKG_BUILDPACKAGE:-dpkg-buildpackage}
-DEBIAN . INSTALL_OPTIONS =q ""
+build: build-stamp
 
-# core methods
-# The next two is unused, because MAKE_LEVEL inc/dec causes
-# some trouble
-DEBIAN . __do_header : 'echo "==> [$($THIS . MAKE_LEVEL)] Making $@" 1>&2
-	$THIS . MAKE_LEVEL =q $(expr $($THIS . MAKE_LEVEL) + 1)'
-DEBIAN . __do_done : '$THIS . MAKE_LEVEL =q $(expr $($THIS . MAKE_LEVEL) - 1)
-	echo "<== [$($THIS . MAKE_LEVEL)] Finished $@" 1>&2'
-
-DEBIAN . do_header : 'echo "==> Making $@" 1>&2'
-DEBIAN . do_done : 'echo "<== Finished $@" 1>&2'
-DEBIAN . do : 'if test "x$($THIS . verbose)" != "xno"; then echo $@; fi
-	if test "x$($THIS . dry_run)" = "xno"; then eval $@; fi'
-DEBIAN . header : 'if test "x$($THIS . verbose)" != "xno"; then
-		$THIS . do_header $@
-	fi'
-DEBIAN . done : 'if test "x$($THIS . verbose)" != "xno"; then
-		$THIS . do_done $@
-	fi'
-
-# These do the Real Job
-DEBIAN . do_build : 'test -f build-stamp || $THIS . build_stamp'
-DEBIAN . do_build_stamp : '$THIS . do dh_testdir
-	$THIS . do "make docs/modules.txt 2>/dev/null"
-	$THIS . do touch build-stamp'
-DEBIAN . do_clean : '$THIS . do dh_testdir
-	$THIS . do dh_testroot
-	$THIS . do rm -f build-stamp docs/modules.txt docs/modules.pod
-# Back up the ChangeLog
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp doc/modules.txt docs/modules.pod
 	mv ChangeLog ChangeLog.backup
-# Clean up!
-	$THIS . do "make clean || true"
-# Copy the ChangeLog back
+	$(MAKE) clean
 	mv ChangeLog.backup ChangeLog
-	$THIS . do dh_clean'
-DEBIAN . do_install : '$THIS . build
-	$THIS . do dh_testdir
-	$THIS . do dh_testroot
-	$THIS . do dh_clean -k
-	$THIS . do dh_installdirs
-	$THIS . do make install $($THIS . INSTALL_OPTIONS)
-	$THIS . do rm -f debian/shoop/usr/share/doc/shoop/COPYING \
-			 debian/shoop/usr/share/doc/shoop/COPYING.gz
-	$THIS . do mv debian/shoop/usr/share/shoop/modules \
-		      debian/shoop-modules/usr/share/shoop/modules
-	$THIS . do mv debian/shoop/usr/share/doc/shoop/modules.txt \
-		      debian/shoop-dev/usr/share/doc/shoop/
-	$THIS . do mv debian/shoop/usr/share/doc/shoop/MODULES \
-		      debian/shoop-dev/usr/share/doc/shoop/
-	$THIS . do rm -rf debian/shoop/usr/share/doc/shoop/examples
-	$THIS . do ln -sf shoop debian/shoop-dev/usr/share/doc/shoop-dev
-	$THIS . do ln -sf shoop debian/shoop-modules/usr/share/doc/shoop-modules
-	for f in $(cat debian/shoop-dev.examples); do
-		$THIS . do cp $f debian/shoop-dev/usr/share/doc/shoop/examples/$f
-	done'
-DEBIAN . do_packages : '$THIS . build
-	$THIS . install
-	$THIS . do dh_testdir
-	$THIS . do dh_testroot
-#	$THIS . do dh_installdebconf
-	$THIS . do dh_installdocs
-#	$THIS . do dh_installmenu
-#	$THIS . do dh_installinfo
-	$THIS . do dh_installchangelogs
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	$(MAKE) install ${INSTALL_OPTIONS} prefix=${CURDIR}/debian/shoop
+	rm -f debian/shoop/usr/share/doc/shoop/COPYING \
+	      debian/shoop/usr/share/doc/shoop/COPYING.gz
+	mv debian/shoop/usr/share/shoop/modules \
+	   debian/shoop-modules/usr/share/shoop/modules
+	mv debian/shoop/usr/share/doc/shoop/modules.txt \
+	   debian/shoop-dev/usr/share/doc/shoop/
+	mv debian/shoop/usr/share/doc/shoop/MODULES \
+	   debian/shoop-dev/usr/share/doc/shoop
+	rm -rf debian/shoop/usr/share/doc/shoop/examples
+	ln -sf shoop debian/shoop-dev/usr/share/doc/shoop-dev
+	ln -sf shoop debian/shoop-modules/usr/share/doc/shoop-modules
+	for f in `cat debian/shoop-dev.examples`; do \
+		cp $$f debian/shoop-dev/usr/share/doc/shoop/examples/$$f; \
+	done
+	
+packages: install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installchangelogs
 # This is Evil.
-	for file in copyright changelog changelog.gz; do
-		$THIS . do rm -f debian/shoop-dev/usr/share/doc/shoop/$file
-		$THIS . do rm -f debian/shoop-modules/usr/share/doc/shoop/$file
+	for file in copyright changelog changelog.gz; do \
+		rm -f debian/shoop-dev/usr/share/doc/shoop/$$file; \
+		rm -f debian/shoop-modules/usr/share/doc/shoop/$$file; \
 	done
 # Evil ends here.
-	$THIS . do dh_link
-	$THIS . do dh_strip
-	$THIS . do dh_compress
-	$THIS . do dh_fixperms
-	$THIS . do dh_installdeb
-	$THIS . do dh_gencontrol
-	$THIS . do dh_md5sums
-	$THIS . do dh_builddeb'
-DEBIAN . do_binary_arch : ''
-DEBIAN . do_binary_indep : '$THIS . packages'
-DEBIAN . do_binary : '$THIS . binary_arch
-	$THIS . binary_indep'
-DEBIAN . do_cvs_build : '# Oh boy, oh boy!
-	$THIS . do make ChangeLog
-	$THIS . do $($THIS . DPKG_BUILDPACKAGE)'
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
 
-# Wrapper function that calls header & done too
-DEBIAN . do_func : '$THIS . header $LASTMETH
-	$THIS . do_$LASTMETH
-	$THIS . done $LASTMETH'
-# Use the wrapper for all targets
-DEBIAN . build : DEBIAN . do_func
-DEBIAN . build_stamp : DEBIAN . do_func
-DEBIAN . clean : DEBIAN . do_func
-DEBIAN . install : DEBIAN . do_func
-DEBIAN . packages : DEBIAN . do_func
-DEBIAN . binary_arch : DEBIAN . do_func
-DEBIAN . binary_indep : DEBIAN . do_func
-DEBIAN . binary : DEBIAN . do_func
-DEBIAN . cvs_build : DEBIAN . do_func
+binary-arch:
+binary-indep: packages
+binary: binary-arch binary-indep
 
-# void main ( whatever )
-DEBIAN . debian : '# Go Johny, go! Go Johny, go go go!
-	while test $# -gt 0
-	do
-		opt=$1
-		shift
+cvs-build:
+	$(MAKE) ChangeLog
+	$(DPKG_BUILDPACKAGE)
 
-		case $opt in
-			build|build-stamp|clean|install|packages|binary-arch|binary-indep|binary|cvs-build)
-				method=$(echo $opt | sed -e "s,\-,_,g")
-				$THIS . TODO .=q $method
-				;;
-			DEB_BUILD_OPTIONS=*nostrip*)
-				$THIS . INSTALL_OPTIONS .=q "strip_comment_space=/bin/cat"
-				;;
-			DEB_*=*)
-				# These are useless for us
-				;;
-			-*b*|-*m*|-*d*|-*e*|-*i*|-*p*|-*q*|-*r*|-*t*|-*w*|-*C|-*f|-*I|-*o|-*W|-*j*|-*k*|-*s*|-*S-|-*n*|-*l*)
-				# Ignored, handled later
-				;;
-			-*)
-				echo "*** Unsupported option: $opt"
-				exit 1
-				;;
-			*)
-				echo "*** Unsupported target: $opt"
-				exit 1
-				;;
-		esac
-		case $opt in
-			-*b*|-*m*|-*d*|-*e*|-*i*|-*p*|-*q*|-*r*|-*t*|-*w*)
-				# Ignored for GNU Make compatibility
-				;;
-		esac
-		case $opt in
-			-*C|-*f|-*I|-*o|-*W|-*l)
-				# Ignored (with arguments) for GNU Make compatibility
-				shift
-				;;
-		esac
-		case $opt in
-			-*j*)
-				# This is not implemented yet
-				;;
-		esac
-		case $opt in
-			-*k*)
-				$THIS . keep_going =q yes
-				;;
-		esac
-		case $opt in
-			-*S*)
-				$THIS . keep_going =q no
-				;;
-		esac
-		case $opt in
-			-*n*)
-				$THIS . dry_run =q yes
-				;;
-		esac
-		case $opt in
-			-*s*)
-				$THIS . verbose =q no
-				;;
-		esac
-		case $opt in
-			-*v*)
-				$ THIS . version
-				exit 0
-				;;
-		esac
-	done
-	$THIS . header debian
-	if test "x$($THIS . keep_going)" = "xno"; then
-		set -e
-	fi
-	# FIXME : $THIS . TODO empty => print warning
-	for rule in $($THIS . TODO); do
-		$THIS . $rule
-	done
-	$THIS . done debian'
-
-# Run forest, run !
-DEBIAN . debian ${@:-build}
-
-exit 0
+.PHONY: cvs-build binary binary-arch binary-indel packages install clean build
