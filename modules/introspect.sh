@@ -5,6 +5,9 @@
 #
 # Smell the Java. GPL copyright 2000 by Adam Heath <doogie@debian.org>
 
+# Enable introspection.
+_shoop_introspect=1
+
 BASE . introspect : '
 	local OBJNAME=$1 DEFINES A DISPLAYOBJ;
 	shift;

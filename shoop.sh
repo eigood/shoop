@@ -8,9 +8,12 @@ _shoop () {
 	shift 3
 
 	if [ "$1" = = -o "$1" = : ]; then
-		if eval [ -z "\$_shooptype_${TRYOBJ}_$METH" ]; then
+		# This block is for introspect.
+		if [ "$_shoop_introspect" ] &&
+		   eval [ "$_shoop_introspect" -a -z "\$_shooptype_${TRYOBJ}_$METH" ]; then
 			eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
+		
 		if [ "$1" = = ]; then
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=variable;
@@ -49,7 +52,9 @@ _shoop () {
 	fi
 }
 
-# Create a base object class. All other objects will inherit from this.
+# Temporarily turn on introspection, so the base object has everything recorded
+# about it.
+_shoop_introspect=1
 
 # Create a method to create a new object (on an object that technically doesn't
 # exist yet).
@@ -69,3 +74,6 @@ BASE . parent : '
 	shift;
 	eval _shoopparent_$OBJNAME=\"$@\"
 '
+
+# Now if you want it, you have to turn it back on.
+unset _shoop_introspect

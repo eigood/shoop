@@ -1,5 +1,6 @@
-#!/bin/sh -e
+#!/bin/sh
 . ./shoop.sh
+. ./introspect.sh
 
 echo some counters:
 BASE . counter = 10
@@ -15,7 +16,6 @@ FOO . count
 BAR . test
 BASE . count
 
-. ./introspect.sh
 echo BAR . introspect:
 BAR . introspect
 echo FOO . introspect resolve:
