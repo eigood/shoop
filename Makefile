@@ -1,8 +1,9 @@
  #!/usr/bin/make -f
 TIME=/usr/bin/time -f "%E"
-ITERATIONS=10000
+ITERATIONS=1000
 SEQ=\$$(seq 1 $(ITERATIONS))
 DEF_PREP = . ./shoop.sh
+DEF_PREP_I = . ./shoop.sh; _shoop_introspect=1
 SH=sh
 # run_command msg, prep code, loop code
 benchmark = @echo -n "$(ITERATIONS) $(1): ";$(TIME) $(SH) -c "$(2); \
@@ -24,5 +25,10 @@ benchmark:
 	$(call benchmark,shoop variable gets, $(DEF_PREP); BASE . foo = $x , \
 		BASE . foo)
 	$(call benchmark,shoop method calls , $(DEF_PREP); BASE . foo : echo hi , \
+		BASE . foo)
+	$(call benchmark,shoop variable sets(i), $(DEF_PREP_I) , BASE . foo = 1)
+	$(call benchmark,shoop variable gets(i), $(DEF_PREP_I); BASE . foo = $x , \
+		BASE . foo)
+	$(call benchmark,shoop method calls(i) , $(DEF_PREP_I); BASE . foo : echo hi , \
 		BASE . foo)
 	
