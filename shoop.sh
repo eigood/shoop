@@ -1,5 +1,5 @@
 #!/bin/sh -e
-# OOP in shell. GPL copyright 2000 by Joey Hess
+# OOP in shell. GPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
 _shoop () {
 	local TRUEOBJ=$1
