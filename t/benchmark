@@ -51,7 +51,7 @@ run () {
 			return
 		fi
 		tmp=$(mktemp foo.XXXXXX)
-		echo -ne "\t    : [$count] ($SHELL) $message\r"
+		printf "\t    : [$count] ($SHELL) $message\r"
 		/usr/bin/time -o $tmp -f "%E" $SHELL -c "
 				$prep;
 				count=$count;
