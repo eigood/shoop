@@ -14,11 +14,12 @@ case "$1" in
 		(cd $HTDOCS;exec cvs update)
 	;;
 	cvspulse)
-		if lockfile -1 -r 2 $HTDOCS/update.lock; then
+		if lockfile -1 -r 2 $HTDOCS/update.lock 2>/dev/null; then
 			# we have obtained the lock on the cvspulse script.
-			if lockfile -0 -r 0 $HTDOCS/cvspulse.lock; then
+			if lockfile -0 -r 0 $HTDOCS/cvspulse.lock 2>/dev/null; then
 				# ok, new pulse active.
 				# remove master lock, so other pulses can come in.
+				exec >> $GHOME/cvspulse.log 2>&1
 				rm -f $HTDOCS/update.lock
 				$0 www;
 				# We do a loop, so that if while we are reupdating, another
@@ -29,7 +30,7 @@ case "$1" in
 					$0 www
 				done
 				rm -f $HTDOCS/cvspulse.lock
-			elif lockfile -0 -r 0 $HTDOCS/cvsflag.lock; then
+			elif lockfile -0 -r 0 $HTDOCS/cvsflag.lock 2>/dev/null; then
 				# 2nd(and subsequent) pulses set the above lock
 				# flag, which the 1st pulse we see and will do
 				# another update from cvs.  We don't have to do anything here.
