@@ -16,20 +16,23 @@ _shoop () {
 		DEFINE=$1
 		shift
 		case $DEFINE in
-			*=)
+			=)
 				eval "_shoop_$TRUEMETH='echo -n $@'
 				      _shooptype_$TRUEMETH=variable"
 				echo -n $@
 			;;
-			*:)
+			:=)
+				eval "readonly _shoop_$TRUEMETH='echo -n $@'
+				      _shooptype_$TRUEMETH=variable"
+				echo -n $@
+			;;
+			:)
 				eval "_shoop_$TRUEMETH='$@'
 				      _shooptype_$TRUEMETH=method"
 			;;
-		esac
-		case $DEFINE in
-			:?*)
-				eval readonly "_shoop_$TRUEMETH"
-			;;
+			::)
+				eval "readonly _shoop_$TRUEMETH='$@'
+				      _shooptype_$TRUEMETH=method"
 		esac
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		local THIS=$TRUEOBJ
