@@ -24,6 +24,19 @@ LIST . add :p '
 	$THIS . _order =q "$($THIS . _order) $count"
 	$THIS . set $size "$@"
 '
+LIST . increase_size :p '
+	local count=$(($($THIS . _count) + 1)) size=$(($($THIS . size) + $1)) neworder
+	local i=$count
+	count=$(($count + $1))
+	while [ $i -lt $count ]; do
+		neworder="${neworder:+$neworder }$i"
+		$THIS . _$i = ""
+		i=$(($i + 1))
+	done
+	$THIS . _count =q $count
+	$THIS . size =q $size
+	$THIS . _order =q "$($THIS . _order) $neworder"
+'
 LIST . insert :p '
 	$THIS . insertat 1 "$@"
 '

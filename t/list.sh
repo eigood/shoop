@@ -52,4 +52,15 @@ ok "" 0 "second"	list . get 1
 ok "" 0 "SECOND"	list . get 2
 ok "" 0 "third"		list . get 3
 
-tests 31
+ok "" 0 ""		list . increase_size 5
+ok "" 0 "8"		list . size
+ok "" 0 "second"	list . get 1
+ok "" 0 "SECOND"	list . get 2
+ok "" 0 "third"		list . get 3
+ok "" 0 ""		list . get 4
+ok "" 0 ""		list . get 5
+ok "" 0 ""		list . get 6
+ok "" 0 ""		list . get 7
+ok "" 0 ""		list . get 8
+
+tests 41
