@@ -19,11 +19,10 @@ _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
 	shift 3
 	if [ "$1" = = -o "$1" = := -o "$1" = : -o "$1" = :: ]; then
-		local FINAL DEFINE
 		# This block is for introspect.
 		if [ "$_shoop_introspect" ] &&
-			eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
-				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
+		   eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
+			eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
 		if [ "$1" = = ]; then
 			shift
@@ -73,8 +72,8 @@ _shoop () {
 	return 0
 }
 
-# Temporarily turn on introspection, so the base object has everything recorded
-# about it as it is being created.
+# Temporarily turn on introspection, so the base object has everything 
+# recorded about it as it is being created.
 _shoop_introspect=1
 
 # Create a method to create a new object.
