@@ -57,6 +57,7 @@ test:
 			$(CURDIR)/t/inheritance.sh\
 			$(CURDIR)/t/ref.sh\
 			$(CURDIR)/t/list.sh\
+			$(CURDIR)/t/alist.sh\
 			$(CURDIR)/t/stack.sh\
 			$(CURDIR)/t/onexit.sh\
 			$(CURDIR)/t/serialize.sh\
