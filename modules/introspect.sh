@@ -8,7 +8,7 @@
 # Enable introspection inside _shoop
 _shoop_introspect=1
 
-OBJECT . introspect : '
+IFS=" " OBJECT . introspect : '
 	local DEFINES A DISPLAYOBJ;
 	if [ "$2" ]; then
 		DISPLAYOBJ=$2;

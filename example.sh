@@ -34,7 +34,6 @@ echo introspecting BAR
 BAR . introspect
 echo introspecting FOO
 FOO . introspect resolve
-FOO . serialize
 echo serializing OBJECT
 OBJECT . serialize
 echo serializing FOO

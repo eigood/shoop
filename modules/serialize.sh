@@ -12,7 +12,7 @@
 _shoop_introspect=1
 
 _shoop_quote="'"
-OBJECT . serialize : '
+IFS=" " OBJECT . serialize : '
 	local DEFINES A DISPLAYOBJ;
 	if [ "$2" ]; then
 		DISPLAYOBJ=$2;
@@ -23,21 +23,21 @@ OBJECT . serialize : '
 	for A in $DEFINES; do
 		if eval [ -z \"\$_shoopseen_$A\" ]; then
 			eval echo -n "$DISPLAYOBJ . $A\ ";
-			if eval [ \"\$_shoopfinal_${THIS}_$A\" ]; then
-				echo -n :;
-			fi;
 			if eval [ \$_shooptype_${THIS}_$A = variable ]; then
 				echo -n "= ";
 				$DISPLAYOBJ . $A;
 			else
 				echo -n ": $_shoop_quote";
-				eval echo -n "\$_shoop_${THIS}_$A";
+				IFS=" " eval echo -n "\$_shoop_${THIS}_$A";
 				echo -n "$_shoop_quote";
 			fi;
 			echo ;
 			eval _shoopseen_$A="1";
 		fi;
 	done;
+	if eval [ \"\$_shoopfinal_$DISPLAYOBJ\" ]; then
+		eval echo "$DISPLAYOBJ . finalize \$_shoopfinal_$DISPLAYOBJ";
+	fi;
 	if [ "$1" = resolve ];then
 		for P in $($THIS . parent 2>/dev/null >/dev/null); do
 			$P . serialize resolve $DISPLAYOBJ;
