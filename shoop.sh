@@ -68,8 +68,9 @@ _shoop () {
 		;;
 	esac
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		local THIS=$TRYOBJ
-		eval eval \$_shoop_$TRYMETH
+		local THIS=$TRYOBJ oIFS="$IFS"
+		IFS=""
+		eval "eval \"IFS='$oIFS'; \$_shoop_$TRYMETH\""
 		return
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
@@ -79,7 +80,9 @@ _shoop () {
 			# the resolving code.
 			eval local CACHE=\"\$_shoopcache_link_$TRUEMETH\"
 			if [ "$CACHE" ]; then
-				eval eval \$$CACHE
+				local oIFS="$IFS"
+				IFS=""
+				eval "eval \"IFS='$oIFS'; \$$CACHE\""
 				return
 			fi
 		fi
@@ -139,7 +142,7 @@ _shoop () {
 # _shoopcache_method_counter= _shoopcache_link_DESCENDENT_counter
 # _shoopcache_linkmethod_OBJECT_counter= _shoopcache_link_DESCENDENT_counter
 
-IFS=" " _shoopcacheclear_="
+_shoopcacheclear_="
 	if eval [ \\\"\\\$_shoopcache_method_\\\$METH\\\" ]; then
 		# Ok, the current METH is already in someone's cache.
 		# Find out if it is THIS object that is referenced.
@@ -152,8 +155,8 @@ IFS=" " _shoopcacheclear_="
 			eval unset _shoopcache_method_\$METH\
 				 \\\$_shoopcache_method_\$METH\
 				 _shoopcache_linkmethod_\$TRUEMETH\
-				 \\\$_shoopcache_linkmethod_\$TRUEMETH
-		fi
+				 \\\$_shoopcache_linkmethod_\$TRUEMETH;
+		fi;
 	fi
 "
 # Temporarily turn on introspection, so the base object has everything 
