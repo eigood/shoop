@@ -163,7 +163,9 @@ shp_set_int = $(call benchmark,shoop variable sets (with introspect)            
 		OBJECT . foo = 1)
 
 clean:
-	rm -f *~ .#* ChangeLog $(binstall)
+	echo Cleaning
+	rm -f *~ .#* ChangeLog
+	rm -rf $(binstall)
 
 install: installshare installbins installdocs installexamples
 
