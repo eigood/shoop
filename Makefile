@@ -76,7 +76,12 @@ www-test2:
 			""
 
 example:
-	sh ./example.sh
+	$(MAKE) installbins installmodules prefix=$(tinstall)
+	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
+			SHOOPMOD=$(tinstall)$(moddir)\
+			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			CURDIR=$(CURDIR)\
+			$(CURDIR)/example.sh
 
 benchmark:
 	$(MAKE) installbins installmodules prefix=$(tinstall)
