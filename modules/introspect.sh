@@ -5,7 +5,7 @@
 #
 # Smell the Java. GPL copyright 2000 by Adam Heath <doogie@debian.org>
 
-# Enable introspection.
+# Enable introspection inside _shoop
 _shoop_introspect=1
 
 BASE . introspect : '
