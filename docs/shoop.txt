@@ -1,0 +1,79 @@
+Introduction:
+
+	Every language under the sun these days is Object Oriented.  In an
+	effort to make POSIX shell more buzzword compliant, and to show
+	that it's really not a big deal for a language to lack built-in OO
+	support, we have added object orientation to plain old shell
+	script.  Specifically, we have implemented classless OO with intro-
+	spection, finalization, serialization, and multiple inheritance.
+	Even then, most of these buzzword features are add-on modules.
+
+	Shoop scripts look similiar to some OO languages, but there are
+	various differences.  Most of these differences stem from the fact
+	that the shell is the limiting factor.
+
+
+Statements:
+
+	A valid shoop statement has the following form: 
+
+		<obj> . <name> [ \.?[=:]q?) (<value>|<code>)]
+
+	Each item as the following definitions:
+
+	obj:
+
+		The name of the object.
+
+	variable:
+
+		A non-typed variable.  This, in grand shell fashion, stores
+		its data as a string.
+
+	name:
+
+		The name of the method or variable in which to access.
+
+	value:
+
+		The text string that should be assigned to the variable or
+		method.
+
+
+Assignments:
+
+	When the character immediately following the method/variable is
+	'=' or ':', an assignment takes place.  If the character is '=',
+	the name refers to a variable, and the value is treated as a text
+	string.  If the character is ':', then the name is a method.
+
+	There are currently 2 assignment modifiers that can be used.  If
+	the above character is preceeded with '.', then this means to
+	append the new value to the current value.  A 'q' on the end means
+	to not echo the results of the assignment.  'q' only makes sense
+	when assigning to a variable.
+
+Methods:
+
+	Methods are short shell snippets, that process arguments, and
+	optionally return data.  
+	
+
+
+code:
+
+	The program code that should be run.  The shell variable $THIS
+	will contain the name of the current object, and the positional
+	parameters("$@", $*, etc) will contain the method arguments.
+
+method:
+
+	A function or subroutine that optionally takes a list of argu-
+	ments.
+
+
+
+See also:
+
+	introspect.txt, finalize.txt, serialize.txt, also_inherit.txt,
+	and use.txt.
