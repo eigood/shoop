@@ -23,10 +23,10 @@ prep OBJECT . foo = 1
 bm 6 "shoop variable gets" 'OBJECT . foo'
 
 prep $DEF_PREP
-bm 7 "shoop method sets" 'OBJECT . foo : ":"'
+bm 7 "shoop method sets" 'OBJECT . foo : "echo hi"'
 
 prep $DEF_PREP
-prep OBJECT . foo : ":"
+prep OBJECT . foo : "echo hi"
 bm 8 "shoop method gets" 'OBJECT . foo'
 
 prep $DEF_PREP
