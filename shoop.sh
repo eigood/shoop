@@ -155,7 +155,7 @@ _shoop OBJECT OBJECT new OBJECT
 OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
-OBJECT . super :p '_shoop $THIS $($THIS . parent) "$LASTMETH" $@; return'
+OBJECT . super :p '_shoop $THIS $($THIS . parent) "$LASTMETH" "$@"; return'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect
