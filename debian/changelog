@@ -1,3 +1,9 @@
+shoop (UNRELEASE) unstable; urgency=low
+
+  * Removed bashism from debian/rules.  Closes: #88067
+
+ -- Gergely Nagy <8@free.bsd.hu>  UNRELEASED
+
 shoop (0.1) unstable; urgency=low
 
   * Initial release (closes: Bug#84406).

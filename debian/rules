@@ -100,10 +100,10 @@ DEBIAN . do_packages : '$THIS . build
 #	$THIS . do dh_installinfo
 	$THIS . do dh_installchangelogs
 # This is Evil.
-	$THIS . do rm -f debian/shoop-dev/usr/share/doc/shoop/copyright
-	$THIS . do rm -f debian/shoop-dev/usr/share/doc/shoop/changelog{,.gz}
-	$THIS . do rm -f debian/shoop-modules/usr/share/doc/shoop/copyright
-	$THIS . do rm -f debian/shoop-modules/usr/share/doc/shoop/changelog{,.gz}
+	for file in copyright changelog changelog.gz; do
+		$THIS . do rm -f debian/shoop-dev/usr/share/doc/shoop/$file
+		$THIS . do rm -f debian/shoop-modules/usr/share/doc/shoop/$file
+	done
 # Evil ends here.
 	$THIS . do dh_link
 	$THIS . do dh_strip
