@@ -143,7 +143,7 @@ test12 = $(call benchmark,shoop variable sets (with introspect)     ,\
 		OBJECT . foo = 1)
 
 clean:
-	rm -f *~ .#*
+	rm -f *~ .#* ChangeLog
 
 install: installshare installbins installdocs installexamples
 
