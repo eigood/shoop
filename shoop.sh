@@ -23,14 +23,14 @@ _shoop () {
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		local THIS=$TRUEOBJ
 		eval eval "\$_shoop_$TRYMETH"
-		echo $TRUEOBJ.$METH did not return. >&2
+		echo $THIS.$METH did not return. >&2
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\" THIS=$TRUEOBJ
 		# Try inheritance 1 level deep -- the quick way.
 		for P in $PARENTS; do
 			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
 				eval eval "\$_shoop_${P}_$METH"
-				echo $TRUEOBJ.$METH did not return. >&2
+				echo $THIS.$METH did not return. >&2
 				return
 			fi
 		done
@@ -44,7 +44,7 @@ _shoop () {
 			if eval [ \"\$_shooptype_${P}_$METH\" ];then
 				set -- "$orgargs"
 				eval eval "\$_shoop_${P}_$METH"
-				echo $TRUEOBJ.$METH did not return. >&2
+				echo $THIS.$METH did not return. >&2
 				return
 			fi
 			shift
