@@ -2,13 +2,13 @@ Source: shoop
 Section: devel
 Priority: extra
 Maintainer: Gergely Nagy <shoop-devel@lists.sourceforge.net>
-Build-Depends: debhelper (>= 2.0.40), perl5
+Build-Depends: debhelper (>= 2.0.40), perl
 Standards-Version: 3.5.0
 
 Package: shoop
 Architecture: all
 Recommends: shoop-modules (>= ${Source-Version})
-Description: OOP in shell
+Description: The SHell Object Oriented Programming library
  Every language under the sun these days is Object Oriented.
  In an effort to make POSIX shell more buzzword compliant, and
  to show that it's really not a big deal for a language to lack
