@@ -32,3 +32,5 @@ benchmark:
 #	$(call benchmark,shoop method calls(i) , $(DEF_PREP_I); OBJECT . foo : echo hi , \
 #		OBJECT . foo)
 	
+clean:
+	rm -f *~
