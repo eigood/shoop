@@ -103,11 +103,11 @@ inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
 
 strip_comment_space = $(TOPDIR)/utils/shell-stripper
 
-$(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir)
+$(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir) $(strip_comment_space)
 	$(inst_msg)
 	$(strip_comment_space) < $< > $@
 
-$(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir)
+$(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir) $(strip_comment_space)
 	$(inst_msg)
 	$(strip_comment_space) < $< > $@
 	chmod +x $@
