@@ -44,11 +44,22 @@ DEBIAN . do_install : '$THIS . build
 	$THIS . do mv debian/shoop/usr/share/shoop/modules \
 		      debian/shoop-modules/usr/share/shoop/modules
 	$THIS . do mv debian/shoop/usr/share/doc/shoop/modules.txt \
-		      debian/shoop-modules/usr/share/doc/shoop-modules/
+		      debian/shoop-dev/usr/share/doc/shoop/
 	$THIS . do mv debian/shoop/usr/share/doc/shoop/MODULES \
-		      debian/shoop-modules/usr/share/doc/shoop-modules/
-	$THIS . do mv debian/shoop/usr/share/doc/shoop/examples \
-		      debian/shoop-modules/usr/share/doc/shoop-modules/'
+		      debian/shoop-dev/usr/share/doc/shoop/
+	$THIS . do rm -rf debian/shoop/usr/share/doc/shoop/examples
+	$THIS . do ln -sf shoop debian/shoop-dev/usr/share/doc/shoop-dev
+	$THIS . do ln -sf shoop debian/shoop-modules/usr/share/doc/shoop-modules
+	SAVE_IFS="$IFS"
+	GOOD_IFS=" 	
+"
+	IFS="$GOOD_IFS"
+	for f in $(cat debian/shoop-dev.examples); do
+		IFS="$SAVE_IFS"
+		$THIS . do cp $f debian/shoop-dev/usr/share/doc/shoop/examples/$f
+		IFS="$GOOD_IFS"
+	done
+	IFS="$SAVE_IFS"'
 DEBIAN . do_packages : '$THIS . build
 	$THIS . install
 	$THIS . do dh_testdir
@@ -58,6 +69,12 @@ DEBIAN . do_packages : '$THIS . build
 #	$THIS . do dh_installmenu
 #	$THIS . do dh_installinfo
 	$THIS . do dh_installchangelogs
+# This is Evil.
+	$THIS . do rm -f debian/shoop-dev/usr/share/doc/shoop/copyright
+	$THIS . do rm -f debian/shoop-dev/usr/share/doc/shoop/changelog{,.gz}
+	$THIS . do rm -f debian/shoop-modules/usr/share/doc/shoop/copyright
+	$THIS . do rm -f debian/shoop-modules/usr/share/doc/shoop/changelog{,.gz}
+# Evil ends here.
 	$THIS . do dh_link
 	$THIS . do dh_strip
 	$THIS . do dh_compress
