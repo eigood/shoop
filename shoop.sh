@@ -30,10 +30,7 @@ _shoop () {
 				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 			fi
 			if [ -z "$_shoopnocache_" ]; then
-				local THIS=$TRYOBJ oIFS="$IFS"
-				IFS=""
-				eval $_shoopcacheclear_ || true
-				IFS="$oIFS"
+				eval $_shoopcacheclear_
 			fi
 			# Some various assignment modifiers.
 			if [ "${varmeth#.}" != "$varmeth" ]; then append=1 varmeth=${varmeth#.}; fi
@@ -146,19 +143,19 @@ _shoop () {
 # _shoopcache_linkmethod_OBJECT_counter= _shoopcache_link_DESCENDENT_counter
 
 _shoopcacheclear_='
-	if eval [ \"\$_shoopcache_method_\$METH\" ]; then
+	if eval [ \"\$_shoopcache_method_$METH\" ]; then
 		# Ok, the current METH is already in someone''s cache.
 		# Find out if it is THIS object that is referenced.
-		if eval [ -z \"\$_shoopcache_linkmethod_\$TRUEMETH\" ]; then
+		if eval [ -z \"\$_shoopcache_linkmethod_$TRUEMETH\" ]; then
 			# Someone is referencing \$METH, and it is not TRUEMETH, so
 			# that means we have to erase all references for \$METH.
 			#
 			# TODO: Only erase if $TRUE was in the parent path of
 			# \$_shoopcache_method_\$METH
-			eval unset _shoopcache_method_\$METH\
-				 \$_shoopcache_method_\$METH\
-				 _shoopcache_linkmethod_\$TRUEMETH\
-				 \$_shoopcache_linkmethod_\$TRUEMETH;
+			eval unset _shoopcache_method_$METH\
+				 \$_shoopcache_method_$METH\
+				 _shoopcache_linkmethod_$TRUEMETH\
+				 \$_shoopcache_linkmethod_$TRUEMETH || true;
 		fi;
 	fi
 '
