@@ -53,7 +53,7 @@ _shoop () {
 _shoop_introspect=1
 
 # Create a method to create a new object.
-_shoop BASE BASE new : '
+_shoop OBJECT OBJECT new : '
 	local OBJNAME=$1;
 	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }";
 	if [ $THIS != $OBJNAME ]; then
@@ -61,11 +61,11 @@ _shoop BASE BASE new : '
 	fi
 '
 # Create the base object via the method already defined on it.
-_shoop BASE BASE new BASE
+_shoop OBJECT OBJECT new OBJECT
 
 # This method handles calling an overridden method of your parent.
 # Sadly, you have to pass in the method name to call.
-BASE . super : '_shoop $THIS $($THIS . parent) $@'
+OBJECT . super : '_shoop $THIS $($THIS . parent) $@'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect

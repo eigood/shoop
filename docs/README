@@ -7,10 +7,10 @@ orientation to plain old shell script. (Next up: awk.) Specifically, I have
 implemented classless OO with introspection, finalization, serialization,
 and multiple inheritance.
 
-When you source shoop.sh, you start out with a single base object, BASE.
-You can make a new object named OBJ that has BASE as its parent like so:
+When you source shoop.sh, you start out with a single base object, OBJECT.
+You can make a new object named OBJ that has OBJECT as its parent like so:
 
-BASE . new OBJ
+OBJECT . new OBJ
 
 You can add/change a property of OBJ like this:
 

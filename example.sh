@@ -5,16 +5,16 @@
 . ./final.sh
 
 echo some counters:
-BASE . counter = 10
+OBJECT . counter = 10
 echo
-BASE . count : '$THIS . counter = $(expr $($THIS . counter) + 1)'
-BASE . test = 20
-BASE . finalize test
+OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1)'
+OBJECT . test = 20
+OBJECT . finalize test
 echo
-BASE . count
+OBJECT . count
 echo
-BASE . new FOO
-BASE . new BAR
+OBJECT . new FOO
+OBJECT . new BAR
 BAR . parent = A B C D FOO >/dev/null
 BAR . test
 echo
@@ -27,7 +27,7 @@ FOO . count
 echo
 FOO . count
 echo
-BASE . count
+OBJECT . count
 echo
 
 echo introspecting BAR
@@ -35,5 +35,7 @@ BAR . introspect
 echo introspecting FOO
 FOO . introspect resolve
 FOO . serialize
-echo serializing BASE
-BASE . serialize
+echo serializing OBJECT
+OBJECT . serialize
+echo serializing FOO
+FOO . serialize

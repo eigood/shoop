@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-# Introspect module for shoop. Expands the BASE class with an introspect
+# Introspect module for shoop. Expands the OBJECT class with an introspect
 # method, that can list all methods and variables that are defined on a class.
 #
 # Smell the Java. GPL copyright 2000 by Adam Heath <doogie@debian.org>
@@ -8,7 +8,7 @@
 # Enable introspection inside _shoop
 _shoop_introspect=1
 
-BASE . introspect : '
+OBJECT . introspect : '
 	local DEFINES A DISPLAYOBJ;
 	if [ "$2" ]; then
 		DISPLAYOBJ=$2;

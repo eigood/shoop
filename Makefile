@@ -21,14 +21,14 @@ benchmark:
 	$(call benchmark,internal variable sets , true , FOO=$x)
 	$(call benchmark,internal variable gets , FOO=1 , echo FOO)
 	$(call benchmark,internal function calls, foo () { echo hi; } , foo)
-	$(call benchmark,shoop variable sets, $(DEF_PREP) , BASE . foo = 1)
-	$(call benchmark,shoop variable gets, $(DEF_PREP); BASE . foo = $x , \
-		BASE . foo)
-	$(call benchmark,shoop method calls , $(DEF_PREP); BASE . foo : echo hi , \
-		BASE . foo)
-	$(call benchmark,shoop variable sets(i), $(DEF_PREP_I) , BASE . foo = 1)
-#	$(call benchmark,shoop variable gets(i), $(DEF_PREP_I); BASE . foo = $x , \
-#		BASE . foo)
-#	$(call benchmark,shoop method calls(i) , $(DEF_PREP_I); BASE . foo : echo hi , \
-#		BASE . foo)
+	$(call benchmark,shoop variable sets, $(DEF_PREP) , OBJECT . foo = 1)
+	$(call benchmark,shoop variable gets, $(DEF_PREP); OBJECT . foo = $x , \
+		OBJECT . foo)
+	$(call benchmark,shoop method calls , $(DEF_PREP); OBJECT . foo : echo hi , \
+		OBJECT . foo)
+	$(call benchmark,shoop variable sets(i), $(DEF_PREP_I) , OBJECT . foo = 1)
+#	$(call benchmark,shoop variable gets(i), $(DEF_PREP_I); OBJECT . foo = $x , \
+#		OBJECT . foo)
+#	$(call benchmark,shoop method calls(i) , $(DEF_PREP_I); OBJECT . foo : echo hi , \
+#		OBJECT . foo)
 	
