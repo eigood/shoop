@@ -30,7 +30,6 @@ tests () {
 
 # This is uber-disgusing. Our IFS is messed up, so this gets the full output
 # of the test program. It then parses it.
-testfailures=0
 compare () {
 	local id
 	while :; do
