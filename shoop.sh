@@ -46,14 +46,14 @@ _shoop () {
 				if [ "$append" ];then set -- "$(eval eval "\$_shoop_$TRUEMETH") $@"; fi
 				if [ ! "$quiet" ]; then echo -n $@; fi
 
-				if [ $# -gt 0 ]; then
+				if [ $# -eq 0 ]; then
 					return
 				fi
 				eval "_shoop_$TRUEMETH='echo -n $@'
 				      _shooptype_$TRUEMETH=variable"
 			else
 				if [ "$quiet" ]; then echo "Invalid modifier(q) on assignment!($TRUEOBJ.$METH)" >&2; fi
-				if [ $# -gt 0 ]; then
+				if [ $# -eq 0 ]; then
 					return
 				fi
 				if [ "$append" ];then
