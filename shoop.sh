@@ -4,32 +4,40 @@
 _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
 	shift 3
-	if [ "$1" = = -o "$1" = =q -o "$1" = : ]; then
-		# This block is for introspect.
-		if [ "$_shoop_introspect" ] &&
-		   eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
-			eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
-		fi
-		
-		if [ -z "$_shoopnocache_" ]; then
-			eval $_shoopcacheclear_
-		fi
-		if [ "$1" = = -o "$1" = =q ]; then
-			if [ "$1" = = ]; then
-				shift
-				echo -n $@
-			else
-				shift
+	case "$1" in
+		=|=q|.=|.=q|:)
+			local varmeth=$1 append="" quiet=""; shift
+			# This block is for introspect.
+			if [ "$_shoop_introspect" ] &&
+			   eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
+				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 			fi
-			eval "_shoop_$TRUEMETH='echo -n $@'
-			      _shooptype_$TRUEMETH=variable"
-		else
-			shift
-			eval "_shoop_$TRUEMETH='$@'
-			      _shooptype_$TRUEMETH=method"
-		fi
-		return
-	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
+			if [ -z "$_shoopnocache_" ]; then
+				eval $_shoopcacheclear_
+			fi
+			# Some various assignment modifiers.
+			if [ "${varmeth#.}" != $varmeth ]; then append=1 varmeth=${varmeth#.}; fi
+			if [ "${varmeth%q}" != $varmeth ]; then quiet=1 varmeth=${varmeth%q}; fi
+			if [ "$varmeth" = = ]; then
+				if [ "$append" ];then eval "set -- $(eval eval "\$_shoop_$TRUEMETH")$@"; fi
+				if [ ! "$quiet" ]; then echo -n $@; fi
+
+				eval "_shoop_$TRUEMETH='echo -n $@'
+				      _shooptype_$TRUEMETH=variable"
+			else
+				if [ "$quiet" ]; then echo "Invalid modified(q) on assignment!($TRUEOBJ.$METH)" >&2; fi
+				if [ "$append" ];then
+					eval eval "_shoop_$TRUEMETH=\'\$_shoop_$TRUEMETH;\$@\'
+					      _shooptype_$TRUEMETH=method"
+				else
+					eval "_shoop_$TRUEMETH='$@'
+					      _shooptype_$TRUEMETH=method"
+				fi
+			fi
+			return
+		;;
+	esac
+	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		local THIS=$TRUEOBJ
 		eval eval "\$_shoop_$TRYMETH"
 		return
