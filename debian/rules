@@ -79,17 +79,9 @@ DEBIAN . do_install : '$THIS . build
 	$THIS . do rm -rf debian/shoop/usr/share/doc/shoop/examples
 	$THIS . do ln -sf shoop debian/shoop-dev/usr/share/doc/shoop-dev
 	$THIS . do ln -sf shoop debian/shoop-modules/usr/share/doc/shoop-modules
-# I have to use ugly IFS magic here, otherwise things would fail miserably
-	SAVE_IFS="$IFS"
-	GOOD_IFS=" 	
-"
-	IFS="$GOOD_IFS"
 	for f in $(cat debian/shoop-dev.examples); do
-		IFS="$SAVE_IFS"
 		$THIS . do cp $f debian/shoop-dev/usr/share/doc/shoop/examples/$f
-		IFS="$GOOD_IFS"
-	done
-	IFS="$SAVE_IFS"'
+	done'
 DEBIAN . do_packages : '$THIS . build
 	$THIS . install
 	$THIS . do dh_testdir
