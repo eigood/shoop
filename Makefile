@@ -117,7 +117,7 @@ NAMES=$(shell\
 docs/modules.txt: utils/shelldoc $(MODULES)
 	rm -f modules_tmp
 	$(MAKE) modules_tmp
-	utils/shelldoc $$(cat modules_tmp) > $@
+	utils/shelldoc "SHOOP Modules" $$(cat modules_tmp) > $@
 	rm -f modules_tmp
 
 .PHONY: docs/modules.txt
