@@ -1,0 +1,57 @@
+#!/bin/sh -e
+#SHELL=$(basename ${SHELL:-bash})
+. ${SHOOPSH:-/usr/bin/shoop.sh}
+. ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
+
+OBJECT . use rules_debian
+OBJECT . default_target = build
+
+OBJECT . pkgs == SHOOP SHOOP_doc
+
+OBJECT . new SHOOP_base
+
+
+SHOOP_base . bindir == /usr/bin
+SHOOP_base . moddir == /usr/share/shoop/modules
+SHOOP_base . docdir == /usr/share/doc/shoop
+SHOOP_base . empdir == /usr/share/doc/shoop/examples
+
+SHOOP_base . new SHOOP
+SHOOP_base . new SHOOP_doc
+
+SHOOP . prefix == $CURDIR/debian/tmp
+SHOOP_doc . prefix == $CURDIR/debian/shoop-doc
+
+SHOOP . pkg = shoop > /dev/null
+SHOOP_doc . pkg = shoop-doc > /dev/null
+
+SHOOP . bins == \
+	shoop.sh\
+
+SHOOP_doc . docs == \
+	AUTHORS\
+	CONTRIBUTING\
+	COPYING\
+	MODULES\
+	README\
+	TODO\
+
+SHOOP_doc . examples == \
+	example.sh\
+
+SHOOP . modules == \
+        destroy.sh\
+        final.sh\
+        introspect.sh\
+        prettyprint.sh\
+        serialize.sh\
+        thread.sh\
+        use.sh\
+
+OBJECT . build : '
+'
+
+OBJECT . processcmdline "$@"
+
+#SHOOP . install
+#SHOOP_doc . install
