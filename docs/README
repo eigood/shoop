@@ -20,8 +20,8 @@ You can add/change a method of OBJ like this:
 
 OBJ . method : echo "hello world!"
 
-If you want to make a property/method final, ie, can't be overriden,
-prepend the type char with `:'.
+If you want to make a property/method final, ie, can't be changed(but can
+still be overridden in subclasses), prepend the type char with `:'.
 
 OBJ . property := 3
 OBJ . method :: echo "hello world!"
