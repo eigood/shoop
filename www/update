@@ -34,7 +34,7 @@ case "$1" in
 				# another update from cvs.  We don't have to do anything here.
 				: this is a null command, which returns true
 			fi
-			rm -f $HTDOCS/update.lock
+			rm -f $HTDOCS/cvspulse.lock
 		fi
 	;;
 esac
