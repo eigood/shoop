@@ -106,9 +106,25 @@ docs/modules.pod: utils/shelldoc $(MODULES)
 	utils/shelldoc "SHOOP Modules" $$(cat modules_tmp) > $@
 	rm -f modules_tmp
 
-.PHONY: docs/modules.pod
+docs/modules.txt: docs/modules.pod
+
+dyndocs: www/modules.html docs/modules.txt
+modules_title=SHOOP Modules
+
+%.txt: %.pod
+	pod2text < $< > $@
+%.html: %.pod
+	pod2html --title "$($(*F)_title)"< $< > $@
+
+www/modules.html: docs/modules.html
+	cp -a $< $@
+
+clean_files+=www/modules.html docs/modules.txt docs/modules.html docs/modules.pod 
+clean_files+=pod2html-dircache pod2html-itemcache
 
 ChangeLog:
 	utils/mkChangeLog $@
 
 include $(TOPDIR)/Makefile.rules
+
+.PHONY: docs/modules.pod
