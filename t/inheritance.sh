@@ -2,6 +2,9 @@
 # Inheritance regression test. Also sets basic methods and variables.
 . ./shoop.sh
 
+# Accessing undefined stuff.
+ok 1 "" OBJECT . no_such_property 2>/dev/null
+
 # Setting/getting variables.
 ok 0 1	OBJECT . counter = 1
 ok 0 2	OBJECT . counter = 2
@@ -49,4 +52,4 @@ ok 0 ""	DESCENDENT . count : \
 	'$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super count))'
 ok 0 13	DESCENDENT . count # you do the math..
 
-tests 32
+tests 33

@@ -90,10 +90,9 @@ if [ "$1" ]; then
 
 	echo
 	echo "Regression test summary:"
-	echo
-	echo "A total of $totaltestcount individual tests were ran, from $(($# + 1)) regression test scripts."
+	echo "	A total of $totaltestcount individual tests were ran,"
+	echo -n "	from $(($# + 1)) regression test scripts. "
 	if [ "$totalfailures" != 0 ]; then
-		echo
 		echo "Of those, $totalfailures tests FAILED."
 		exit 1
 	else
