@@ -3,8 +3,7 @@
 . ${SHOOPSH:-/usr/bin/shoop.sh}
 . ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 
-
-ok "" 0 ""		OBJECT . use alist
+ok "" 0 ""		OBJECT . use alist ref
 
 # setup
 ok "" 0 ""		ALIST . new alist

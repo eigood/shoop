@@ -183,26 +183,14 @@ _shoop_introspect=1
 # this will lead to a cache inconsistency.
 
 _shoop . OBJECT OBJECT new :p '
-	local OBJNAME
-	if [ $# -gt 1 ]; then
-		OBJECT . _ref OBJNAME
-		eval "$@ :p ''$OBJNAME \\\"\\\$@\\\"''"
-	else
-		OBJNAME=$1
-	fi
-	eval "$OBJNAME () { local cmd=\"\$1\"; shift; _shoop \$cmd $OBJNAME $OBJNAME \"\$@\"; };"
-	if [ $THIS != $OBJNAME ]; then
-		_shoop . $OBJNAME $OBJNAME parent = $THIS >/dev/null
+	eval "$1 () { local cmd=\"\$1\"; shift; _shoop \$cmd $1 $1 \"\$@\"; };"
+	if [ $THIS != $1 ]; then
+		_shoop . $1 $1 parent = $THIS >/dev/null
 	fi
 	eval unset _shoopcache_ \$_shoopcache_ || true
 '
-_shoop . OBJECT OBJECT _ref :p '
-	eval $1=_$(($($THIS . __ref 2>/dev/null) + 1))
-	eval "$THIS . __ref =q \${$1#_}"
-'
 # Create the base object via the method already defined on it.
 _shoop . OBJECT OBJECT new OBJECT
-
 
 # Define the parent variable
 OBJECT . parent = ""

@@ -6,7 +6,7 @@ ALIST_ENTRY . getkey = ""
 ALIST_ENTRY . getvalue = ""
 
 ALIST . newpair :p '
-	OBJECT . _ref $1
+	OBJECT_REF . _ref $1
 	eval local ref=\$$1;
 	shift
 	ALIST_ENTRY . new $ref

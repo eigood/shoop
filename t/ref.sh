@@ -1,8 +1,10 @@
 #!/bin/sh -e
 # Inheritance regression test. Also sets basic methods and variables.
 . ${SHOOPSH:-/usr/share/shoop/shoop.sh}
+. ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 
 # setup
+ok "" 0 ""	OBJECT . use ref
 ok "" 0 1	OBJECT . counter = 1
 ok "" 0 ""	OBJECT . incr :p '$THIS . counter = $(($($THIS . counter) + 1))'
 ok "" 0 ""	OBJECT . new object
@@ -15,7 +17,7 @@ ok "" 0 3	OBJECT . incr
 ok "" 0 3	OBJECT . counter
 
 # creating the reference
-ok "" 0 ""	OBJECT . new object . o
+ok "" 0 ""	OBJECT_REF . new OBJECT object . o
 
 # getting/setting
 ok "" 0 "3"	object . o . counter
@@ -34,4 +36,4 @@ ok "" 0 3	OBJECT . counter
 ok "" 0 3	object . counter
 ok "" 0 10	object . o . counter
 
-tests 20
+tests 21

@@ -19,5 +19,6 @@ MODULES=\
 	stack.sh\
 	onexit.sh\
 	alist.sh\
+	ref.sh\
 
 include $(TOPDIR)/Makefile.rules
