@@ -19,6 +19,22 @@ _shoopcommand_header_='
 _shoopcommand_footer_='
 	esac
 '
+_shoop_tr() {
+	local char="$1" replace="$2" bad rest tmp left; shift 2
+	bad="$@" rest="$@" out=""
+	while :; do
+		: $rest
+		: $char
+		tmp="${rest%$char*}"
+		if [ ${#tmp} -eq ${#rest} ]; then
+			break
+		fi
+		left="${rest#$tmp$char}"
+		out="$replace$left$out"
+		rest="$tmp"
+	done
+	out="$rest$out"
+}
 _shoop () {
 	local cmd=$1; shift
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH THIS CLASS
@@ -50,12 +66,14 @@ _shoop () {
 			fi
 			if [ "$varmeth" = = ]; then
 				if [ "$append" ];then set -- "$(eval eval "\$_shoop_$TRUEMETH") $@"; fi
-				if [ ! "$quiet" ]; then eval 'echo -n '\'"$@"\'; fi
+				local out
+				_shoop_tr "'" "'\''" "$@"
+				if [ ! "$quiet" ]; then eval 'echo -n '\'"$out"\'; fi
 
 				if [ $# -eq 0 ]; then
 					return
 				fi
-				eval "_shoop_$TRUEMETH=\"echo -n '\$@'\"
+				eval "_shoop_$TRUEMETH=\"echo -n '\$out'\"
 				      _shooptype_$TRUEMETH=variable"
 			else
 				if [ "$quiet" ]; then echo "Invalid modifier(q) on assignment!($TRUEOBJ.$METH)" >&2; fi
