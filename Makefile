@@ -57,6 +57,7 @@ test:
 			$(CURDIR)/t/list.sh\
 			$(CURDIR)/t/stack.sh\
 			$(CURDIR)/t/onexit.sh\
+			$(CURDIR)/t/serialize.sh\
 
 www-test1:
 	$(MAKE) installbins installmodules prefix=$(tinstall)
