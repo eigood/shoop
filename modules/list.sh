@@ -62,6 +62,7 @@ LIST . set :p '
 LIST . delete :p '
 	local ret left pos=$1 order="$($THIS . _order)"; shift
 	$THIS . get $pos
+	$THIS . drop $pos
 	set -- $order
 	eval $THIS d _\$$pos
 	shift $(($pos - 1))
@@ -71,6 +72,9 @@ LIST . delete :p '
 	$THIS . size =q $(($($THIS . size) - 1))
 	order="$($THIS . _order)"
 	: order $order
+'
+LIST . drop :p '
+	eval $THIS d _\$$1
 '
 LIST . rol :p '
 	local count size=$($THIS . size) order left
