@@ -1,9 +1,9 @@
 #!/bin/sh
 . ./shoop.sh
-. ./introspect.sh
-. ./serialize.sh
-. ./final.sh
-
+. ./use.sh
+OBJECT . use introspect
+OBJECT . use serialize
+OBJECT . use final
 echo some counters:
 OBJECT . counter = 10
 echo
