@@ -15,7 +15,8 @@ case "$1" in
 		(cd $HTDOCS;exec cvs update)
 	;;
 	cvspulse)
-		if lockfile -1 -r 2 $HTDOCS/update.lock 2>/dev/null; then
+		echo "Pulsing webserver to update from cvs on $(date -u)"
+		(if lockfile -1 -r 2 $HTDOCS/update.lock 2>/dev/null; then
 			# we have obtained the lock on the cvspulse script.
 			if lockfile -0 -r 0 $HTDOCS/cvspulse.lock 2>/dev/null; then
 				# ok, new pulse active.
@@ -38,6 +39,6 @@ case "$1" in
 				: this is a null command, which returns true
 			fi
 			rm -f $HTDOCS/update.lock
-		fi
+		fi)&
 	;;
 esac
