@@ -36,6 +36,10 @@ EXAMPLES=\
 
 PKG=shoop
 PKG_VER=0.1
+TOPDIR=.
+
+strip_comment_space = $(TOPDIR)/utils/shell-stripper
+binstall = $(CURDIR)/benchmark-dir
 
 all:
 	@echo This makefile is only here to run benchmarks or examples,
@@ -51,7 +55,6 @@ test:
 example:
 	@sh ./example.sh
 
-binstall = $(CURDIR)/benchmark-dir
 benchmark:
 	$(MAKE) install prefix=$(binstall)
 	cd $(binstall); SHOOPSH=$(binstall)$(bindir)/shoop.sh $(CURDIR)/t/benchmark $(CURDIR)/t/benchmark.bm ""
@@ -87,14 +90,15 @@ $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: thisdir=empdir
 
 inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
 
-strip_comment_space = egrep -v '^([	 ]*\#.*|[	 ]*)$$'
+strip_comment_space = $(TOPDIR)/utils/shell-stripper
+
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir)
 	@$(inst_msg)
-	@$(strip_comment_space) $< |(echo "#!/bin/sh -e";cat) > $@
+	@$(strip_comment_space) < $< > $@
 
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir)
 	@$(inst_msg)
-	@$(strip_comment_space) $< |(echo "#!/bin/sh -e";cat) > $@
+	@$(strip_comment_space) < $< > $@
 	@chmod +x $@
 
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(docdir)
@@ -108,7 +112,6 @@ $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES)): $(prefix)$(empdir)/%: % $(prefi
 $(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
 	@echo Making dir $$\(prefix\)$*
 	@mkdir -p $@
-
 
 .PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
 
@@ -124,13 +127,14 @@ cvs-build:
 
 NAMES=$(shell\
 	awk '\
-	/^CVS:/{\
-	sub(/^CVS:/, "");\
-	printf "-u \"%s:", $$1;\
-	sub($$1 " ","");\
-	split($$0, A, / *[<>] */);\
-	printf "%s:%s\"\n", A[1], A[2]}\
-' AUTHORS)
+		/^CVS:/{\
+			sub(/^CVS:/, "");\
+			printf "-u \"%s:", $$1;\
+			sub($$1 " ","");\
+			split($$0, A, / *[<>] */);\
+			printf "%s:%s\"\n", A[1], A[2]\
+			}\
+	' AUTHORS)
 #endef
 
 ChangeLog:
