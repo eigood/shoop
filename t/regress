@@ -3,7 +3,7 @@
 
 # Call this function to test something.
 ok () {
-	local name=$1 expected_return=$2 expected_output=$3
+	local name="$1" expected_return="$2" expected_output="$3"
 	shift 3
 	
 	testcount=$(($testcount + 1))
@@ -24,8 +24,9 @@ tests () {
 # of the test program. It then parses it.
 testfailures=0
 compare () {
+	local id
 	while :; do
-		local name=$1 count=$2 expected_output=$3 expected_return=$4 output=$5 return=$6 id
+		local name="$1" count="$2" expected_output="$3" expected_return="$4" output="$5" return="$6"
 		shift 6
 		if [ "$name" ]; then
 			id="$name($count)"

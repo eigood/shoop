@@ -21,9 +21,9 @@ _shoop () {
 			;;
 	esac
 	case "$1" in
-		=|=q|=p|.=|.=q|.=p|.=qp|:|:p|.:|.:p)
+		:|:p|.:|.:p|\=|\=q|\=p|\.\=|\.\=q|\.\=p|\.\=qp)
 			local varmeth=$1 append="" quiet="" private=""; shift
-			if [ "${varmeth%p}" != $varmeth ]; then private=1; varmeth=${varmeth%p}; fi
+			if [ "${varmeth%p}" != "$varmeth" ]; then private=1; varmeth=${varmeth%p}; fi
 			# This block is for introspect.
 			if [ "$_shoop_introspect" ] &&
 			   eval [ -z \"\$_shooptype_$TRYMETH\$private\" ]; then
@@ -33,8 +33,8 @@ _shoop () {
 				eval $_shoopcacheclear_
 			fi
 			# Some various assignment modifiers.
-			if [ "${varmeth#.}" != $varmeth ]; then append=1 varmeth=${varmeth#.}; fi
-			if [ "${varmeth%q}" != $varmeth ]; then quiet=1 varmeth=${varmeth%q}; fi
+			if [ "${varmeth#.}" != "$varmeth" ]; then append=1 varmeth=${varmeth#.}; fi
+			if [ "${varmeth%q}" != "$varmeth" ]; then quiet=1 varmeth=${varmeth%q}; fi
 			if eval [ \"\$_shoopprivate_$TRYMETH\" ]; then
 				echo "Previous declaration of ($TRYOBJ:$METH) marked private" >&2
 				return 1
@@ -44,7 +44,7 @@ _shoop () {
 			fi
 			if [ "$varmeth" = = ]; then
 				if [ "$append" ];then set -- "$(eval eval "\$_shoop_$TRUEMETH") $@"; fi
-				if [ ! "$quiet" ]; then echo -n $@; fi
+				if [ ! "$quiet" ]; then eval "echo -n \"$@\""; fi
 
 				if [ $# -eq 0 ]; then
 					return
@@ -83,10 +83,14 @@ _shoop () {
 				return
 			fi
 		fi
+		eval "local orgargs=\"$@\""
+		eval set -- $PARENTS
 		# 1st stage resolver.  Look at the immediate parents.
-		for P in $PARENTS; do
+		while [ $# -gt 0 ]; do
+			P=$1
 			eval GETMETH=\"\$_shoop_${P}_$METH\"
 			if [ "$GETMETH" ]; then
+				set -- $orgargs
 				eval "$GETMETH"
 				return
 			fi
@@ -96,16 +100,16 @@ _shoop () {
 			# which is where most of the time will be spent.  This
 			# gave an 8% speedup in the 2nd stage, and only noise in
 			# the first.
-			NEWPARENTS="$NEWPARENTS $(eval eval "\$_shoop_${P}_parent")"
+			NEWPARENTS="${NEWPARENTS:+ $NEWPARENTS}$(eval eval "\$_shoop_${P}_parent")"
+			shift
 		done
 		# 1st stage found no match, so resolve the inheritance tree,
 		# starting at the second level, and loop over untested super
 		# classes.
-		local orgargs="$@"
 		set -- $NEWPARENTS
 		while [ $# -gt 0 ];do
 			P=$1
-			eval GETMETH="\$_shoop_${P}_$METH"
+			eval GETMETH=\"\$_shoop_${P}_$METH\"
 			if [ "$GETMETH" ]; then
 				set -- $orgargs
 				# Save a reference to the resolved object in the cache for the

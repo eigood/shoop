@@ -42,7 +42,7 @@ LIST . get :p '
 '
 LIST . set :p '
 	local pos=$1; shift
-	local args="$@"
+	eval "local args=\"$@\""
 	set -- $($THIS . _order)
 	eval $THIS . _\$$pos = \"\$args\"
 '
