@@ -24,6 +24,8 @@ for($a = 1; $a < @ARGV; $a++) {
 		$file =~ s/.*\///;
 		print "=item $file\n\n$line\n";
 		undef $line;
+	} else {
+		print STDERR $ARGV[$a] . "\n";
 	}
 	close FILE;
 }
