@@ -13,7 +13,7 @@ endif
 
 build-stamp:
 	dh_testdir
-	$(MAKE) docs/modules.txt 2>/dev/null
+	$(MAKE) -C docs modules.txt 2>/dev/null
 	touch $@
 
 build: build-stamp
