@@ -17,8 +17,8 @@ _shoop () {
 		shift 1
 		eval "_shoop_${TRUEOBJ}_${METH} () { $@; }"
 	elif ! eval _shoop_${TRYOBJ}_$METH $TRUEOBJ $@ 2>/dev/null; then
-		if [ "`_shoop_${TRYOBJ}_parent 2>/dev/null`" ]; then
-			_shoop $TRUEOBJ `_shoop_${TRYOBJ}_parent` $METH $@
+		if [ "$(_shoop_${TRYOBJ}_parent 2>/dev/null)" ]; then
+			_shoop $TRUEOBJ $(_shoop_${TRYOBJ}_parent) $METH $@
 		else
 			echo "No such method, \"$METH\"" >&2
 			return 1
