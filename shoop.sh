@@ -108,7 +108,7 @@ _shoop () {
 			while [ $# -gt 0 ];do
 				CLASS=$1
 				eval GETMETH=\"\$_shoop_${CLASS}_$METH\"
-				if [ "$GETMETH" ]; then
+				if [ ${#GETMETH} -gt 0 ]; then
 					# Save a reference to the resolved object in the cache for the
 					# true object.
 					if [ -z "$_shoopnocache_" ]; then
@@ -137,7 +137,7 @@ _shoop () {
 		local _shoopclassstack_old=$_shoopclassstack_new
 		eval GETMETH=\"\$_shoop_${CLASS}_$METH\"
 	fi
-	if [ "$GETMETH" ]; then
+	if [ ${#GETMETH} -gt 0 ]; then
 		local oIFS="$IFS"
 		IFS=""
 		eval "IFS='$oIFS'; $GETMETH"
