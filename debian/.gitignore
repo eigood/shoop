@@ -1,0 +1,5 @@
+*.debhelper
+files
+shoop
+shoop-modules
+shoop-dev
