@@ -146,9 +146,7 @@ IFS=" " _shoop OBJECT OBJECT new :p '
 	if [ $THIS != $OBJNAME ]; then
 		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null
 	fi
-	if [ "$_shoopcache_" ]; then
-		eval unset _shoopcache_ \$_shoopcache_
-	fi
+	eval unset _shoopcache_ \$_shoopcache_ || true
 '
 # Create the base object via the method already defined on it.
 _shoop OBJECT OBJECT new OBJECT
