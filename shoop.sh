@@ -68,7 +68,7 @@ _shoop () {
 		;;
 	esac
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		THIS=$TRYOBJ CLASS=$TRYOBJ
+		THIS=$TRUEOBJ CLASS=$TRYOBJ
 	else
 		eval local PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
 			NEWPARENTS=""
@@ -133,6 +133,8 @@ _shoop () {
 		fi
 	fi
 	if [ "$CLASS" ]; then
+		local _shoopclassstack_new="$_shoopclassstack_old $CLASS"
+		local _shoopclassstack_old=$_shoopclassstack_new
 		eval GETMETH=\"\$_shoop_${CLASS}_$METH\"
 	fi
 	if [ "$GETMETH" ]; then
@@ -207,11 +209,10 @@ OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
 OBJECT . super :p '
-	if [ -z "$__super" ]; then
-		local __super=$THIS
-	fi
-	_shoop . $__super $($THIS . parent) "$LASTMETH" "$@"
-	return
+	local __last_class=$(set -- $_shoopclassstack_old;eval echo \$\{$(($# - 1))\})
+	eval local "__super_savetype=\"\$_shooptype_${__last_class}_$LASTMETH\" _shooptype_${__last_class}_$LASTMETH="
+	_shoop . $THIS $THIS "$LASTMETH" "$@"
+	eval _shooptype_${TRYOBJ}_$__last_meth=$__super_savetype
 '
 
 # Now if you want introspection, you have to turn it back on.

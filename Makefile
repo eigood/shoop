@@ -52,6 +52,7 @@ test:
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
 			CURDIR=$(CURDIR)\
 			$(SHELL) $(CURDIR)/t/regress\
+			$(CURDIR)/t/super.sh\
 			$(CURDIR)/t/ifs.sh\
 			$(CURDIR)/t/inheritance.sh\
 			$(CURDIR)/t/ref.sh\
