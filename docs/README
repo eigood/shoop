@@ -25,7 +25,7 @@ You can add/change a method of OBJ like this:
 
 OBJ . method : echo "hello world!"
 
-You can call the method or get the value of the property like this:
+You can call a method or get the value of a property like this:
 
 OBJ . property
 OBJ . method
@@ -45,10 +45,9 @@ overrode it, generally):
 THIS . super method
 
 If you want introspection, finalization, or serialization, see MODULES.
-Also, see CONTRIBUTING.
-
 That's about it. Now run off and write a MOO or something.
 
-Shoop is copyright 2000 under the terms of the GNU GPL by:
-	Joey Hess <joey@kitenet.net>
+Shoop is copyright 2000 under the terms of the GNU GPL by this pack of
+maniacs:
+	Joey Hess <joeyh@debian.org>
 	Adam Heath <doogie@debian.org>
