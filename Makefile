@@ -7,7 +7,7 @@ DEF_PREP = . ./shoop.sh
 benchmark = \
 	@echo -n "bash: $(ITERATIONS) $(1): ";$(TIME) bash -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null ; \
-	echo -n "ash:  $(ITERATIONS) $(1): ";$(TIME) ash -c "$(2); \
+	 echo -n "ash : $(ITERATIONS) $(1): ";$(TIME) ash -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null
 
 nobenchmark =
