@@ -51,7 +51,7 @@ all:
 	echo \	make test
 
 test:
-	$(MAKE) install prefix=$(tinstall)
+	$(MAKE) installbins installmodules prefix=$(tinstall)
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
@@ -62,7 +62,7 @@ example:
 	sh ./example.sh
 
 benchmark:
-	$(MAKE) install prefix=$(tinstall)
+	$(MAKE) installbins installmodules prefix=$(tinstall)
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
@@ -75,9 +75,9 @@ clean:
 	rm -f *~ .#* ChangeLog
 	rm -rf $(tinstall)
 
-install: installshare installbins installdocs installexamples
+install: installmodules installbins installdocs installexamples
 
-installshare	: $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))
+installmodules	: $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))
 installbins	: $(patsubst %, $(prefix)$(bindir)/%,$(BINS))
 installdocs	: $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))
 installexamples	: $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))
