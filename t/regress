@@ -7,13 +7,11 @@ ok () {
 	shift
 	
 	testcount=$(expr $testcount + 1)
-	echo -n "compare $testcount \"$expected\" \""
-	if ! $@; then
-		echo \"
-		echo badret $expected $?
-	else
-		echo \"
-	fi
+	echo -n "compare $testcount '$expected' '"
+	set +e
+	$@
+	echo "' $?"
+	set -e
 }
 
 # Call this function last say how many tests you should have run.
@@ -24,25 +22,34 @@ tests () {
 
 testfailures=0
 compare () {
-	if [ "$2" = "$3" ]; then
-		if [ "$VERBOSE" ]; then
-			echo "	test $1 succeeded"
+	while :; do
+		if [ "$2" = "$3" ]; then
+			if [ "$VERBOSE" ]; then
+				echo "	test $1 succeeded"
+			fi
+		else
+			echo "	test $1 FAILED: expected $2, but got $3"
+			testfailures=$(expr $testfailures + 1)
 		fi
-	else
-		echo "	test $1 FAILED: expected $3, but got $2"
-		testfailures=$(expr $testfailures + 1)
-	fi
+	
+		shift 4
+		if [ "$1" != compare ]; then
+			break 1
+		fi
+		shift 1
+	done	
+	eval $@
 }
 
 if [ "$1" ]; then
 	# This part runs a regression test script (which uses the code above),
-	# and parses the output, to print a human-readable summary.
+	# and parses the output to print a human-readable summary.
 	script=$1
 	shift
 
-	echo Beginning test of $torun ..
+	echo Beginning test of $script ..
 	testcount=0
-	eval `. $script` || echo woah!
+	eval `. $script || echo woah`
 	if [ "$expected" -a "$expected" != "$testcount" ]; then
 		echo "$expected tests were expected, but $testcount were run."
 	fi
