@@ -22,8 +22,6 @@ ifdef SUBDIRS
 	for a in $(SUBDIRS); do\
 		$(MAKE) -C $$a $*;\
 	done
-else
-	
 endif
 
 $(patsubst %,install%,modules bins docs examples dirs): %: %.real %.subdirs
@@ -40,8 +38,6 @@ ifdef VERBOSE
 	echo "bindir is: $(bindir)"
 	echo "moddir is: $(moddir)"
 	echo
-else
-
 endif
 
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: msg=$(MODULES_MSG)
