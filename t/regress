@@ -10,7 +10,7 @@ ok () {
 	testcount=$(($testcount + 1))
 	echo -n "compare $testcount '$expected_output' $expected_return '"
 	set +e
-	$@
+	"$@"
 	echo "' $?"
 	set -e
 }
