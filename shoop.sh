@@ -14,6 +14,7 @@ _shoopgetparent() {
 		fi
 	done
 }
+
 _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
 	shift 3
@@ -40,8 +41,7 @@ _shoop () {
 	else
 		eval local P PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
 		# Try inheritance 1 level deep -- the quick way.
-		# TODO: benchmark to see if this helps.
-		#    (remember, it also lets errors be seen..)
+		# (Benchmark to see if this helps..)
 		for P in $PARENTS; do
 			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
 				local THIS=$TRUEOBJ
