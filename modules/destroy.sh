@@ -10,9 +10,13 @@
 _shoop_introspect=1
 
 IFS=" " OBJECT . destroy : '
-	eval local A DEFINES=\$_shoopdefines_$THIS;
+	eval local A DEFINES=\$_shoopdefines_$THIS METH="" TRUEMETH=""
 	for A in $DEFINES; do
-		unset _shooptype_${THIS}_$A _shoopfinal_${THIS}_$A _shoop_${THIS}_$A;
+		METH=$A TRUEMETH=${THIS}_$A
+		if [ -z "$_shoopnocache_" ]; then
+			eval $_shoopcacheclear_
+		fi
+		unset _shooptype_$TRUEMETH _shoopfinal_$TRUEMETH _shoop_TRUEMETH;
 	done;
 	eval unset _shoopdefines_$THIS $THIS _shoopcache_ \$_shoopcache_
 '
