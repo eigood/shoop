@@ -71,8 +71,8 @@ _shoop BASE BASE new : '
 	local PARENT=$1;
 	local OBJNAME=$2;
 	
-	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }
-	      $OBJNAME . parent = $PARENT >/dev/null";
+	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };
+	      $OBJNAME . parent = $PARENT >/dev/null"
 '
 # Create the base object via the method already defined on it.
 _shoop_BASE_new '' BASE
