@@ -25,9 +25,9 @@ IFS=" " OBJECT . serialize :p '
 		local DISPLAYOBJ=$THIS oldargs="$@"
 		set -- $PARENTS
 		if [ "$1" ]; then
-			echo "$1 . new $THIS"
+			echo "$1 . new $THIS;"
 			if [ $# -gt 1 ]; then
-				echo "$THIS . parent $PARENTS"
+				echo "$THIS . parent $PARENTS;"
 			fi
 			eval _shoopseen_parent=1
 		fi
@@ -45,12 +45,12 @@ IFS=" " OBJECT . serialize :p '
 				IFS=" " eval echo -n "\$_shoop_${THIS}_$A"
 				echo -n "$_shoop_quote"
 			fi
-			echo
+			echo ";"
 			eval local _shoopseen_$A=1
 		fi
 	done
 	if eval [ \"\$_shoopfinal_$DISPLAYOBJ\" ]; then
-		eval echo "$DISPLAYOBJ . finalize \$_shoopfinal_$DISPLAYOBJ"
+		eval echo "$DISPLAYOBJ . finalize \$_shoopfinal_$DISPLAYOBJ\;"
 	fi
 	# This does not use a non-recursive form, as this code does not
 	# need to be fast.  It is only for informative output.
