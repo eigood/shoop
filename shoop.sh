@@ -20,7 +20,8 @@ _shoop () {
 		else
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=method"
-			eval "_shoop_${TRUEOBJ}_$METH () { $@; }"
+			eval "_shoop_${TRUEOBJ}_$METH () { $@
+			}"
 		fi
 # Alternate, variable method. Benchmark before turning on. (See line above, too.)
 #	elif eval [ \"\$_shooptype_${TRYOBJ}_$METH\" = variable ]; then
@@ -44,8 +45,8 @@ _shoop () {
 
 # Create a base object class. All other objects will inherit from this.
 
-# Method to create a new object. Pass the name of the object to create.
-_shoop_BASE_new () {
+# Create a method to create a new object.
+_shoop BASE BASE new : '
 	local PARENT=$1
 	local OBJNAME=$2
 	
@@ -53,9 +54,7 @@ _shoop_BASE_new () {
 	if [ "$PARENT" ]; then
 		eval "_shoopparent_$OBJNAME=$PARENT"
 	fi
-}
-_shoopdefines_BASE=new
-_shooptype_BASE_new=method
+'
 # Make the base object.
 _shoop_BASE_new '' BASE
 BASE . parent : '
