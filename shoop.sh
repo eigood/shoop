@@ -3,11 +3,7 @@
 # LGPL copyright 2000 by Joey Hess <joey@kitenet.net>
 #			 Adam Heath <doogie@debian.org>
 
-_shoop () {
-	local cmd=$1; shift
-	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH THIS CLASS
-	shift 3
-
+_shoopcommand_header_='
 	case "$cmd" in
 		d)	if eval [ \"\$_shoopprivate_$TRUEMETH\" ]; then
 				echo "Previous declaration of ($TRUEOBJ:$METH) marked private" >&2
@@ -19,7 +15,17 @@ _shoop () {
 			fi
 			return
 			;;
+'
+_shoopcommand_footer_='
 	esac
+'
+_shoop () {
+	local cmd=$1; shift
+	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH THIS CLASS
+	shift 3
+
+	eval "$_shoopcommand_header_$_shoopcommand_middle_$_shoopcommand_footer_"
+
 	case "$1" in
 		:|:p|.:|.:p|\=|\=q|\=p|\.\=|\.\=q|\.\=p|\.\=qp)
 			local varmeth=$1 append="" quiet="" private=""; shift
