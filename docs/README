@@ -10,11 +10,11 @@ You can make a new object named OBJ that has BASE as its parent like so:
 
 BASE . new OBJ
 
-You can add/change a property of FOO like this:
+You can add/change a property of OBJ like this:
 
 OBJ . property = 3
 
-You can add/change a method of FOO like this:
+You can add/change a method of OBJ like this:
 
 OBJ . method : echo "hello world!"
 
