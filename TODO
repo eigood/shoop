@@ -4,9 +4,14 @@
   a second level resolve is done to call a method.
   DONE (investigate ways to only paritially blow away a cache, instead of
 	blowing away the whole thing anytime something changes).
-        DONE
+	DONE
   * Severity: critical
     Add a way to clear the cache when an object is created/destroyed.
+    DONE, but it blows away the whole cache.  This is sub-obtimal.  Lazy
+	resolving makes this not simple to fix.
+
 
 * Regression test suite.
+  DONE
 * protected/private methods/variables.
+  DONE
