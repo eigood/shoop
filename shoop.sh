@@ -21,6 +21,13 @@ _shoop () {
 			# Some various assignment modifiers.
 			if [ "${varmeth#.}" != $varmeth ]; then append=1 varmeth=${varmeth#.}; fi
 			if [ "${varmeth%q}" != $varmeth ]; then quiet=1 varmeth=${varmeth%q}; fi
+			if eval [ \"\$_shoopprivate_$TRYMETH\" ]; then
+				echo "Previous declaration of ($TRUEOBJ:$METH) marked private" >&2
+				return 1
+			fi
+			if [ "$private" ]; then
+				eval _shoopprivate_$TRYMETH=1
+			fi
 			if [ "$varmeth" = = ]; then
 				if [ "$append" ];then set -- "$(eval eval "\$_shoop_$TRUEMETH") $@"; fi
 				if [ ! "$quiet" ]; then echo -n $@; fi
