@@ -1,6 +1,6 @@
 #!/bin/sh
-. ./shoop.sh
-. ./use.sh
+. ${SHOOPSH:-/usr/bin/shoop.sh}
+. ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 OBJECT . use introspect serialize final destroy thread prettyprint
 
 THREAD . new TT
@@ -21,7 +21,7 @@ OBJECT . counter = 10
 echo
 OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1); return'
 OBJECT . test = 20
-OBJECT . finalize test
+OBJECT . final test
 echo
 OBJECT . count
 echo
