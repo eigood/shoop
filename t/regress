@@ -7,7 +7,7 @@ ok () {
 	local expected_output=$2
 	shift 2
 	
-	testcount=$(expr $testcount + 1)
+	testcount=$(($testcount + 1))
 	echo -n "compare $testcount '$expected_output' $expected_return '"
 	set +e
 	$@
@@ -31,14 +31,14 @@ compare () {
 		
 		if [ "$expected_return" != "$return" ]; then
 			say "test $count FAILED: expected return code $expected_return, but got $return"
-			testfailures=$(expr $testfailures + 1)
+			testfailures=$(($testfailures + 1))
 		elif [ "$expected_output" = "$output" ]; then
 			if [ "$VERBOSE" ]; then
 				say "test $count succeeded"
 			fi
 		else
 			say "test $count FAILED: expected $expected_output, but got $output"
-			testfailures=$(expr $testfailures + 1)
+			testfailures=$(($testfailures + 1))
 		fi
 		
 		shift 5
@@ -58,25 +58,45 @@ say () {
 	echo "	$*"
 }
 
-for script in "$@"; do
-	# This part runs a regression test script (which uses the code above),
-	# and parses the output to print a human-readable summary.
-	script=$1
-	shift
+totaltestcount=0
+totalfailures=0
 
-	spoke=""
-	echo -n Beginning test of $script ..
-	testcount=0
-	eval `. $script || echo woah`
-	if [ "$expected" -a "$expected" != "$testcount" ]; then
-		say "($expected tests were expected, but $testcount were run)"
-	fi
-	if [ "$testfailures" != 0 ]; then
-		echo ".. $testfailures test(s) FAILED."
+if [ "$1" ]; then
+	for script in "$@"; do
+		# This part runs a regression test script (which uses the code above),
+		# and parses the output to print a human-readable summary.
+		script=$1
+		shift
+	
+		spoke=""
+		echo -n Beginning test of $script ..
+		testcount=0
+		eval `. $script || echo woah`
+		if [ "$expected" -a "$expected" != "$testcount" ]; then
+			say "($expected tests were expected, but $testcount were run)"
+		fi
+		if [ "$testfailures" != 0 ]; then
+			echo ".. $testfailures test(s) FAILED."
+		else
+			if [ "$spoke" ]; then
+				echo -n ".."
+			fi		
+			echo " all test(s) successful."
+		fi
+
+		totalfailures=$(($totalfailures + $testfailures)) || true
+		totaltestcount=$(($totaltestcount + $testcount)) || true
+	done
+
+	echo
+	echo "Regression test summary:"
+	echo
+	echo "A total of $totaltestcount individual tests were ran, from $(($# + 1)) regression test scripts."
+	if [ "$totalfailures" != 0 ]; then
+		echo
+		echo "Of those, $totalfailures tests FAILED."
+		exit 1
 	else
-		if [ "$spoke" ]; then
-			echo -n ".."
-		fi		
-		echo " all test(s) successful."
+		echo "All succeeded."
 	fi
-done
+fi
