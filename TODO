@@ -4,5 +4,6 @@
   a second level resolve is done to call a method.
   DONE (investigate ways to only paritially blow away a cache, instead of
 	blowing away the whole thing anytime something changes).
+        DONE
 * Regression test suite.
 * protected/private methods/variables.
