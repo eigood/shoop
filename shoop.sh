@@ -8,7 +8,7 @@ _shoop () {
 	shift 3
 
 	if [ "$1" = = -o "$1" = : ]; then
-		if eval [ "\$_shooptype_${TRYOBJ}_$METH" ]; then
+		if eval [ -z "\$_shooptype_${TRYOBJ}_$METH" ]; then
 			eval "_shoopdefines_$TRUEOBJ=\"$_shoopdefines_$TRUEOBJ $METH\""
 		fi
 		if [ "$1" = = ]; then
@@ -32,7 +32,17 @@ _shoop () {
 		eval local PARENTS=\$_shoopparent_$TRYOBJ
 		if [ "$PARENTS" ]; then
 			local P
-			for P in $PARENTS;do
+			# Try inheritance 1 level deep, the quick way.
+			# TODO: benchmark to see if this helps.
+			#    (remember, it also lets errors be seen..)
+			for P in $PARENTS; do
+				if eval [ "\$_shooptype_${P}_$METH" ]; then
+					_shoop $TRUEOBJ $P $METH $@
+					return $?
+				fi
+			done
+			# When the quick way fails, try the hard way.
+			for P in $PARENTS; do
 				if _shoop $TRUEOBJ $P $METH $@ 2>/dev/null; then
 					return 0
 				fi
@@ -58,33 +68,7 @@ _shoop BASE BASE new : '
 # Make the base object.
 _shoop_BASE_new '' BASE
 BASE . parent : '
-local OBJNAME=$1;
-shift;
-eval _shoopparent_$OBJNAME=\"$@\"
-'
-BASE . introspect : '
-local OBJNAME=$1 DEFINES TYPE A DISPLAYOBJ;
-shift;
-if [ "$2" ];then
-	DISPLAYOBJ=$2;
-else
-	DISPLAYOBJ=$OBJNAME;
-fi;
-eval DEFINES=\$_shoopdefines_$OBJNAME;
-for A in $DEFINES; do
-	if ! echo $_shoop_introspect_seen | tr " " "\n" | grep -q "^$A$";then
-		eval TYPE=\$_shooptype_${OBJNAME}_$A;
-		echo "$DISPLAYOBJ: $A is $TYPE";
-		_shoop_introspect_seen="$_shoop_introspect_seen $A";
-	fi
-done;
-if [ "$1" = resolve ];then
-	eval local PARENT=\$_shoopparent_$OBJNAME;
-	for P in $PARENT;do
-		$P . introspect resolve $DISPLAYOBJ;
-	done
-fi;
-for A in $DEFINES; do
-	_shoop_introspect_seen=$(echo $_shoop_introspect_seen | tr " " "\n" | grep -v "^$A$");
-done
+	local OBJNAME=$1;
+	shift;
+	eval _shoopparent_$OBJNAME=\"$@\"
 '

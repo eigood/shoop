@@ -11,6 +11,8 @@ FOO . counter = 1
 FOO . count
 BAR . test
 BASE . count
+
+. introspect.sh
 BAR . introspect
 FOO . introspect resolve
 BASE . introspect
