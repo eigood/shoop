@@ -23,7 +23,7 @@ while (<>) {
 	#
 	# Don't throw away the script magic identifier.
 	#
-	if(!($first && /^#!/)) {
+	if(!(defined $first && /^#!/)) {
 		#
 		# Strip leading whitespace.
 		#
@@ -35,7 +35,12 @@ while (<>) {
 		next if(/^(#.*|)$/);
 	}
 	print;
-	next;
-	$first = 0;
+	if(defined $first) {
+		print "# This script has been preprocessed prior to installation\n";
+		print "# It has had comments, blank lines, and leading spaces\n";
+		print "# removed, and \\-style lines combined.  This was done so\n";
+		print "# that it could run quicker under some shells.\n"
+	}
+	undef $first;
 
 }
