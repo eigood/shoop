@@ -1,0 +1,9 @@
+BAR_parent () {
+	echo "FOO"
+}
+BAR_name () {
+	echo "bar"
+}
+BAR_goodbye () {
+	true
+}
