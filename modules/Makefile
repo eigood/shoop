@@ -17,5 +17,6 @@ MODULES=\
 	dns.sh\
 	list.sh\
 	stack.sh\
+	onexit.sh\
 
 include $(TOPDIR)/Makefile.rules
