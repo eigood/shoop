@@ -1,7 +1,4 @@
-If you come up with any useful base objects, or extention modules send them
-to me, Joey Hess <joey@kitenet.net>, copyrighted under the GPL, LGPL, or BSD
-copyright (sans advertising clause), and I'll add them in. Currently, I
-have:
+Several modules expand shoop so it can do various object oriented things:
 
 introspect.sh  - list all methods and variables that are defined on a class
 final.sh       - make class variables and methods final

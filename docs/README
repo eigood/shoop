@@ -39,7 +39,8 @@ overrode it, generally):
 
 THIS . super method
 
-If you want introspection, finalization, or serialization, see CONTRIBUTING.
+If you want introspection, finalization, or serialization, see MODULES.
+Also, see CONTRIBUTING.
 
 That's about it. Now run off and write a MOO or something.
 
