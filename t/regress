@@ -1,0 +1,54 @@
+#!/bin/sh -e
+# Regression test framework (modeled on perl's if you can't tell).
+
+# Call this function to test something.
+ok () {
+	expected=$1
+	shift
+	
+	testcount=$(expr $testcount + 1)
+	echo -n "compare $testcount \"$expected\" \""
+	if ! $@; then
+		echo \"
+		echo badret $expected $?
+	else
+		echo \"
+	fi
+}
+
+# Call this function last say how many tests you should have run.
+tests () {
+	echo expected=$1
+	echo testcount=$testcount
+}
+
+testfailures=0
+compare () {
+	if [ "$2" = "$3" ]; then
+		if [ "$VERBOSE" ]; then
+			echo "	test $1 succeeded"
+		fi
+	else
+		echo "	test $1 FAILED: expected $3, but got $2"
+		testfailures=$(expr $testfailures + 1)
+	fi
+}
+
+if [ "$1" ]; then
+	# This part runs a regression test script (which uses the code above),
+	# and parses the output, to print a human-readable summary.
+	script=$1
+	shift
+
+	echo Beginning test of $torun ..
+	testcount=0
+	eval `. $script` || echo woah!
+	if [ "$expected" -a "$expected" != "$testcount" ]; then
+		echo "$expected tests were expected, but $testcount were run."
+	fi
+	if [ "$testfailures" != 0 ]; then
+		echo $testfailures tests FAILED.
+	else
+		echo .. all tests successful.
+	fi
+fi
