@@ -89,8 +89,10 @@ _shoop_introspect=1
 _shoop BASE BASE new : '
 	local PARENT=$1 OBJNAME=$2;
 	
-	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; };
-	      $OBJNAME . parent = $PARENT >/dev/null"
+	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }";
+	if [ $PARENT != $OBJNAME ]; then
+		_shoop $OBJNAME $OBJNAME parent = $PARENT >/dev/null;
+	fi
 '
 # Create the base object via the method already defined on it.
 _shoop BASE BASE new BASE
