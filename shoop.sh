@@ -55,7 +55,8 @@ _shoop () {
 
 # Create a base object class. All other objects will inherit from this.
 
-# Create a method to create a new object.
+# Create a method to create a new object (on an object that technically doesn't
+# exist yet).
 _shoop BASE BASE new : '
 	local PARENT=$1
 	local OBJNAME=$2
@@ -65,7 +66,7 @@ _shoop BASE BASE new : '
 		eval "_shoopparent_$OBJNAME=$PARENT"
 	fi
 '
-# Make the base object.
+# Create the base object via the method already defined on it.
 _shoop_BASE_new '' BASE
 BASE . parent : '
 	local OBJNAME=$1;

@@ -1,10 +1,10 @@
 What on earth is this?
 
 Well, every language under the sun these days is Object Oriented. In an
-effort to make POSIX shell more buzzword complient, and to show that built
+effort to make POSIX shell more buzzword compliant, and to show that built
 in object orientation support is just not a big deal at all, I have added
 object orientation to the language. (Next up: awk.) Specifically, it
-impliments classless OO with single inheritance.
+implements classless OO with multiple inheritance.
 
 When you source shoop.sh, you start out with a single base object, BASE.
 You can make a new object named OBJ that has BASE as its parent like so:
@@ -26,6 +26,12 @@ OBJ . method
 
 Both will output the value of the property or return value of the method to
 stdout.
+
+You can change the parent of an object like this. List multiple parents and
+multiple inheritance starts happening:
+
+OBJ . parent FOO
+OBJ . parent BAR BAZ QUUX
 
 That's about it. Now run off and write a MOO or something.
 
