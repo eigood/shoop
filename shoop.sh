@@ -5,7 +5,7 @@
 
 _shoop () {
 	local cmd=$1; shift
-	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH
+	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH GETMETH THIS
 	shift 3
 
 	case "$cmd" in
@@ -68,11 +68,12 @@ _shoop () {
 		;;
 	esac
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		local THIS=$TRYOBJ
+		THIS=$TRYOBJ
 		eval GETMETH=\"\$_shoop_$TRYMETH\"
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
-			THIS=$TRUEOBJ NEWPARENTS=""
+			NEWPARENTS=""
+		THIS=$TRUEOBJ
 		if [ -z "$_shoopnocache_" ]; then
 			# If this object is found in the cache, than short-circuit
 			# the resolving code.
