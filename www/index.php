@@ -1,11 +1,3 @@
-<?php
-// Default Web Page for groups that haven't setup their page yet
-// Please replace this file with your own website
-//
-// $Id: index.php,v 1.3 2000/02/01 19:54:57 doogie Exp $
-//
-$headers = getallheaders();
-?>
 <HTML>
 <HEAD>
 <TITLE>SourceForge: Welcome</TITLE>
