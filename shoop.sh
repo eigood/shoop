@@ -2,7 +2,7 @@
 # OOP in shell. GPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
 _shoop () {
-	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3 LASTMETH=$METH
+	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=$1_$3 TRYMETH=$2_$3 LASTMETH=$METH
 	shift 3
 	case "$1" in
 		=|=q|=p|.=|.=q|.=p|.=qp|:|:p)
