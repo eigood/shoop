@@ -68,9 +68,7 @@ if [ "$1" ]; then
 	for script in "$@"; do
 		# This part runs a regression test script (which uses the code above),
 		# and parses the output to print a human-readable summary.
-		script=$1
-		shift
-	
+			
 		spoke=""
 		echo -n Beginning test of $script ..
 		testcount=0
@@ -90,11 +88,10 @@ if [ "$1" ]; then
 		totalfailures=$(($totalfailures + $testfailures)) || true
 		totaltestcount=$(($totaltestcount + $testcount)) || true
 	done
-
 	echo
 	echo "Regression test summary:"
 	echo "	A total of $totaltestcount individual tests were ran,"
-	echo -n "	from $(($# + 1)) regression test scripts. "
+	echo -n "	from $(($#)) regression test scripts. "
 	if [ "$totalfailures" != 0 ]; then
 		echo "Of those, $totalfailures tests FAILED."
 		exit 1
