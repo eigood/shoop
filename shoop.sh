@@ -12,25 +12,26 @@ _shoop () {
 		fi
 		if [ "$1" = = ]; then
 			shift
-			eval "_shoop_$TRUEMETH='echo -n $@; return'
+			eval "_shoop_$TRUEMETH='echo -n $@'
 			      _shooptype_$TRUEMETH=variable"
 			echo -n $@
+			return
 		else
 			shift
 			eval "_shoop_$TRUEMETH='$@'
 			      _shooptype_$TRUEMETH=method"
+			return
 		fi
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		local THIS=$TRUEOBJ
 		eval eval "\$_shoop_$TRYMETH"
-		echo $THIS.$METH did not return. >&2
+		return
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\" THIS=$TRUEOBJ
 		# Try inheritance 1 level deep -- the quick way.
 		for P in $PARENTS; do
 			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
 				eval eval "\$_shoop_${P}_$METH"
-				echo $THIS.$METH did not return. >&2
 				return
 			fi
 		done
@@ -44,7 +45,6 @@ _shoop () {
 			if eval [ \"\$_shooptype_${P}_$METH\" ];then
 				set -- "$orgargs"
 				eval eval "\$_shoop_${P}_$METH"
-				echo $THIS.$METH did not return. >&2
 				return
 			fi
 			shift
@@ -53,7 +53,6 @@ _shoop () {
 		echo "\"$METH\" is undefined for $TRYOBJ." >&2
 		return 1
 	fi
-	return 0
 }
 
 # Temporarily turn on introspection, so the base object has everything 
