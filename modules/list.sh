@@ -1,6 +1,3 @@
-# TODO
-# erase variables(requires shoop.sh support)
-
 OBJECT . new LIST
 
 LIST . size =q 0
