@@ -100,18 +100,6 @@ cvs-build:
 	tar c --exclude CVS --exclude cvs-build . |\
 		(mkdir -p cvs-build/$(PKG)-$(PKG_VER);cd cvs-build/$(PKG)-$(PKG_VER);tar x)
 
-NAMES=$(shell\
-	awk '\
-		/^CVS:/{\
-			sub(/^CVS:/, "");\
-			printf "-u \"%s:", $$1;\
-			sub($$1 " ","");\
-			split($$0, A, / *[<>] */);\
-			printf "%s:%s\"\n", A[1], A[2]\
-			}\
-	' docs/AUTHORS)
-#endef
-
 docs/modules.pod: utils/shelldoc $(MODULES)
 	rm -f modules_tmp
 	$(MAKE) modules_tmp
@@ -121,6 +109,6 @@ docs/modules.pod: utils/shelldoc $(MODULES)
 .PHONY: docs/modules.pod
 
 ChangeLog:
-	rcs2log $(NAMES) > $@
+	utils/mkChangeLog $@
 
 include $(TOPDIR)/Makefile.rules
