@@ -12,24 +12,23 @@ _shoop () {
 			eval [ -z \"\$_shooptype_$TRYMETH\" ]; then
 				eval "_shoopdefines_$TRUEOBJ=\"\$_shoopdefines_$TRUEOBJ $METH\""
 		fi
+		
 		DEFINE=$1
 		shift
 		case $DEFINE in
 			*=)
-				#local DOLLAR=\$
-				#set -- $(eval eval echo \"$\{DOLLAR\}\{{$(seq -s , 1 $(($#-1)))}\}\")
-				eval "_shooptype_$TRUEMETH=variable;
-				      _shoop_$TRUEMETH='echo -n $@'"
+				eval "_shoop_$TRUEMETH='echo -n $@'
+				      _shooptype_$TRUEMETH=variable"
 				echo -n $@
 			;;
 			*:)
-				eval "_shooptype_$TRUEMETH=method;
-				      _shoop_$TRUEMETH='$@'"
+				eval "_shoop_$TRUEMETH='$@'
+				      _shooptype_$TRUEMETH=method"
 			;;
 		esac
 		case $DEFINE in
 			:?*)
-				eval readonly "_shoop_$TRUEMETH=1"
+				eval readonly "_shoop_$TRUEMETH"
 			;;
 		esac
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
