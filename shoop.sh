@@ -30,7 +30,7 @@ _shoop () {
 	else
 		eval local PARENTS=\"`_shoop_${TRYOBJ}_parent`\"
 		local P
-		# Try inheritance 1 level deep, the quick way.
+		# Try inheritance 1 level deep -- the quick way.
 		# TODO: benchmark to see if this helps.
 		#    (remember, it also lets errors be seen..)
 		for P in $PARENTS; do
@@ -51,11 +51,10 @@ _shoop () {
 }
 
 # Temporarily turn on introspection, so the base object has everything recorded
-# about it.
+# about it as it is being created.
 _shoop_introspect=1
 
-# Create a method to create a new object (on an object that technically doesn't
-# exist yet).
+# Create a method to create a new object.
 _shoop BASE BASE new : '
 	local PARENT=$1
 	local OBJNAME=$2

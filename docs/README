@@ -30,8 +30,8 @@ stdout.
 You can change the parent of an object like this. List multiple parents and
 multiple inheritance starts happening:
 
-OBJ . parent FOO
-OBJ . parent BAR BAZ QUUX
+OBJ . parent = FOO
+OBJ . parent = BAR BAZ QUUX
 
 That's about it. Now run off and write a MOO or something.
 
