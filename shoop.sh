@@ -43,8 +43,10 @@ _shoop () {
 				return 0
 			fi
 		done
-		echo "\"$METH\" is undefined for $TRYOBJ." >&2
-		return 1
+		if [ "$PARENTS" ];then
+			echo "\"$METH\" is undefined for $TRYOBJ." >&2
+			return 1
+		fi
 	fi
 }
 
