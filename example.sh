@@ -1,7 +1,20 @@
 #!/bin/sh
 . ./shoop.sh
 . ./use.sh
-OBJECT . use introspect serialize final destroy
+OBJECT . use introspect serialize final destroy thread
+
+THREAD . new TT
+TT . run : '
+	local a;
+	for a in $(seq 1 5);do
+		echo $a;
+		sleep 1;
+	done
+'
+#TT . start
+#sleep 3
+#TT . wait
+#exit
 
 echo some counters:
 OBJECT . counter = 10
