@@ -14,5 +14,6 @@ MODULES=\
 	use.sh\
 	also_inherit.sh\
 	www.sh\
+	dns.sh\
 
 include $(TOPDIR)/Makefile.rules
