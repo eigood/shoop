@@ -4,31 +4,29 @@
 . ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 
 OBJECT . use rules_debian
-OBJECT . default_target = build
 
-OBJECT . pkgs == SHOOP SHOOP_doc
+DEBIAN . default_target =q build
 
-OBJECT . new SHOOP_base
+DEBIAN . new SHOOP_base
 
+SHOOP_base . bindir =q /usr/bin
+SHOOP_base . moddir =q /usr/share/shoop/modules
+SHOOP_base . docdir =q /usr/share/doc/shoop
+SHOOP_base . empdir =q /usr/share/doc/shoop/examples
 
-SHOOP_base . bindir == /usr/bin
-SHOOP_base . moddir == /usr/share/shoop/modules
-SHOOP_base . docdir == /usr/share/doc/shoop
-SHOOP_base . empdir == /usr/share/doc/shoop/examples
+SHOOP_base . newpkg SHOOP
+SHOOP_base . newpkg SHOOP_doc
 
-SHOOP_base . new SHOOP
-SHOOP_base . new SHOOP_doc
+SHOOP . prefix =q $CURDIR/debian/tmp
+SHOOP_doc . prefix =q $CURDIR/debian/shoop-doc
 
-SHOOP . prefix == $CURDIR/debian/tmp
-SHOOP_doc . prefix == $CURDIR/debian/shoop-doc
+SHOOP . pkg =q shoop
+SHOOP_doc . pkg =q shoop-doc
 
-SHOOP . pkg = shoop > /dev/null
-SHOOP_doc . pkg = shoop-doc > /dev/null
-
-SHOOP . bins == \
+SHOOP . bins =q \
 	shoop.sh\
 
-SHOOP_doc . docs == \
+SHOOP_doc . docs =q \
 	AUTHORS\
 	CONTRIBUTING\
 	COPYING\
@@ -36,10 +34,10 @@ SHOOP_doc . docs == \
 	README\
 	TODO\
 
-SHOOP_doc . examples == \
+SHOOP_doc . examples =q \
 	example.sh\
 
-SHOOP . modules == \
+SHOOP . modules =q \
         destroy.sh\
         final.sh\
         introspect.sh\
@@ -48,10 +46,10 @@ SHOOP . modules == \
         thread.sh\
         use.sh\
 
-OBJECT . build : '
+DEBIAN . build : '
 '
 
-OBJECT . processcmdline "$@"
+DEBIAN . processcmdline "$@"
 
 #SHOOP . install
 #SHOOP_doc . install
