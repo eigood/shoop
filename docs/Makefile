@@ -10,4 +10,5 @@ DOCS=\
 	README\
 	modules.txt\
 
+include $(TOPDIR)/Makefile.vars
 include $(TOPDIR)/Makefile.rules
