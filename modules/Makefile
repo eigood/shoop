@@ -16,5 +16,6 @@ MODULES=\
 	www.sh\
 	dns.sh\
 	list.sh\
+	stack.sh\
 
 include $(TOPDIR)/Makefile.rules
