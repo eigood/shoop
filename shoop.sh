@@ -70,7 +70,7 @@ _shoop () {
 	if eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		THIS=$TRYOBJ CLASS=$TRYOBJ
 	else
-		eval local CLASS PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
+		eval local PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
 			NEWPARENTS=""
 		THIS=$TRUEOBJ
 		if [ -z "$_shoopnocache_" ]; then
