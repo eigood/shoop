@@ -5,5 +5,8 @@
   DONE (investigate ways to only paritially blow away a cache, instead of
 	blowing away the whole thing anytime something changes).
         DONE
+  * Severity: critical
+    Add a way to clear the cache when an object is created/destroyed.
+
 * Regression test suite.
 * protected/private methods/variables.
