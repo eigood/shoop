@@ -25,6 +25,7 @@ IFS=" " OBJECT . use : '
 				fi;
 			done;
 		fi;
-	done
+	done;
+	return
 '
 _shoopuse_use=1

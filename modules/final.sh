@@ -12,5 +12,6 @@ IFS=" " OBJECT . finalize : '
 			      _shoopfinal_${THIS}_$item=1;
 			      _shoopfinal_$THIS=\"\$_shoopfinal_$THIS $item\"";
 		fi
-	done
+	done;
+	return
 '

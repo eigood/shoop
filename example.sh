@@ -19,7 +19,7 @@ TT . run : '
 echo some counters:
 OBJECT . counter = 10
 echo
-OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1)'
+OBJECT . count : '$THIS . counter = $(expr $($THIS . counter) + 1); return'
 OBJECT . test = 20
 OBJECT . finalize test
 echo
@@ -31,7 +31,7 @@ BAR . parent = A B FOO C D OBJECT > /dev/null
 BAR . test
 echo
 BAR . blah
-FOO . count : '$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super count))'
+FOO . count : '$THIS . counter = $(expr $($THIS . counter) \* 2 + $($THIS . super count)); return'
 FOO . counter = 1
 echo
 FOO . count

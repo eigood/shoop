@@ -33,5 +33,6 @@ IFS=" " OBJECT . introspect : '
 	fi;
 	for A in $DEFINES; do
 		eval unset _shoopseen_$A;
-	done
+	done;
+	return
 '

@@ -56,5 +56,6 @@ IFS=" " OBJECT . serialize : '
 	fi;
 	for A in $DEFINES; do
 		unset _shoopseen_$A;
-	done
+	done;
+	return
 '
