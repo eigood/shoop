@@ -5,7 +5,7 @@
 echo some counters:
 BASE . counter = 10
 echo
-BASE . count : '$1 . counter = $(expr $($1 . counter) + 1)'
+BASE . count : '$_shoop_THIS . counter = $(expr $($_shoop_THIS . counter) + 1)'
 BASE . test = 20
 echo
 BASE . count
@@ -15,7 +15,7 @@ BASE . new BAR
 BAR . parent = A B C D FOO >/dev/null
 BAR . test
 echo
-FOO . count : '$1 . counter = $(expr $($1 . counter) \* 2 + $($1 . super count))'
+FOO . count : '$_shoop_THIS . counter = $(expr $($_shoop_THIS . counter) \* 2 + $($_shoop_THIS . super count))'
 FOO . counter = 1
 echo
 FOO . count

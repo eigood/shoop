@@ -37,7 +37,7 @@ _shoop () {
 					      _shoop_$TRUEMETH='$@'"
 				else
 					eval "_shooptype_$TRUEMETH=method;
-					      _shoop_$TRUEMETH () { $@;
+					      _shoop_$TRUEMETH () { local _shoop_THIS=$1; shift; $@;
 }"
 				fi
 			;;
@@ -49,7 +49,7 @@ _shoop () {
 		esac
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
 		if [ "$_shoop_introspect" ]; then
-			set -- $TRUEOBJ $@
+			local _shoop_THIS=$TRUEOBJ
 			eval eval "\$_shoop_$TRYMETH"
 		else
 			_shoop_$TRYMETH $TRUEOBJ "$@"
@@ -87,11 +87,10 @@ _shoop_introspect=1
 
 # Create a method to create a new object.
 _shoop BASE BASE new : '
-	local PARENT=$1 OBJNAME=$2;
-	
+	local OBJNAME=$1;
 	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }";
-	if [ $PARENT != $OBJNAME ]; then
-		_shoop $OBJNAME $OBJNAME parent = $PARENT >/dev/null;
+	if [ $_shoop_THIS != $OBJNAME ]; then
+		_shoop $OBJNAME $OBJNAME parent = $_shoop_THIS >/dev/null;
 	fi
 '
 # Create the base object via the method already defined on it.
@@ -99,7 +98,7 @@ _shoop BASE BASE new BASE
 
 # This method handles calling an overridden method of your parent.
 # Sadly, you have to pass in the method name to call.
-BASE . super : 'THIS=$1; shift; _shoop $THIS $($THIS . parent) $@'
+BASE . super : '_shoop $_shoop_THIS $($_shoop_THIS . parent) $@'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect
