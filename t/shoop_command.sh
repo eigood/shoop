@@ -5,8 +5,8 @@
 
 ok "" 0 ""		OBJECT . use shoop_command
 
-ok "" 0 ""		SHOOP . command . register p 'echo "TRUEOBJ=$TRUEOBJ TRYOBJ=$TRYOBJ METH=$METH REST='\''$@'\''";return'
+ok "" 0 ""		SHOOP . command . register p 'echo "TRUEOBJ=$TRUEOBJ TRYOBJ=$TRYOBJ METH=$METH REST='"'"'$@'"'"'";return'
 
-ok "" 0 "TRUEOBJ=SHOOP TRYOBJ=SHOOP METH=command REST=. register"		SHOOP p command . register
+ok "" 0 "TRUEOBJ=SHOOP TRYOBJ=SHOOP METH=command REST='. register'"		SHOOP p command . register
 
 tests 3
