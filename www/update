@@ -24,7 +24,7 @@ case "$1" in
 				# We do a loop, so that if while we are reupdating, another
 				# pulse comes in, we can be sure that it will still have its
 				# changes noticed by this script.
-				while [ -e $HTDOCS/cvsflag.lock ];
+				while [ -e $HTDOCS/cvsflag.lock ]; do
 					rm -f $HTDOCS/cvsflag.lock
 					$0 www
 				done
