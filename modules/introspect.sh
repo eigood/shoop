@@ -14,20 +14,39 @@ BASE . introspect : '
 		DISPLAYOBJ=$2;
 	else
 		DISPLAYOBJ=$THIS;
+		echo "$3object $DISPLAYOBJ {";
 	fi;
 	eval DEFINES=\$_shoopdefines_$THIS;
 	for A in $DEFINES; do
 		if eval [ -z \"\$_shoopseen_$A\" ]; then
-			eval echo "$DISPLAYOBJ\($THIS\): $A is \$_shooptype_${THIS}_$A";
+			echo -en "\t$3";
+			if eval [ \"\$_shoopfinal_${THIS}_$A\" ]; then
+				echo -n "final ";
+			fi;
+			eval echo -n "\$_shooptype_${THIS}_$A $A\ ";
+			if eval [ \$_shooptype_${THIS}_$A = variable ]; then
+				echo -n "= ";
+				$DISPLAYOBJ . $A;
+			else
+				echo -ne "{\n$3\t\t";
+				eval echo "\$_shoop_${THIS}_$A";
+				echo -ne "$3\t}";
+			fi;
+			echo ;
 			eval _shoopseen_$A="1";
 		fi;
 	done;
 	if [ "$1" = resolve ];then
-		for P in $($THIS . parent); do
-			$P . introspect resolve $DISPLAYOBJ;
+		for P in $($THIS . parent 2>/dev/null); do
+			echo -e "\t$3class $P {";
+			$P . introspect resolve $DISPLAYOBJ "$3\t";
+			echo -e "\t$3}";
 		done;
 	fi;
 	for A in $DEFINES; do
-		eval unset _shoopseen_$A;
-	done
+		unset _shoopseen_$A;
+	done;
+	if [ -z "$2" ]; then
+		echo "$3}";
+	fi
 '
