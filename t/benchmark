@@ -50,13 +50,14 @@ run () {
 		if [ "$count" = done ]; then
 			return
 		fi
-		seq="$(seq -s ' ' 1 $count)"
 		tmp=$(mktemp foo.XXXXXX)
 		echo -ne "\t    : [$count] ($SHELL) $message\r"
 		/usr/bin/time -o $tmp -f "%E" $SHELL -c "
 				$prep;
-				for a in $seq; do
+				count=$count;
+				while [ \$count -gt 0 ]; do
 					echo -n \$a;$script;
+					count=\$((\$count - 1));
 				done
 			" >/dev/null 2>&1 || true
 		cat $tmp|egrep -v '^Command ((stopped|terminated) by signal|exited with non-zero status) [0-9]*$'
