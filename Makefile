@@ -27,8 +27,8 @@ benchmark:
 	$(call benchmark,shoop method calls , $(DEF_PREP); BASE . foo : echo hi , \
 		BASE . foo)
 	$(call benchmark,shoop variable sets(i), $(DEF_PREP_I) , BASE . foo = 1)
-	$(call benchmark,shoop variable gets(i), $(DEF_PREP_I); BASE . foo = $x , \
-		BASE . foo)
-	$(call benchmark,shoop method calls(i) , $(DEF_PREP_I); BASE . foo : echo hi , \
-		BASE . foo)
+#	$(call benchmark,shoop variable gets(i), $(DEF_PREP_I); BASE . foo = $x , \
+#		BASE . foo)
+#	$(call benchmark,shoop method calls(i) , $(DEF_PREP_I); BASE . foo : echo hi , \
+#		BASE . foo)
 	

@@ -26,10 +26,6 @@ FOO . count
 echo
 BASE . count
 echo
-BASE . counter := 10
-echo
-BASE . count || true
-echo
 
 echo BAR . introspect:
 BAR . introspect
