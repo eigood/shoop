@@ -66,7 +66,7 @@ all:
 	@echo \	make test
 
 test:
-	@for f in t/*.sh; do t/regress $$f; done
+	@t/regress t/*.sh
 
 example:
 	@sh ./example.sh
