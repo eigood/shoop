@@ -3,12 +3,11 @@
 
 # Call this function to test something.
 ok () {
-	local expected_return=$1
-	local expected_output=$2
-	shift 2
+	local name=$1 expected_return=$2 expected_output=$3
+	shift 3
 	
 	testcount=$(($testcount + 1))
-	echo -n "compare $testcount '$expected_output' $expected_return '"
+	echo -n "compare '$name' '$testcount' '$expected_output' '$expected_return' '"
 	set +e
 	"$@"
 	echo "' $?"
@@ -26,22 +25,26 @@ tests () {
 testfailures=0
 compare () {
 	while :; do
-		local count=$1 expected_output=$2 expected_return=$3
-		local output=$4 return=$5
-		
+		local name=$1 count=$2 expected_output=$3 expected_return=$4 output=$5 return=$6 id
+		shift 6
+		if [ "$name" ]; then
+			id="$name($count)"
+		else
+			id=$count
+		fi
 		if [ "$expected_return" != "$return" ]; then
-			say "test $count FAILED: expected return code $expected_return, but got $return"
+
+			say "test $id FAILED: expected return code $expected_return, but got $return"
 			testfailures=$(($testfailures + 1))
 		elif [ "$expected_output" = "$output" ]; then
 			if [ "$VERBOSE" ]; then
-				say "test $count succeeded"
+				say "test $id succeeded"
 			fi
 		else
-			say "test $count FAILED: expected \`$expected_output', but got \`$output'"
+			say "test $id FAILED: expected \`$expected_output', but got \`$output'"
 			testfailures=$(($testfailures + 1))
 		fi
 		
-		shift 5
 		if [ "$1" != compare ]; then
 			break
 		fi
