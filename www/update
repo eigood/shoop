@@ -11,6 +11,7 @@ case "$1" in
 	www)
 		RUNNING_UNDER_CVS=1
 		export RUNNING_UNDER_CVS
+		date -u
 		(cd $HTDOCS;exec cvs update)
 	;;
 	cvspulse)
