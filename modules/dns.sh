@@ -37,27 +37,25 @@ IFS=" " DNS . builddns :p '
 #		echo "ns$counter	IN A	$($THIS . ns_ip_$counter)"
 	done
 	echo
-	for counter in $($THIS . hosts 2>/dev/null); do
-		echo "$counter	IN A	$($THIS . host_ip_$counter)"
-		: bar
-		mx=$($THIS . host_mx_$counter 2>/dev/null)
-		if [ "$mx" ];then
-			echo "	IN MX	$mx"
-		fi
-	done
+	$THIS hosts host_ip_ "IN A"
 	echo
-	for counter in $($THIS . cnames 2>/dev/null); do
-		echo "$counter	IN CNAME	$($THIS . cname_$counter)"
-		: bar
-		mx=$($THIS . host_mx_$counter 2>/dev/null)
-		if [ "$mx" ];then
-			echo "	IN MX	$mx"
-		fi
-	done
+	$THIS cnames cname_ "IN CNAME"
 	echo
 	for counter in $($THIS . hosts 2>/dev/null); do
 		echo "$($THIS . host_ip_$counter)	IN PTR	$counter.$($THIS . domain)."
 	done
+'
+IFS=" " DNS . buildhost :p '
+	local var=$1 varstub=$2 line="$3" host
+	for host in $($THIS . $var 2>/dev/null); do
+		echo "$host	$line	$($THIS . $varstub$host)"
+		: bar
+		mx=$($THIS . host_mx_$host 2>/dev/null)
+		if [ "$mx" ];then
+			echo "	IN MX	$mx"
+		fi
+	done
+
 '
 IFS=" " DNS . host :p '
 	local host=$1; shift
