@@ -18,7 +18,7 @@ _shoop () {
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=variable;
 			      _shoop_${TRUEOBJ}_$METH () { echo -n $@; }"
-			echo $@
+			echo -n $@
 		else
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=method;
@@ -28,14 +28,14 @@ _shoop () {
 	elif eval [ \"\$_shooptype_${TRYOBJ}_$METH\" ]; then
 		eval _shoop_${TRYOBJ}_$METH $TRUEOBJ \"\$@\";
 	else
-		eval local PARENTS=\$_shoopparent_$TRYOBJ
+		eval local PARENTS=\"`_shoop_${TRYOBJ}_parent`\"
 		if [ "$PARENTS" ]; then
 			local P
 			# Try inheritance 1 level deep, the quick way.
 			# TODO: benchmark to see if this helps.
 			#    (remember, it also lets errors be seen..)
 			for P in $PARENTS; do
-				if eval [ "\$_shooptype_${P}_$METH" ]; then
+				if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
 					_shoop $TRUEOBJ $P $METH $@
 					return $?
 				fi
@@ -62,18 +62,11 @@ _shoop BASE BASE new : '
 	local PARENT=$1
 	local OBJNAME=$2
 	
-	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }"
-	if [ "$PARENT" ]; then
-		eval "_shoopparent_$OBJNAME=$PARENT"
-	fi
+	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }
+	      $OBJNAME . parent = $PARENT >/dev/null"
 '
 # Create the base object via the method already defined on it.
 _shoop_BASE_new '' BASE
-BASE . parent : '
-	local OBJNAME=$1;
-	shift;
-	eval _shoopparent_$OBJNAME=\"$@\"
-'
 
 # Now if you want it, you have to turn it back on.
 unset _shoop_introspect
