@@ -10,5 +10,4 @@ ok hello "OBJECT . moo = hello"
 ok 2 "OBJECT . counter"
 ok hello "OBJECT . moo"
 
-# Remember to keep this up-to-date
-total 5
+tests 5
