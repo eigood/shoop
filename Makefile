@@ -2,9 +2,10 @@
 TIME=/usr/bin/time -f "%E"
 ITERATIONS=10000
 SEQ=\$$(seq 1 $(ITERATIONS))
-DEF_PREP = . shoop.sh
+DEF_PREP = . ./shoop.sh
+SH=sh
 # run_command msg, prep code, loop code
-benchmark = @echo -n "$(ITERATIONS) $(1): ";$(TIME) sh -c "$(2); \
+benchmark = @echo -n "$(ITERATIONS) $(1): ";$(TIME) $(SH) -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null
 
 all:
