@@ -10,12 +10,11 @@ ok () {
 	shift 3
 	
 	testcount=$(($testcount + 1))
-	echo -n "compare '$name' '$testcount' '$(echo "$expected_output" | sed "s/'/''/g")' '$expected_return' '"
 	set +e
 	"$@" > $TMPF
 	ret=$?
-	sed "s/'/''/g" < $TMPF
-	echo "' $ret"
+	local IFS=""
+	echo "compare '$name' '$testcount' '$(echo "$expected_output" | sed s/"'"/"''"'/g;s,\n,\\,')' '$expected_return' '$(sed s/"'"/"''"'/g;s,\n,\\,' < $TMPF)' $ret"
 	set -e
 }
 
@@ -64,7 +63,7 @@ say () {
 		spoke=1
 		echo
 	fi
-	echo "	$*"
+	echo "	$@"
 }
 
 totaltestcount=0
@@ -79,7 +78,7 @@ if [ "$1" ]; then
 		echo -n Beginning test of $script ..
 		testcount=0
 		testfailures=0
-		eval `. $script || echo woah`
+		eval "$(. $script || echo woah)"
 		if [ "$expected" -a "$expected" != "$testcount" ]; then
 			say "($expected tests were expected, but $testcount were run)"
 		fi
