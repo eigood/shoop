@@ -43,13 +43,19 @@ SEQ=$(shell seq 1 $(ITERATIONS))
 DEF_PREP = . ./shoop.sh
 
 # run_command msg, prep code, loop code
+benchmark = @
+ifeq ($(NOBASH),)
 benchmark = \
-	@echo -n "bash: $(ITERATIONS) $(1): ";$(TIME) bash -c "$(2); \
-	for x in $(SEQ); do $(3); done " > /dev/null ; \
-	 echo -n "ash : $(ITERATIONS) $(1): ";$(TIME) ash -c "$(2); \
-	for x in $(SEQ); do $(3); done " > /dev/null
+	echo -n "bash: $(ITERATIONS) $(1): ";$(TIME) bash -c "$(2); \
+	for x in $(SEQ); do $(3); done " > /dev/null ;\
 
-nobenchmark =
+endif
+ifeq ($(NOASH),)
+benchmark += \
+	echo -n "ash : $(ITERATIONS) $(1): ";$(TIME) ash -c "$(2); \
+	for x in $(SEQ); do $(3); done " > /dev/null\
+
+endif
 
 all:
 	@echo This makefile is only here to run benchmarks or examples,
@@ -65,35 +71,77 @@ test:
 example:
 	@sh ./example.sh
 
+
 benchmark:
-	$(call benchmark,internal variable sets                    ,\
+	$(test1)
+	$(test2)
+	$(test3)
+	$(test4)
+	$(test5)
+	$(test6)
+	$(test7)
+	$(test8)
+	$(test9)
+	$(test10)
+	$(test11)
+	$(test12)
+
+test1 = $(call benchmark,internal variable sets                       ,\
 		true,\
 		FOO=$x)
-	$(call benchmark,internal variable gets                    ,\
+
+test2 = $(call benchmark,internal variable gets                       ,\
 		FOO=1,\
 		echo FOO)
-	$(call benchmark,internal function calls                   ,\
+test3 = $(call benchmark,internal function sets                       ,\
+		:,\
+		foo () { echo hi; })
+test4 = $(call benchmark,internal function calls                      ,\
 		foo () { echo hi; },\
 		foo)
-	$(call benchmark,shoop variable sets                       ,\
+test5 = $(call benchmark,shoop variable sets                          ,\
 		$(DEF_PREP),\
 		OBJECT . foo = 1)
-	$(call benchmark,shoop variable gets                       ,\
+test6 = $(call benchmark,shoop variable gets                          ,\
 		$(DEF_PREP); OBJECT . foo = $x,\
 		OBJECT . foo)
-	$(call benchmark,shoop method calls                        ,\
-		$(DEF_PREP); OBJECT . foo : echo hi,\
+test7 = $(call benchmark,shoop method sets                            ,\
+		$(DEF_PREP) ,\
+		OBJECT . foo : '')
+test8 = $(call benchmark,shoop method calls                           ,\
+		$(DEF_PREP); OBJECT . foo : 'echo hi;return',\
 		OBJECT . foo)
-	$(call benchmark,shoop resolver method calls               ,\
-		$(DEF_PREP); OBJECT . foo  : echo hi; OBJECT . new BAR,\
+# OBJECT . foo
+#  BAR
+test9 = $(call benchmark,shoop 1st-stage resolver method calls        ,\
+		$(DEF_PREP); OBJECT . foo  : 'echo hi;return'; OBJECT . new BAR,\
 		BAR . foo)
-	$(call benchmark,shoop multi-level resolver method calls   ,\
-		$(DEF_PREP); OBJECT . foo  : echo hi; OBJECT . new BAR; BAR . new BLAH,\
+# OBJECT . foo
+#  BAR
+#   BLAH
+test10 = $(call benchmark,shoop 2nd-stage resolver method calls        ,\
+		$(DEF_PREP); OBJECT . foo  : 'echo hi;return'; OBJECT . new BAR; BAR . new BLAH,\
 		BLAH . foo)
-	$(call benchmark,shoop variable sets (with introspect)     ,\
+# OBJECT . foo
+#  BAR
+#   A
+#  BLAH
+#   A
+#  A
+#  BAZ
+#   A
+test11 = $(call benchmark,shoop multi-inheritance resolver method calls,\
+		$(DEF_PREP); OBJECT . foo  : echo hi\;return; \
+OBJECT . new BAR;\
+OBJECT . new BLAH;\
+OBJECT . new BAZ;\
+BAR . new A;\
+A . parent BAR BLAH OBJECT BAZ,\
+		A . random 2>/dev/null || true)
+test12 = $(call benchmark,shoop variable sets (with introspect)     ,\
 		$(DEF_PREP); _shoop_introspect=1,\
 		OBJECT . foo = 1)
-	
+
 clean:
 	rm -f *~ .#*
 
