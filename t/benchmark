@@ -3,6 +3,7 @@
 SHELL=$(basename ${SHELL:-bash})
 ITERATIONS=${ITERATIONS:-100}
 
+trap '[ "$tmp" ] && rm -f $tmp; exit' 2
 # Call this function to benchmark something.
 prep() {
 	if [ "$_bmprep_" ];then
