@@ -6,6 +6,11 @@
 #
 # LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
+## Passing a list of methods and/or variables to this method will finalize
+## each item.  It does this thru the use of the shell builtin 'readonly.'
+## Once this is done, there is no way to 'destroy' this method, nor is
+## there any way to change the value.
+
 IFS=" " OBJECT . final :p '
 	local item
 	for item in $@; do

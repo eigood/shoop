@@ -6,8 +6,12 @@
 #
 # Smell the Java. LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
+## This module is based off C<introspect>.  It prints out the object's
+## members, in a java/c++ format.
+
 # Enable introspection inside _shoop
 _shoop_introspect=1
+
 
 IFS=" " OBJECT . prettyprint :p '
 	local DEFINES A

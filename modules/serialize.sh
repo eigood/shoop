@@ -13,7 +13,7 @@
 ## script.  Any object that you then wish to save should then be done
 ## with the following syntax:
 ## 
-## C<FOO . serialize E<gt> save_FOO.sh>
+## C<FOO . serialize &E<gt> save_FOO.sh>
 # Enable introspection inside _shoop
 _shoop_introspect=1
 

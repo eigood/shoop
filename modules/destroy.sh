@@ -9,6 +9,10 @@
 # Enable introspection inside _shoop
 _shoop_introspect=1
 
+
+## This module allows one to destroy a shoop object.  It also erases the
+## entire cache.
+
 IFS=" " OBJECT . destroy :p '
 	eval local A DEFINES=\$_shoopdefines_$THIS METH TRUEMETH
 	for A in $DEFINES; do
@@ -19,7 +23,7 @@ IFS=" " OBJECT . destroy :p '
 		unset _shooptype_$TRUEMETH _shoopfinal_$TRUEMETH _shoop_TRUEMETH
 	done
 	# Unfortunately, destroying an object can have really weird side
-	# effects, to the cache tree.  It is best just to erase the whole
+	# effects to the cache tree.  It is best just to erase the whole
 	# thing, then attempting to figure out which parts need to be
 	# erased.
 	eval unset _shoopdefines_$THIS $THIS _shoopcache_ \$_shoopcache_

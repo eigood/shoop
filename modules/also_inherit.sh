@@ -10,6 +10,10 @@
 #
 # LGPL copyright 2000 by Adam Heath <doogie@debian.org>
 
+## This module adds a method that lets an object inherit from multiple
+## parents.  It will make sure there are no inheritance loops, before
+## adding the new objects to this classes parents.
+
 IFS=" " OBJECT . also_inherit : '
 	eval local a curp=$1 newparents="" parents="" retval=0 lastp _seen_child_$THIS=1 p
 	eval set -- $(eval eval "\$_shoop_${THIS}_parent") "$@"
