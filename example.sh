@@ -13,6 +13,9 @@ BAR . test
 BASE . count
 
 . introspect.sh
+echo BAR . introspect:
 BAR . introspect
+echo FOO . introspect resolve:
 FOO . introspect resolve
+echo BASE . introspect:
 BASE . introspect

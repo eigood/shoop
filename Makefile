@@ -8,8 +8,11 @@ run_command = @echo -n "$(1): $(ITERATIONS) in ";$(TIME) sh -c "$(2); \
 	for x in $(SEQ); do $(3); done " > /dev/null
 
 all:
-	@echo This makefile is only here to run benchmarks.
-	@echo \"make benchmark\" will do that.
+	@echo This makefile is only here to run benchmarks or examples.
+	@echo \"make benchmark\" or \"make example\" will do that.
+
+example:
+	@sh ./example.sh
 
 benchmark:
 	$(call run_command, Variable sets , $(DEF_PREP) , \
