@@ -46,7 +46,7 @@ ok 0 brown	KID . eyes
 ok 0 "SOMEGUY MOTHER" KID . parent = SOMEGUY MOTHER
 ok 0 black	SOMEGUY . eyes = black
 ok 0 black	KID . eyes
-# TODO: What is the parent is not an object?
+# TODO: What if the parent is not an object?
 #ok ? ??	KID . parent NOSUCHOBJECT
 #ok 0 black	KID . eyes
 # Inheritance loops should not be allowed.
