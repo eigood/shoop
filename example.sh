@@ -1,7 +1,7 @@
 #!/bin/sh
 . ./shoop.sh
 . ./use.sh
-OBJECT . use introspect serialize final destroy thread
+OBJECT . use introspect serialize final destroy thread prettyprint
 
 THREAD . new TT
 TT . run : '
@@ -46,6 +46,7 @@ echo
 
 echo introspecting BAR
 BAR . introspect
+OBJECT . prettyprint
 echo introspecting FOO
 FOO . introspect resolve
 
