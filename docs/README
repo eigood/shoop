@@ -7,6 +7,10 @@ orientation to plain old shell script. (Next up: awk.) Specifically, I have
 implemented classless OO with introspection, finalization, serialization,
 and multiple inheritance.
 
+Shoop whould work in any POSIX shell. It requires no third-party UNIX tools
+at all. We do reccommend you do not run it under bash, since bash is very
+slow at recursion. Use ash, it's significantly faster.
+
 When you source shoop.sh, you start out with a single base object, OBJECT.
 You can make a new object named OBJ that has OBJECT as its parent like so:
 
