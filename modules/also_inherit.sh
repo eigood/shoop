@@ -1,3 +1,15 @@
+#!/bin/sh -e
+#
+# Multiple inheritance module for shoop.  Walks the object tree, looking for
+# loops(A from B, B from C, C from A type inheritance), and removes any
+# parent from the assignment that has a loop.
+#
+# This only adds new parents.  It doesn't replace.
+#
+# For example: FOO . also_inherit BAR BAZ
+#
+# GPL copyright 2000 by Adam Heath <doogie@debian.org>
+
 IFS=" " OBJECT . also_inherit : '
 	eval local a curp=$1 newparents="" parents="" retval=0 lastp _seen_child_$THIS=1 p
 	eval set -- $(eval eval "\$_shoop_${THIS}_parent") "$@"

@@ -1,5 +1,8 @@
 #!/bin/sh -e
 # Benchmark suite (based on shoop/regress)
+#
+# GPL copyright 2000 by Adam Heath <doogie@debian.org>
+
 SHELL=$(basename ${SHELL:-bash})
 ITERATIONS=${ITERATIONS:-100}
 

@@ -1,6 +1,12 @@
 #!/bin/sh -e
+#
+# Simplistic debian/rules module for shoop.
+#
+# GPL copyright 2000 by Adam Heath <doogie@debian.org>
 
-OBJECT . processcmdline : '
+OBJECT . new DEBIAN
+
+DEBIAN . processcmdline : '
 	while [ $# -gt 0 ]; do
 		var=$(echo "$1"|sed -n "s,^\([^ =	]*\)=,\1,p")
 		if [ "$var" ];then
@@ -18,7 +24,7 @@ OBJECT . processcmdline : '
 				fi
 			;;
 			*)
-				$THIS . targets = $($THIS . targets) $1
+				$THIS . targets =q $($THIS . targets 2>/dev/null) $1
 			;;
 		esac;
 		shift
@@ -31,11 +37,24 @@ OBJECT . processcmdline : '
 		$THIS . $a
 	done
 '
+DEBIAN . newpkg : '
+	local pkg=$1; shift;
+	$THIS . new $pkg;
+	DEBIAN . pkgs .=q " $pkg"
+'
+DEBIAN . runpkg : '
+	local method=$1 msg="$2" a; shift 2;
+	for a in $(DEBIAN . pkgs); do
+		echo $msg for $($a . pkg);
+		$a . ${method}deps
+	done
+'
+
 CURDIR=$PWD
 
-OBJECT . prefix = ${prefix:-$CURDIR} > /dev/null
+DEBIAN . prefix = ${prefix:-$CURDIR} > /dev/null
 
-OBJECT . installfile : '
+DEBIAN . installfile : '
 	if [ "$2" ]; then
 		local base=$(basename $2) target=$($THIS . prefix);
 		if [ $2 -nt $target/$base -o ! -e $target/$base ]; then
@@ -44,21 +63,21 @@ OBJECT . installfile : '
 		fi
 	fi
 '
-OBJECT . installdir : '
+DEBIAN . installdir : '
 	local dir=$($THIS . prefix)/$1;
 	if [ ! -d $dir ]; then
 		echo install -m 755 $dir
 		install -d -m 755 $dir
 	fi
 '
-OBJECT . installfiles : '
+DEBIAN . installfiles : '
 	local dir=$1 file; shift;
 	for file in "$@"; do
 		$THIS . installfile $dir $file
 	done
 '
 
-OBJECT . installdirs : '
+DEBIAN . installdirs : '
 	local dir;
 	for dir in "$@"; do
 		$THIS . installdir $dir
@@ -66,24 +85,37 @@ OBJECT . installdirs : '
 '
 
 
-OBJECT . installpriv	: '
+DEBIAN . installpriv	: '
 	local dir=$($THIS . $1);
 	$THIS . installdir $dir;
 	$THIS . installfiles $dir $($THIS . $2 2>/dev/null);
 '
 
-OBJECT . installbins 		: '$THIS . installpriv bindir bins'
-OBJECT . installdocs		: '$THIS . installpriv docdir docs'
-OBJECT . installmodules		: '$THIS . installpriv moddir modules'
-OBJECT . installexamples	: '$THIS . installpriv empdir examples'
-OBJECT . install		: '
-	$THIS . build;
-	echo Installing for $($THIS . pkg);
+DEBIAN . installbins 		: '$THIS . installpriv bindir bins'
+DEBIAN . installdocs		: '$THIS . installpriv docdir docs'
+DEBIAN . installmodules		: '$THIS . installpriv moddir modules'
+DEBIAN . installexamples	: '$THIS . installpriv empdir examples'
+DEBIAN . installdeps		: '
 	$THIS . installbins;
 	$THIS . installdocs;
 	$THIS . installmodules;
 	$THIS . installexamples
 '
-OBJECT . binary			: '$THIS . binary_indep; $THIS . binary_arch'
-OBJECT . binary_indep		: '$THIS . install'
-OBJECT . binary_arch		: '$THIS . install'
+
+DEBIAN . install		: '
+	DEBIAN . build;
+	DEBIAN . runpkg install Installing
+'
+
+DEBIAN . build		: '
+	DEBIAN . configure;
+	DEBIAN . runpkg build Building
+'
+
+DEBIAN . configure	: '
+	DEBIAN . runpkg configure Configuring
+'
+
+DEBIAN . binary			: '$THIS . binary_indep; $THIS . binary_arch'
+DEBIAN . binary_indep		: '$THIS . install'
+DEBIAN . binary_arch		: '$THIS . install'
