@@ -1,6 +1,6 @@
 #!/bin/sh
 #                                                                               
-# Pseudothread module for shoop. These arn't real threads (no shared data),
+# Pseudothread module for shoop. These aren't real threads (no shared data),
 # but they start up like threads.
 #
 # LGPL copyright 2000 by Adam Heath <doogie@debian.org>
