@@ -72,7 +72,7 @@ _shoop () {
 		done
 		# When the quick way fails, try the hard way.
 		for P in $PARENTS; do
-			if _shoop $TRUEOBJ $P $METH $@ 2>/dev/null; then
+			if ! _shoop $TRUEOBJ $P $METH $@ 2>/dev/null; then
 				return 0
 			fi
 		done
