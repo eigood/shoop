@@ -14,52 +14,29 @@ _shoop () {
 		fi
 		DEFINE=$1
 		shift
-		if eval [ \"\$_shoopfinal_$TRUEMETH\" ]; then
-			eval "echo \"Can't redefine final $TRUEOBJ.$METH(\$_shooptype_$TRUEMETH)\"" >&2
-			return 1
-		fi
 		case $DEFINE in
 			*=)
 				#local DOLLAR=\$
 				#set -- $(eval eval echo \"$\{DOLLAR\}\{{$(seq -s , 1 $(($#-1)))}\}\")
-				if [ "$_shoop_introspect" ]; then
-					eval "_shooptype_$TRUEMETH=variable;
-					      _shoop_$TRUEMETH='echo -n $@'"
-				else
-					eval "_shooptype_$TRUEMETH=variable;
-					      _shoop_$TRUEMETH () { echo -n $@; }"
-				fi
+				eval "_shooptype_$TRUEMETH=variable;
+				      _shoop_$TRUEMETH='echo -n $@'"
 				echo -n $@
 			;;
 			*:)
-				if [ "$_shoop_introspect" ]; then
-					eval "_shooptype_$TRUEMETH=method;
-					      _shoop_$TRUEMETH='$@'"
-				else
-					eval "_shooptype_$TRUEMETH=method;
-					      _shoop_$TRUEMETH () { local _shoop_THIS=$1; shift; $@;
-}"
-				fi
+				eval "_shooptype_$TRUEMETH=method;
+				      _shoop_$TRUEMETH='$@'"
 			;;
 		esac
 		case $DEFINE in
 			:?*)
-				eval "_shoopfinal_$TRUEMETH=1"
+				eval readonly "_shoop_$TRUEMETH=1"
 			;;
 		esac
 	elif eval [ \"\$_shooptype_$TRYMETH\" ]; then
-		if [ "$_shoop_introspect" ]; then
-			local _shoop_THIS=$TRUEOBJ
-			eval eval "\$_shoop_$TRYMETH"
-		else
-			_shoop_$TRYMETH $TRUEOBJ "$@"
-		fi
+		local THIS=$TRUEOBJ
+		eval eval "\$_shoop_$TRYMETH"
 	else
-		if [ "$_shoop_introspect" ]; then
-			eval local PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
-		else
-			eval local PARENTS=$(_shoop_${TRYOBJ}_parent)
-		fi
+		eval local PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
 		local P
 		# Try inheritance 1 level deep -- the quick way.
 		# TODO: benchmark to see if this helps.
@@ -89,8 +66,8 @@ _shoop_introspect=1
 _shoop BASE BASE new : '
 	local OBJNAME=$1;
 	eval "$OBJNAME () { shift; _shoop $OBJNAME $OBJNAME \$@; }";
-	if [ $_shoop_THIS != $OBJNAME ]; then
-		_shoop $OBJNAME $OBJNAME parent = $_shoop_THIS >/dev/null;
+	if [ $THIS != $OBJNAME ]; then
+		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null;
 	fi
 '
 # Create the base object via the method already defined on it.
@@ -98,7 +75,7 @@ _shoop BASE BASE new BASE
 
 # This method handles calling an overridden method of your parent.
 # Sadly, you have to pass in the method name to call.
-BASE . super : '_shoop $_shoop_THIS $($_shoop_THIS . parent) $@'
+BASE . super : '_shoop $THIS $($THIS . parent) $@'
 
 # Now if you want introspection, you have to turn it back on.
 unset _shoop_introspect

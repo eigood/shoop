@@ -13,17 +13,17 @@ BASE . introspect : '
 	if [ "$2" ]; then
 		DISPLAYOBJ=$2;
 	else
-		DISPLAYOBJ=$_shoop_THIS;
+		DISPLAYOBJ=$THIS;
 	fi;
-	eval DEFINES=\$_shoopdefines_$_shoop_THIS;
+	eval DEFINES=\$_shoopdefines_$THIS;
 	for A in $DEFINES; do
 		if eval [ -z \"\$_shoopseen_$A\" ]; then
-			eval echo "$DISPLAYOBJ\($_shoop_THIS\): $A is \$_shooptype_${_shoop_THIS}_$A";
+			eval echo "$DISPLAYOBJ\($THIS\): $A is \$_shooptype_${THIS}_$A";
 			eval _shoopseen_$A="1";
 		fi;
 	done;
 	if [ "$1" = resolve ];then
-		for P in $($_shoop_THIS . parent); do
+		for P in $($THIS . parent); do
 			$P . introspect resolve $DISPLAYOBJ;
 		done;
 	fi;
