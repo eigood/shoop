@@ -72,7 +72,7 @@ _shoop () {
 		eval GETMETH=\"\$_shoop_$TRYMETH\"
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\"\
-			THIS=$TRUEOBJ GETMETH="" NEWPARENTS=""
+			THIS=$TRUEOBJ NEWPARENTS=""
 		if [ -z "$_shoopnocache_" ]; then
 			# If this object is found in the cache, than short-circuit
 			# the resolving code.
