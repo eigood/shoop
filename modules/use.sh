@@ -22,8 +22,8 @@ OBJECT . new _USE
 _USE . findmodule :p '
 	local oIFS="$IFS" IFS=:
 	local usepath="$1"; shift
-	IFS="$oIFS"
 	for B in $usepath;do
+		IFS="$oIFS"
 		if [ -e $B/$1.sh ]; then
 			echo $B/$1.sh
 			break
