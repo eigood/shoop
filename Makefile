@@ -8,6 +8,7 @@ moddir=/usr/share/shoop/modules
 bindir=/usr/bin
 docdir=/usr/share/doc
 mandir=/usr/share/man
+empdir=$(docdir)/examples
 
 DIRS=$(bindir) $(moddir) $(docdir) $(docdir)/examples
 
@@ -30,7 +31,7 @@ DOCS=\
 	README\
 	TODO\
 
-EXAMPLE=\
+EXAMPLES=\
 	example.sh\
 
 TIME=/usr/bin/time -f "%E" 
@@ -90,12 +91,13 @@ benchmark:
 clean:
 	rm -f *~ .#*
 
-install: installshare installbins installdocs
+install: installshare installbins installdocs installexamples
 
-installshare: $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))
-installbins: $(patsubst %, $(prefix)$(bindir)/%,$(BINS))
-installdocs: $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))
-installdirs: $(patsubst %,$(prefix)%,$(DIRS))
+installshare	: $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))
+installbins	: $(patsubst %, $(prefix)$(bindir)/%,$(BINS))
+installdocs	: $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))
+installexamples	: $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))
+installdirs	: $(patsubst %,$(prefix)%,$(DIRS))
 
 installshowconfig:
 	@echo "prefix is: $(prefix)"
@@ -106,14 +108,12 @@ installshowconfig:
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: msg=module
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: msg=binary
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: msg=doc
+$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: msg=examples
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: thisdir=moddir
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: thisdir=bindir
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: thisdir=docdir
+$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: thisdir=empdir
 
-$(prefix)$(moddir)/%		: thisdir=moddir
-$(prefix)$(bindir)/$(SHOOP)	: thisdir=bindir
-$(prefix)$(docdir)/%		: thisdir=moddir
-$(prefix)$(docdir)/$(SHOOP)	: thisdir=bindir
 
 define inst_msg
 	echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
@@ -127,8 +127,12 @@ $(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(
 	@$(inst_msg)
 	@install -m 644 $< $@
 
+$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES)): $(prefix)$(empdir)/%: % $(prefix)$(empdir)
+	@$(inst_msg)
+	@install -m 644 $< $@
+
 $(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
-	@echo Making dir $*
+	@echo Making dir $$\(prefix\)$*
 	@mkdir -p $@
 
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir)
