@@ -13,13 +13,10 @@ _shoop_introspect=1
 
 _shoop_quote="'"
 IFS=" " OBJECT . serialize :p '
-	local DEFINES A DISPLAYOBJ
+	local DEFINES A
 	local PARENTS=$($THIS . parent 2>/dev/null)
-	if [ "$2" ]; then
-		DISPLAYOBJ=$2
-	else
-		DISPLAYOBJ=$THIS
-		local oldargs="$@"
+	if [ -z "$2" ]; then
+		local DISPLAYOBJ=$THIS oldargs="$@"
 		set -- $PARENTS
 		if [ "$1" ]; then
 			echo "$1 . new $THIS"
@@ -43,19 +40,18 @@ IFS=" " OBJECT . serialize :p '
 				echo -n "$_shoop_quote"
 			fi
 			echo
-			eval _shoopseen_$A=1
+			eval local _shoopseen_$A=1
 		fi
 	done
 	if eval [ \"\$_shoopfinal_$DISPLAYOBJ\" ]; then
 		eval echo "$DISPLAYOBJ . finalize \$_shoopfinal_$DISPLAYOBJ"
 	fi
+	# This does not use a non-recursive form, as this code does not
+	# need to be fast.  It is only for informative output.
 	if [ "$1" = resolve ];then
 		for P in $PARENTS; do
 			$P . serialize resolve $DISPLAYOBJ
 		done
 	fi
-	for A in $DEFINES; do
-		unset _shoopseen_$A
-	done
 	return
 '

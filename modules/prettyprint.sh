@@ -10,11 +10,9 @@
 _shoop_introspect=1
 
 IFS=" " OBJECT . prettyprint :p '
-	local DEFINES A DISPLAYOBJ
-	if [ "$2" ]; then
-		DISPLAYOBJ=$2
-	else
-		DISPLAYOBJ=$THIS
+	local DEFINES A
+	if [ -z "$2" ]; then
+		local DISPLAYOBJ=$THIS
 		echo "$3object $DISPLAYOBJ {"
 	fi
 	eval DEFINES=\$_shoopdefines_$THIS
@@ -34,9 +32,11 @@ IFS=" " OBJECT . prettyprint :p '
 				echo -ne "$3\t}"
 			fi
 			echo 
-			eval _shoopseen_$A="1"
+			eval local _shoopseen_$A="1"
 		fi
 	done
+	# This does not use a non-recursive form, as this code does not
+	# need to be fast.  It is only for informative output.
 	if [ "$1" = resolve ];then
 		for P in $($THIS . parent 2>/dev/null); do
 			echo -e "\t$3class $P {"
@@ -44,9 +44,6 @@ IFS=" " OBJECT . prettyprint :p '
 			echo -e "\t$3}"
 		done
 	fi
-	for A in $DEFINES; do
-		unset _shoopseen_$A
-	done
 	if [ -z "$2" ]; then
 		echo "$3}"
 	fi

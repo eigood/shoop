@@ -3,8 +3,10 @@
 # Finalization module for shoop. Expands the OBJECT class with a finalize
 # method. The method takes the names of a list of properites and/or methods
 # that should become final. (Though they may be overridden in a child class.)
+#
+# GPL copyright 2000 by Adam Heath <doogie@debian.org>
 
-IFS=" " OBJECT . finalize :p '
+IFS=" " OBJECT . final :p '
 	local item
 	for item in $@; do
 		if eval  [ -z \"\$_shoopfinal_${THIS}_$item\" ]; then
