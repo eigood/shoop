@@ -21,7 +21,7 @@ _shoop () {
 			shift
 			eval "_shooptype_${TRUEOBJ}_$METH=method"
 			eval "_shoop_${TRUEOBJ}_$METH () { $@
-			}"
+}"
 		fi
 # Alternate, variable method. Benchmark before turning on. (See line above, too.)
 #	elif eval [ \"\$_shooptype_${TRYOBJ}_$METH\" = variable ]; then
@@ -57,11 +57,7 @@ _shoop BASE BASE new : '
 '
 # Make the base object.
 _shoop_BASE_new '' BASE
-BASE . parent : '
-local OBJNAME=$1;
-shift;
-eval _shoopparent_$OBJNAME=\"$@\"
-'
+
 BASE . introspect : '
 local OBJNAME=$1 DEFINES TYPE A DISPLAYOBJ;
 shift;
