@@ -53,6 +53,7 @@ test:
 			CURDIR=$(CURDIR)\
 			$(SHELL) $(CURDIR)/t/regress\
 			$(CURDIR)/t/inheritance.sh\
+			$(CURDIR)/t/ref.sh\
 			$(CURDIR)/t/list.sh\
 			$(CURDIR)/t/stack.sh\
 			$(CURDIR)/t/onexit.sh\
