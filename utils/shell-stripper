@@ -7,6 +7,27 @@
 # Licensed under the LGPL
 #
 
+## A semi-simple shell comment stripper
+## 
+## It was found that certain shell interpeters ran faster, if leading
+## blank space was removed, along with comments.  This program was
+## designed to remove text that match the above constraints.
+## 
+## Items removed
+##>4
+##:blank lines
+##:leading white space
+##:comment lines
+##<
+## Combined lines
+##>4
+##:\\
+## A line ending with \\ has the \\ removed, and the next line is
+## concatenated to the current line, before processing is continued.
+##:;
+## ; is a command delimiter, so it is safe to combined a command from
+## subsequent lines onto the end of the current line.
+##<
 $first = 1;
 while (<>) {
 

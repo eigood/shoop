@@ -12,12 +12,26 @@
 ## When passed the basename of a module(minus any path and .sh
 ## extension), it will look for the first match in $SHOOPPATH.
 ## 
-## There is also '_USE . findmodule <path> <module>' convience method,
-## which looks thru the path trying to find <module>.sh.
+## Some additional methods and variables are provided thru an additional
+## _USE object.  These are:
 ## 
-## If '_USE . recorduse' is set, then all top-level modules will get
-## recorded, and '_USE . showdeps' will print out a table of
-## module/path values.
+##>4
+##:findmodule <path> <module>;
+## looks thru the path trying
+## to find <module>.sh.
+## 
+##:recorduse
+## Set to 1 to record immediate dependencies of this module.
+## default = 1
+## 
+##:quiet
+## Set to 1 to not display an error when a module isn't found.
+## default = 0
+## 
+##:error
+## Set to 1 to return an error when a module isn't found.
+## default = 1
+##<
 
 OBJECT . usepath = $SHOOPPATH:. > /dev/null
 
