@@ -1,0 +1,78 @@
+#!/usr/bin/make -f
+#
+# This makefile needs GNU make.
+#
+
+inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
+strip_comment_space = $(TOPDIR)/utils/shell-stripper
+
+install:\
+	installshowconfig\
+	install.subdirs\
+	installmodules.real\
+	installbins.real\
+	installdocs.real\
+	installexamples.real\
+
+%.subdirs:
+ifdef SUBDIRS
+	set -e;\
+	for a in $(SUBDIRS); do\
+		$(MAKE) -C $$a $*;\
+	done
+else
+	
+endif
+
+$(patsubst %,install%,modules bins docs examples dirs): %: %.real %.subdirs
+
+installmodules.real	: $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))
+installbins.real	: $(patsubst %, $(prefix)$(bindir)/%,$(BINS))
+installdocs.real	: $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))
+installexamples.real	: $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))
+installdirs.real	: $(patsubst %,$(prefix)%,$(DIRS))
+
+
+installshowconfig:
+	echo "prefix is: $(prefix)"
+	echo "bindir is: $(bindir)"
+	echo "moddir is: $(moddir)"
+	echo
+
+$(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: msg=$(MODULES_MSG)
+$(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: msg=$(BINS_MSG)
+$(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: msg=$(DOCS_MSG)
+$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: msg=$(EXAMPLES_MSG)
+$(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: thisdir=moddir
+$(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: thisdir=bindir
+$(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: thisdir=docdir
+$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: thisdir=empdir
+
+$(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir) $(strip_comment_space)
+	$(inst_msg)
+	$(strip_comment_space) < $< > $@
+
+$(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir) $(strip_comment_space)
+	$(inst_msg)
+	$(strip_comment_space) < $< > $@
+	chmod +x $@
+
+$(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(docdir)
+	$(inst_msg)
+	install -m 644 $< $@
+
+$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES)): $(prefix)$(empdir)/%: % $(prefix)$(empdir)
+	$(inst_msg)
+	install -m 644 $< $@
+
+$(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
+	echo Making dir $$\(prefix\)$*
+	mkdir -p $@
+
+.PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
+
+ifndef NOISY
+.SILENT:
+endif
+
+include $(TOPDIR)/Makefile.vars

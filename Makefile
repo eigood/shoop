@@ -2,6 +2,7 @@
 #
 # This makefile needs GNU make.
 #
+TOPDIR=$(CURDIR)
 prefix=$(CURDIR)/debian/tmp
 
 moddir=/usr/share/shoop/modules
@@ -10,28 +11,22 @@ docdir=/usr/share/doc
 mandir=/usr/share/man
 empdir=$(docdir)/examples
 
+MODULES_MSG=modules
+BINS_MSG=binary
+DOCS_MSG=documents
+EXAMPLES_MSG=examples
+MAN_MSG=man pages
+
 DIRS=$(bindir) $(moddir) $(docdir) $(docdir)/examples
+
+SUBDIRS=modules docs
 
 BINS=\
 	shoop.sh\
 
-MODULES=\
-	destroy.sh\
-	final.sh\
-	introspect.sh\
-	prettyprint.sh\
-	serialize.sh\
-	thread.sh\
-	use.sh\
-	also_inherit.sh\
-
 DOCS=\
 	COPYING\
-	CONTRIBUTING\
-	MODULES\
-	README\
 	TODO\
-	docs/modules.txt\
 	
 EXAMPLES=\
 	example.sh\
@@ -40,7 +35,6 @@ PKG=shoop
 PKG_VER=0.1
 TOPDIR=.
 
-strip_comment_space = $(TOPDIR)/utils/shell-stripper
 tinstall = $(CURDIR)/tmp-install
 
 all:
@@ -52,12 +46,33 @@ all:
 	echo \	make test
 
 test:
+	$(MAKE) installmodules installbins prefix=$(tinstall)
+	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
+			SHOOPMOD=$(tinstall)$(moddir)\
+			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			CURDIR=$(CURDIR)\
+			$(SHELL) $(CURDIR)/t/regress\
+			$(CURDIR)/t/inheritance.sh\
+
+www-test1:
 	$(MAKE) installbins installmodules prefix=$(tinstall)
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
-			$(CURDIR)/t/regress\
-			$(CURDIR)/t/*.sh\
+			CURDIR=$(CURDIR)\
+			$(CURDIR)/t/benchmark\
+			$(CURDIR)/t/kbu.bm\
+			""
+
+www-test2:
+	$(MAKE) installbins installmodules prefix=$(tinstall)
+	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
+			SHOOPMOD=$(tinstall)$(moddir)\
+			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			CURDIR=$(CURDIR)\
+			$(CURDIR)/t/benchmark\
+			$(CURDIR)/t/kbhomes.bm\
+			""
 
 example:
 	sh ./example.sh
@@ -67,6 +82,7 @@ benchmark:
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
 			SHOOPMOD=$(tinstall)$(moddir)\
 			SHOOPSH=$(tinstall)$(bindir)/shoop.sh\
+			CURDIR=$(CURDIR)\
 			$(CURDIR)/t/benchmark\
 			$(CURDIR)/t/benchmark.bm\
 			"$(bscr)"
@@ -75,57 +91,6 @@ clean:
 	echo Cleaning
 	rm -f *~ .#* ChangeLog
 	rm -rf $(tinstall)
-
-install: installmodules installbins installdocs installexamples
-
-installmodules	: $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))
-installbins	: $(patsubst %, $(prefix)$(bindir)/%,$(BINS))
-installdocs	: $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))
-installexamples	: $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))
-installdirs	: $(patsubst %,$(prefix)%,$(DIRS))
-
-installshowconfig:
-	echo "prefix is: $(prefix)"
-	echo "bindir is: $(bindir)"
-	echo "moddir is: $(moddir)"
-	echo
-
-$(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: msg=module
-$(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: msg=binary
-$(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: msg=doc
-$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: msg=examples
-$(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: thisdir=moddir
-$(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: thisdir=bindir
-$(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: thisdir=docdir
-$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: thisdir=empdir
-
-
-inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
-
-strip_comment_space = $(TOPDIR)/utils/shell-stripper
-
-$(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir) $(strip_comment_space)
-	$(inst_msg)
-	$(strip_comment_space) < $< > $@
-
-$(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir) $(strip_comment_space)
-	$(inst_msg)
-	$(strip_comment_space) < $< > $@
-	chmod +x $@
-
-$(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(docdir)
-	$(inst_msg)
-	install -m 644 $< $@
-
-$(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES)): $(prefix)$(empdir)/%: % $(prefix)$(empdir)
-	$(inst_msg)
-	install -m 644 $< $@
-
-$(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
-	echo Making dir $$\(prefix\)$*
-	mkdir -p $@
-
-.PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
 
 #
 # Author only targets are below
@@ -146,7 +111,7 @@ NAMES=$(shell\
 			split($$0, A, / *[<>] */);\
 			printf "%s:%s\"\n", A[1], A[2]\
 			}\
-	' AUTHORS)
+	' docs/AUTHORS)
 #endef
 
 docs/modules.txt: utils/shelldoc $(MODULES)
@@ -156,7 +121,4 @@ ChangeLog:
 	echo $(NAMES)
 	rcs2log $(NAMES) > $@
 
-ifndef NOISY
-.SILENT:
-endif
-
+include $(TOPDIR)/Makefile.rules
