@@ -29,7 +29,7 @@ _shoop () {
 		return
 	else
 		eval local P PARENTS=\"$(eval eval "\$_shoop_${TRYOBJ}_parent")\" THIS=$TRUEOBJ GETMETH="" NEWPARENTS=""
-		# Try inheritance 1 level deep -- the quick way.
+		# 1st stage resolver.  Look at the immediate parents.
 		for P in $PARENTS; do
 			eval GETMETH="\$_shoop_${P}_$METH"
 			if [ "$GETMETH" ]; then
@@ -44,9 +44,9 @@ _shoop () {
 			# the first.
 			NEWPARENTS="$NEWPARENTS $(eval eval "\$_shoop_${P}_parent")"
 		done
-		# 1 level deep found no match, so resolve the inheritance
-		# tree, and loop over untested super classes.
-
+		# 1st stage found no match, so resolve the inheritance tree,
+		# starting at the second level, and loop over untested super
+		# classes.
 		local orgargs="$@"
 		set -- $NEWPARENTS
 		while [ $# -gt 0 ];do
