@@ -1,10 +1,22 @@
 #!/bin/sh -e
 # OOP in shell. GPL copyright 2000 by Joey Hess <joey@kitenet.net>
 
+_shoopgetparent() {
+	local a
+	for a in $(eval eval "\$_shoop_${1}_parent"); do
+		if eval [ -z \"\$_shoopresolve_parent_echo_$a\" ]; then
+			eval _shoopresolve_parent_echo_$a=1
+			echo $a
+		fi
+		if eval [ -z \"\$_shoopresolve_parent_get_$a\" ]; then
+			eval _shoopresolve_parent_get_$a=1
+			_shoopgetparent $a
+		fi
+	done
+}
 _shoop () {
 	local TRUEOBJ=$1 TRYOBJ=$2 METH=$3 TRUEMETH=${1}_$3 TRYMETH=${2}_$3
 	shift 3
-
 	if [ "$1" = = -o "$1" = := -o "$1" = : -o "$1" = :: ]; then
 		local FINAL DEFINE
 		# This block is for introspect.
@@ -27,20 +39,43 @@ _shoop () {
 		eval eval "\$_shoop_$TRYMETH"
 	else
 		eval local PARENTS=$(eval eval "\$_shoop_${TRYOBJ}_parent")
+		if [ -z "$PARENTS" ]; then
+			return 0
+		fi
 		local P
 		# Try inheritance 1 level deep -- the quick way.
 		# TODO: benchmark to see if this helps.
 		#    (remember, it also lets errors be seen..)
 		for P in $PARENTS; do
 			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
-				_shoop $TRUEOBJ $P $METH $@
-				return $?
+				local THIS=$TRUEOBJ
+				eval eval "\$_shoop_${P}_$METH"
+				return
 			fi
 		done
-		# When the quick way fails, try the hard way.
+		# 1 level deep found no match, so resolve the inheritance
+		# tree, and loop over untested super classes.
+
+		# Tell getparent that we have already checked the first
+		# level of parents.  However, getparent still needs to
+		# walk the entire parent tree.
 		for P in $PARENTS; do
-			if ! _shoop $TRUEOBJ $P $METH $@ 2>/dev/null; then
-				return 0
+			eval _shoopresolve_parent_echo_$P=1
+		done
+		local PARENTS2="$(_shoopgetparent $TRYOBJ)"
+		local UNSET
+		for P in $PARENTS; do
+			UNSET="$UNSET _shoopresolve_parent_echo_$P"
+		done
+		for P in $PARENTS2; do
+			UNSET="$UNSET _shoopresolve_parent_echo_$P _shoopresolve_parent_get_$P"
+		done
+		eval unset $UNSET
+		for P in $PARENTS2; do
+			if eval [ -n \"\$_shooptype_${P}_$METH\" ]; then
+				local THIS=$TRUEOBJ
+				eval eval "\$_shoop_${P}_$METH"
+				return
 			fi
 		done
 		if [ "$PARENTS" ];then
@@ -48,6 +83,7 @@ _shoop () {
 			return 1
 		fi
 	fi
+	return 0
 }
 
 # Temporarily turn on introspection, so the base object has everything recorded
