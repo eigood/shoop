@@ -11,15 +11,23 @@ NAMES=$(awk "
 " docs/AUTHORS)
 eval rcs2log -v $NAMES | 
 awk '
-/	\* /{
+/\t\* /{
 	split($0,A,/:/);
 	count=split(A[1],B,/, /);
 	first=1;
+	len=0
 	for(C = 1; C <= count; C++) {
-		if(!first)
+		if(!first) {
 			printf ", ";
+			len += 2;
+		}
+		if ( len > 65 ) {
+			printf "\n\t  ";
+			len=0
+		}
 		sub(/\/cvsroot\/shoop\/shoop\//,"",B[C]);
 		printf "%s", B[C];
+		len += length(B[C]);
 		first=0
 	}
 	printf ":%s\n", A[2];
