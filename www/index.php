@@ -59,7 +59,7 @@
     </TD>
   </TR>
 </TABLE>
-<!-- fooey -->
+
 <!-- end footer table -->
 </BODY>
 </HTML>
