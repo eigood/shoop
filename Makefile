@@ -3,11 +3,11 @@
 # This makefile needs GNU make.
 #
 TOPDIR=$(CURDIR)
-prefix=$(CURDIR)/debian/tmp
+prefix=$(CURDIR)/debian/shoop
 
 moddir=/usr/share/shoop/modules
-bindir=/usr/bin
-docdir=/usr/share/doc
+bindir=/usr/share/shoop
+docdir=/usr/share/doc/shoop
 mandir=/usr/share/man
 empdir=$(docdir)/examples
 
