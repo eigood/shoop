@@ -45,6 +45,7 @@ all:
 	echo \	make install
 	echo \	make test
 
+test: SHELL=ash
 test:
 	$(MAKE) installmodules installbins prefix=$(tinstall)
 	cd $(tinstall); SHOOPPATH=$(tinstall)$(moddir)\
