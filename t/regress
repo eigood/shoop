@@ -63,7 +63,7 @@ compare () {
 		fi
 		shift
 	done
-	eval $@
+	eval "$@"
 }
 
 say () {
