@@ -1,55 +1,112 @@
-#!/bin/sh -e
-#SHELL=$(basename ${SHELL:-bash})
-. ${SHOOPSH:-/usr/bin/shoop.sh}
-. ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
+#! /bin/sh -e
+## debian/rules for SHOOP
+## by Gergely Nagy <algernon@debian.org>
 
-OBJECT . use rules_debian
+# exports
+export SHOOPPATH=${PWD}:${PWD}/modules
+export SHOOPMOD=${PWD}/modules
+export DH_COMPAT=3
 
-DEBIAN . default_target =q build
+# #include <shoop>
+. ${PWD}/shoop.sh
 
-DEBIAN . new SHOOP_base
+# basic setup
+OBJECT . new DEBIAN
 
-SHOOP_base . bindir =q /usr/bin
-SHOOP_base . moddir =q /usr/share/shoop/modules
-SHOOP_base . docdir =q /usr/share/doc/shoop
-SHOOP_base . empdir =q /usr/share/doc/shoop/examples
+DEBIAN . MAKE_LEVEL =q 0
 
-SHOOP_base . newpkg SHOOP
-SHOOP_base . newpkg SHOOP_doc
+# core methods
+DEBIAN . header : 'echo "==> [`eval $THIS . MAKE_LEVEL`] Making $@" 1>&2
+	$THIS . MAKE_LEVEL =q `expr \`eval $THIS . MAKE_LEVEL\` + 1`'
+DEBIAN . done : '$THIS . MAKE_LEVEL =q `expr \`eval $THIS . MAKE_LEVEL\` - 1`
+	echo "<== [`eval $THIS . MAKE_LEVEL`] Finished $@" 1>&2'
+DEBIAN . do : 'echo $@
+	eval $@'
 
-SHOOP . prefix =q $CURDIR/debian/tmp
-SHOOP_doc . prefix =q $CURDIR/debian/shoop-doc
+# These do the Real Job
+DEBIAN . do_build : 'test -f build-stamp || $THIS . build_stamp'
+DEBIAN . do_build_stamp : '$THIS . do dh_testdir
+	$THIS . do "make docs/modules.txt 2>/dev/null"
+	$THIS . do touch build-stamp'
+DEBIAN . do_clean : '$THIS . do dh_testdir
+	$THIS . do dh_testroot
+	$THIS . do rm -f build-stamp docs/modules.txt docs/modules.pod
+	$THIS . do "make clean || true"
+	$THIS . do dh_clean'
+DEBIAN . do_install : '$THIS . build
+	$THIS . do dh_testdir
+	$THIS . do dh_testroot
+	$THIS . do dh_clean -k
+	$THIS . do dh_installdirs
+	$THIS . do make install
+	$THIS . do rm -f debian/shoop/usr/share/doc/shoop/COPYING \
+			 debian/shoop/usr/share/doc/shoop/COPYING.gz
+	$THIS . do mv debian/shoop/usr/share/shoop/modules \
+		      debian/shoop-modules/usr/share/shoop/modules
+	$THIS . do mv debian/shoop/usr/share/doc/shoop/modules.txt \
+		      debian/shoop-modules/usr/share/doc/shoop-modules/
+	$THIS . do mv debian/shoop/usr/share/doc/shoop/MODULES \
+		      debian/shoop-modules/usr/share/doc/shoop-modules/
+	$THIS . do mv debian/shoop/usr/share/doc/shoop/examples \
+		      debian/shoop-modules/usr/share/doc/shoop-modules/'
+DEBIAN . do_packages : '$THIS . build
+	$THIS . install
+	$THIS . do dh_testversion 2.0.40
+	$THIS . do dh_testdir
+	$THIS . do dh_testroot
+#	$THIS . do dh_installdebconf
+	$THIS . do dh_installdocs
+#	$THIS . do dh_installmenu
+#	$THIS . do dh_installinfo
+	$THIS . do dh_installchangelogs
+	$THIS . do dh_link
+	$THIS . do dh_strip
+	$THIS . do dh_compress
+	$THIS . do dh_fixperms
+	$THIS . do dh_installdeb
+	$THIS . do dh_gencontrol
+	$THIS . do dh_md5sums
+	$THIS . do dh_builddeb'
+DEBIAN . do_binary_arch : ''
+DEBIAN . do_binary_indep : '$THIS . packages'
+DEBIAN . do_binary : '$THIS . binary_arch
+	$THIS . binary_indep'
 
-SHOOP . pkg =q shoop
-SHOOP_doc . pkg =q shoop-doc
+# Wrapper function that calls header & done too
+DEBIAN . do_func : '$THIS . header $LASTMETH
+	$THIS . do_$LASTMETH
+	$THIS . done $LASTMETH'
+# Use the wrapper for all targets
+DEBIAN . build : DEBIAN . do_func
+DEBIAN . build_stamp : DEBIAN . do_func
+DEBIAN . clean : DEBIAN . do_func
+DEBIAN . install : DEBIAN . do_func
+DEBIAN . packages : DEBIAN . do_func
+DEBIAN . binary_arch : DEBIAN . do_func
+DEBIAN . binary_indep : DEBIAN . do_func
+DEBIAN . binary : DEBIAN . do_func
 
-SHOOP . bins =q \
-	shoop.sh\
+# void main ( whatever )
+DEBIAN . debian : '$THIS . header debian
+	for opt in $@
+	do
+		case $opt in
+			build|build-stamp|clean|install|packages|binary-arch|binary-indep|binary)
+				method=`echo $opt | sed -e "s,\-,_,g"`
+				DEBIAN . $method
+				;;
+			DEB_*=*)
+				# These are useless for us
+				;;
+			*)
+				echo "*** Unsupported target: $opt"
+				exit 1
+				;;
+		esac
+	done
+	$THIS . done debian'
 
-SHOOP_doc . docs =q \
-	AUTHORS\
-	CONTRIBUTING\
-	COPYING\
-	MODULES\
-	README\
-	TODO\
+# Run forest, run !
+DEBIAN . debian ${@:-build}
 
-SHOOP_doc . examples =q \
-	example.sh\
-
-SHOOP . modules =q \
-        destroy.sh\
-        final.sh\
-        introspect.sh\
-        prettyprint.sh\
-        serialize.sh\
-        thread.sh\
-        use.sh\
-
-DEBIAN . build : '
-'
-
-DEBIAN . processcmdline "$@"
-
-#SHOOP . install
-#SHOOP_doc . install
+exit 0
