@@ -19,7 +19,7 @@ _shoop () {
 			if [ "${varmeth#.}" != $varmeth ]; then append=1 varmeth=${varmeth#.}; fi
 			if [ "${varmeth%q}" != $varmeth ]; then quiet=1 varmeth=${varmeth%q}; fi
 			if [ "$varmeth" = = ]; then
-				if [ "$append" ];then eval "set -- $(eval eval "\$_shoop_$TRUEMETH")$@"; fi
+				if [ "$append" ];then set -- "$(eval eval "\$_shoop_$TRUEMETH") $@"; fi
 				if [ ! "$quiet" ]; then echo -n $@; fi
 
 				eval "_shoop_$TRUEMETH='echo -n $@'
@@ -113,7 +113,6 @@ _shoop () {
 				# \$_shoopcache_method_\$METH
 IFS=" " _shoopcacheclear_="
 	if eval [ \\\"\\\$_shoopcache_method_\$METH\\\" ]; then
-		eval echo \\\"\\\$_shoopcache_linkmethod_\$TRUEMETH\\\"
 		if eval [ -z \\\"\\\$_shoopcache_linkmethod_\$TRUEMETH\\\" ]; then
 			eval unset _shoopcache_method_\$METH\
 				 \\\$_shoopcache_method_\$METH\
@@ -143,6 +142,8 @@ IFS=" " _shoop OBJECT OBJECT new : '
 '
 # Create the base object via the method already defined on it.
 _shoop OBJECT OBJECT new OBJECT
+
+# Define the parent variable
 OBJECT . parent = ""
 
 # This method handles calling an overridden method of your parent.
