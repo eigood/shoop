@@ -169,13 +169,17 @@ $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))	: thisdir=docdir
 $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))	: thisdir=empdir
 
 
-define inst_msg
-	echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
-endef
+inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
 
+strip_comment_space = egrep -v '^([	 ]*\#.*|[	 ]*)$$'
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES)): $(prefix)$(moddir)/%: % $(prefix)$(moddir)
 	@$(inst_msg)
-	@egrep -v '([ 	]*#|^[ 	]*$)' $< |(echo "#!/bin/sh -e";cat) > $@
+	@$(strip_comment_space) $< |(echo "#!/bin/sh -e";cat) > $@
+
+$(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir)
+	@$(inst_msg)
+	@$(strip_comment_space) $< |(echo "#!/bin/sh -e";cat) > $@
+	@chmod +x $@
 
 $(patsubst %, $(prefix)$(docdir)/%,$(DOCS)): $(prefix)$(docdir)/%: % $(prefix)$(docdir)
 	@$(inst_msg)
@@ -189,10 +193,6 @@ $(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
 	@echo Making dir $$\(prefix\)$*
 	@mkdir -p $@
 
-$(patsubst %, $(prefix)$(bindir)/%,$(BINS)): $(prefix)$(bindir)/%: % $(prefix)$(bindir)
-	@$(inst_msg)
-	@egrep -v '([ 	]*#|^[ 	]*$)' $< |(echo "#!/bin/sh -e";cat) > $@
-	@chmod +x $@
 
 .PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
 
