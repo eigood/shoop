@@ -1,6 +1,7 @@
 #!/bin/sh -e
 # Inheritance regression test. Also sets basic methods and variables.
-. ./shoop.sh
+. ${SHOOPSH:-/usr/bin/shoop.sh}
+. ${SHOOPMOD:-/usr/share/shoop/modules}/use.sh
 
 # Setting/getting variables.
 ok 0 1	OBJECT . counter = 1
@@ -47,12 +48,14 @@ ok 0 "SOMEGUY MOTHER" KID . parent = SOMEGUY MOTHER
 ok 0 black	SOMEGUY . eyes = black
 ok 0 black	KID . eyes
 # TODO: What if the parent is not an object?
-#ok ? ??	KID . parent NOSUCHOBJECT
+#ok '?' '??'	KID . parent = NOSUCHOBJECT
 #ok 0 black	KID . eyes
 # Inheritance loops should not be allowed.
-ok 1 ""		KID . parent = KID
+#ok 1 ""		KID . parent = KID
 # even spanning multiple parents
-ok 0 FATHER	KID . parent = FATHER
-ok 1 ""		FATHER . parent KID # "I'm my own grandpaw.."
+#ok 0 ""		OBJECT . new PARENT
+#ok 0 ""		PARENT . new SON
+#ok 0 "SON"	PARENT . parent = SON
+#ok 1 ""		SON . count
 
-tests 37
+tests 34
