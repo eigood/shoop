@@ -12,7 +12,7 @@ mandir=/usr/share/man
 DIRS=$(bindir) $(moddir) $(docdir) $(docdir)/examples
 
 BINS=\
-shoop.sh\
+	shoop.sh\
 
 MODULES=\
 	destroy.sh\
@@ -31,7 +31,7 @@ DOCS=\
 	TODO\
 
 EXAMPLE=\
-example.sh\
+	example.sh\
 
 TIME=/usr/bin/time -f "%E" 
 ITERATIONS=100 
