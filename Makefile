@@ -87,10 +87,8 @@ benchmark:
 			$(CURDIR)/t/benchmark.bm\
 			"$(bscr)"
 
-clean:
-	echo Cleaning
-	rm -f *~ .#* ChangeLog
-	rm -rf $(tinstall)
+clean_dirs=$(tinstall)
+clean_files=*~ .\#* ChangeLog docs/modules.pod
 
 #
 # Author only targets are below
@@ -114,13 +112,13 @@ NAMES=$(shell\
 	' docs/AUTHORS)
 #endef
 
-docs/modules.txt: utils/shelldoc $(MODULES)
+docs/modules.pod: utils/shelldoc $(MODULES)
 	rm -f modules_tmp
 	$(MAKE) modules_tmp
 	utils/shelldoc "SHOOP Modules" $$(cat modules_tmp) > $@
 	rm -f modules_tmp
 
-.PHONY: docs/modules.txt
+.PHONY: docs/modules.pod
 
 ChangeLog:
 	rcs2log $(NAMES) > $@

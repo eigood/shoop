@@ -7,6 +7,7 @@ inst_msg = echo Installing $(msg) from $< to $$\(prefix\)$$\($(thisdir)\)/$<.
 strip_comment_space = $(TOPDIR)/utils/shell-stripper
 this_dir := $(patsubst $(shell cd $(TOPDIR); /bin/pwd)/%,%,$(CURDIR))
 
+unexport clean_files clean_dirs
 install:\
 	installshowconfig\
 	install.subdirs\
@@ -33,12 +34,15 @@ installdocs.real	: $(patsubst %, $(prefix)$(docdir)/%,$(DOCS))
 installexamples.real	: $(patsubst %, $(prefix)$(empdir)/%,$(EXAMPLES))
 installdirs.real	: $(patsubst %,$(prefix)%,$(DIRS))
 
-
 installshowconfig:
+ifdef VERBOSE
 	echo "prefix is: $(prefix)"
 	echo "bindir is: $(bindir)"
 	echo "moddir is: $(moddir)"
 	echo
+else
+
+endif
 
 $(patsubst %, $(prefix)$(moddir)/%,$(MODULES))	: msg=$(MODULES_MSG)
 $(patsubst %, $(prefix)$(bindir)/%,$(BINS))	: msg=$(BINS_MSG)
@@ -72,8 +76,16 @@ $(patsubst %,$(prefix)%,$(DIRS)): $(prefix)%:
 
 .PHONY: installshowconfig installdirs installdocs installbins installshare ChangeLog
 
+clean: clean.subdirs
+	echo Cleaning in $(this_dir)
+	if [ "$(clean_files)" ];then rm -f $(clean_files); fi
+	if [ "$(clean_dirs)" ];then rm -rf $(clean_dirs); fi
+
 modules_tmp: modules_tmp.subdirs
-	echo $(patsubst %,$(this_dir)/%,$(MODULES)) >> $(TOPDIR)/$@
+	modules="$(patsubst %,$(this_dir)/%,$(MODULES))";\
+	if [ "$$modules" ]; then\
+		echo $$modules;\
+	fi >> $(TOPDIR)/$@
 
 
 ifndef NOISY
