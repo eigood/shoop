@@ -1,6 +1,7 @@
 #!/bin/sh -e
 NAMES=$(awk "
 /^CVS:/{
+	sub(/'/, \"'\\''\");
 	sub(/^CVS:/, \"\");
 	printf \"-u '%s:\", \$1;
 	sub(\$1 \" \",\"\");
