@@ -48,8 +48,11 @@ benchmark = \
 nobenchmark =
 
 all:
-	@echo This makefile is only here to run benchmarks or examples.
-	@echo \"make benchmark\" or \"make example\" will do that.
+	@echo This makefile is only here to run benchmarks or examples,
+	@echo or install shoop.
+	@echo \	make benchmark
+	@echo \	make example
+	@echo \	make install
 
 test: example
 example:
