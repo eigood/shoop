@@ -128,10 +128,15 @@ _shoop_introspect=1
 
 # Create a method to create a new object.
 
-# TODO: clear cache !!!!<<<< CRITICAL >>>>!!!!
-# Not as simple as it first looks, because you can set your
-# parents to non-existant objects, and then define those parents
-# later.  Maybe we should not allow that, tho?
+# We clear the whole cache, whenever a new object is created.  This
+# is sub-optimal, as it should really only dump cache chains that
+# have traversed this object.
+#
+# The reason for this, is because we use lazy resolving.  You can
+# set your parents to non-existant objects, and define those objects
+# at a later time.  However, if the newer object contains a method
+# that has already been resolved(and cached) by the first object,
+# this will lead to a cache inconsistency.
 
 IFS=" " _shoop OBJECT OBJECT new :p '
 	local OBJNAME=$1
@@ -139,6 +144,7 @@ IFS=" " _shoop OBJECT OBJECT new :p '
 	if [ $THIS != $OBJNAME ]; then
 		_shoop $OBJNAME $OBJNAME parent = $THIS >/dev/null
 	fi
+	eval unset _shoopcache_ \$_shoopcache_
 	return
 '
 # Create the base object via the method already defined on it.
