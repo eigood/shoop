@@ -32,7 +32,7 @@ bm () {
 
 	local name=$1 message=$2; shift 2
 	if eval [ -z \"\$_bms_$name\" ];then
-		eval "_bm_$name () { benchmark $ITERATIONS \"$message\" \"$_bmprep_\" \"$@\"; }"
+		eval "_bm_$name () { benchmark $ITERATIONS '$message' '$_bmprep_' '$@'; }"
 		eval _bms_$name=1
 		_bmtest_="$_bmtest_ $name"
 		unset _bmprep_
