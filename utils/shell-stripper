@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+#
+# This is a perl script that can strip uneeded characters from a
+# shell script, so that certain shells(bash!) can run it faster.
+#
+# Copyright 2000 by Adam Heath <doogie@debian.org>
+# Licensed under the GPL
+#
+
+$first = 1;
+while (<>) {
+
+	#
+	# Remove continuation characters.  This is done first
+	# incase the script magic below is a continued line.
+	#
+	if(/\\$/) {
+		chop;s/\\$//;
+		$_ .= <>;
+		redo if not eof;
+	};
+
+	#
+	# Don't throw away the script magic identifier.
+	#
+	if(!($first && /^#!/)) {
+		#
+		# Strip leading whitespace.
+		#
+		s/[ \t]*//;
+
+		#
+		# Skip blank and comment lines.
+		#
+		next if(/^(#.*|)$/);
+	}
+	print;
+	next;
+	$first = 0;
+
+}
